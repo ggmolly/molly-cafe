@@ -53,6 +53,7 @@ func main() {
 					}
 					game.HandlePacket(uuid, id, msg)
 				} else { // Invalid message type, disconnect the client and break the loop
+					log.Printf("Invalid message type: %d, disconnecting client", mt)
 					socket.ConnectedClients.Remove(uuid)
 					break
 				}
