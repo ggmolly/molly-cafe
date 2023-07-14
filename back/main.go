@@ -3,11 +3,16 @@ package main
 import (
 	"log"
 
+	"github.com/bettercallmolly/molly/game"
 	"github.com/bettercallmolly/molly/socket"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
+
+func init() {
+	socket.ConnectedClients = socket.NewClients()
+}
 
 func main() {
 	app := fiber.New()
@@ -41,10 +46,12 @@ func main() {
 			} else {
 				// binary message only
 				if mt == websocket.BinaryMessage {
-					err := socket.InterpretPacket(msg)
+					id, err := socket.SanitizePacket(msg)
 					if err != nil {
 						log.Printf("Error interpreting packet: %s", err)
+						continue
 					}
+					game.HandlePacket(uuid, id, msg)
 				} else { // Invalid message type, disconnect the client and break the loop
 					socket.ConnectedClients.Remove(uuid)
 					break
