@@ -6,6 +6,11 @@ import (
 	"github.com/bettercallmolly/molly/socket/packets"
 )
 
+type GenericPacket struct {
+	Type uint8
+	Data []byte
+}
+
 // A function that does nothing, called if a unexpected packet is received
 func noop() (*GenericPacket, error) {
 	return nil, nil
@@ -14,11 +19,6 @@ func noop() (*GenericPacket, error) {
 var (
 	PacketHandlers = map[uint8]func() (*GenericPacket, error){}
 )
-
-type GenericPacket struct {
-	Type uint8
-	Data []byte
-}
 
 func init() {
 	// We're not supposed to receive these packets from the client
