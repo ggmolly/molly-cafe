@@ -6,31 +6,55 @@ import (
 	"github.com/bettercallmolly/molly/socket/packets"
 )
 
-type GenericPacket struct {
-	Type uint8
-	Data []byte
-}
-
-// A function that does nothing, called if a unexpected packet is received
-func noop() (*GenericPacket, error) {
-	return nil, nil
+type Requirements struct {
+	Min      int
+	Max      int
+	Equal    int // If this is set, Min and Max are ignored
+	Function *func([]byte) bool
 }
 
 var (
-	PacketHandlers = map[uint8]func() (*GenericPacket, error){}
+	okayPackets = map[uint8]Requirements{}
 )
 
 func init() {
-	// We're not supposed to receive these packets from the client
-	PacketHandlers[packets.CYA_PACKET_ID] = noop
-	PacketHandlers[packets.WELCOME_PACKET_ID] = noop
+	okayPackets[packets.MOUSE_MOVE_ID] = Requirements{Equal: 4, Function: nil} // expecting two float32
 }
 
-func InterpretPacket(data []byte) (*GenericPacket, error) {
-	packetType := data[0]
-	if handler, ok := PacketHandlers[packetType]; ok {
-		return handler()
+func validPacket(data []byte, reqs Requirements) bool {
+	// Check size requirements
+	length := len(data)
+	var lengthOk bool = true
+	if reqs.Equal != 0 {
+		lengthOk = length == reqs.Equal
 	} else {
-		return nil, fmt.Errorf("unknown packet type: %d", packetType)
+		if reqs.Min != 0 {
+			lengthOk = length >= reqs.Min
+		}
+		if reqs.Max != 0 {
+			lengthOk = length <= reqs.Max
+		}
 	}
+	if !lengthOk {
+		return false
+	}
+	// Check function requirements
+	if reqs.Function != nil {
+		return (*reqs.Function)(data)
+	}
+	return true
+}
+
+func SanitizePacket(data []byte) (uint8, error) {
+	if len(data) == 0 {
+		return 0, fmt.Errorf("empty packet?")
+	}
+	packetId := data[0]
+	if _, ok := okayPackets[packetId]; !ok {
+		return 0, fmt.Errorf("invalid packet type: %d", packetId)
+	}
+	if !validPacket(data[1:], okayPackets[packetId]) {
+		return 0, fmt.Errorf("invalid packet size: %d", len(data))
+	}
+	return packetId, nil
 }
