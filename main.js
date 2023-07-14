@@ -7,7 +7,7 @@ const MOUSE_MOVE_ID = 0b01000010;
 
 const CLIENT_PACKET_TYPE = 0b01000000;
 
-let lastX, lastY;
+let eventTicks = 8;
 
 class Packet {
     constructor(id, data) {
@@ -39,23 +39,30 @@ function removePlayer(uuid) {
 function movePlayer(uuid, x, y) {
     let player = document.getElementById(uuid);
     if (!player) return ;
-    player.style.left = x * window.innerWidth + "px";
-    player.style.top = y * window.innerHeight + "px";
+    player.style.left = x + "px";
+    player.style.top = y + "px";
 }
 
 socket.onopen = function (event) {
     window.addEventListener("mousemove", function (event) {
-        // must move at least 2px to send a packet
-        if (Math.abs(event.clientX - lastX) < 2 && Math.abs(event.clientY - lastY) < 2) return ;
+        // wait 8 ticks
+        lastX = event.clientX;
+        lastY = event.clientY;
+        if (eventTicks > 0) {
+            eventTicks--;
+            return ;
+        }
+        eventTicks = 8;
         lastX = event.clientX;
         lastY = event.clientY;
         let packet = new Packet(MOUSE_MOVE_ID, new Uint8Array(5));
         // set two bytes for x and two bytes for y
-        let buffer = new ArrayBuffer(9);
+        let buffer = new ArrayBuffer(5);
         let data = new DataView(buffer);
         data.setUint8(0, MOUSE_MOVE_ID);
-        data.setFloat32(1, event.clientX / window.innerWidth);
-        data.setFloat32(5, event.clientY / window.innerHeight);
+        // Instead of sending the raw x and y values, we send a value between 0 and 65535
+        data.setUint16(1, event.clientX / window.innerWidth * 65535);
+        data.setUint16(3, event.clientY / window.innerHeight * 65535);
         packet.data = new Uint8Array(buffer);
         socket.send(packet.data);
     });
@@ -82,9 +89,9 @@ socket.onmessage = function (event) {
             break;
         case MOUSE_MOVE_ID:
             let data = new DataView(packet.data.buffer);
-            // x and y are two float32 values
-            let x = data.getFloat32(36 + 0);
-            let y = data.getFloat32(36 + 4);
+            // x and y are two uint16 values between 0 and 65535
+            let x = data.getUint16(36 + 0) / 65535 * window.innerWidth;
+            let y = data.getUint16(36 + 2) / 65535 * window.innerHeight;
             movePlayer(uuid, x, y);
             break;
     }

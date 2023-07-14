@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	okayPackets[packets.MOUSE_MOVE_ID] = Requirements{Equal: 9, Function: nil} // expecting two float32
+	okayPackets[packets.MOUSE_MOVE_ID] = Requirements{Equal: 5, Function: nil} // expecting two float32
 }
 
 func validPacket(data []byte, reqs Requirements) (bool, bool) {
