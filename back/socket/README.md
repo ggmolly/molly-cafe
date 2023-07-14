@@ -32,7 +32,7 @@ Packet ID (1 byte) | Client UUID (36 bytes) | Data (n bytes)
 
 ## Packets
 
-### Welcome
+### `0x00` - Welcome
 
 Sent by the server to every clients (except the one who just connected) when a new client connects.
 
@@ -40,7 +40,7 @@ Sent by the server to every clients (except the one who just connected) when a n
 Packet ID (1 byte) | Client UUID (36 bytes)
 ```
 
-### Cya
+### `0x01` - Cya
 
 Sent by the server to every clients (except the one who just disconnected) when a client disconnects.
 
