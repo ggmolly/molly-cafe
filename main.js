@@ -16,9 +16,9 @@ class Packet {
     }
 }
 
-function addPlayer(uuid) {
+function addPlayer(socketId) {
     let player = document.createElement("div");
-    player.id = uuid;
+    player.id = socketId;
     player.style.width = "24px";
     player.style.height = "24px";
     player.style.borderRadius = "50%";
@@ -29,15 +29,15 @@ function addPlayer(uuid) {
     document.body.appendChild(player);
 }
 
-function removePlayer(uuid) {
+function removePlayer(socketId) {
     // remove the player from the dom
-    let player = document.getElementById(uuid);
+    let player = document.getElementById(socketId);
     if (!player) return ;
     document.body.removeChild(player);
 }
 
-function movePlayer(uuid, x, y) {
-    let player = document.getElementById(uuid);
+function movePlayer(socketId, x, y) {
+    let player = document.getElementById(socketId);
     if (!player) return ;
     player.style.left = x + "px";
     player.style.top = y + "px";
@@ -73,26 +73,24 @@ socket.onmessage = function (event) {
     let arrayBuffer = event.data;
     let byteArray = new Uint8Array(arrayBuffer);
     let packet = new Packet(byteArray[0], byteArray.slice(1));
-    let uuid = "";
+    let socketId = 0;
     if (packet.id & CLIENT_PACKET_TYPE) {
-        // copy the first 36 bytes into the uuid
-        for (let i = 0; i < 36; i++) {
-            uuid += String.fromCharCode(packet.data[i]);
-        }
+        // copy the first 2 bytes of the packet data
+        socketId = new DataView(packet.data.buffer).getUint16(0);
     }
     switch (packet.id) {
         case WELCOME_PACKET_ID:
-            addPlayer(uuid);
+            addPlayer(socketId);
             break;
         case CYA_PACKET_ID:
-            removePlayer(uuid);
+            removePlayer(socketId);
             break;
         case MOUSE_MOVE_ID:
             let data = new DataView(packet.data.buffer);
             // x and y are two uint16 values between 0 and 65535
-            let x = data.getUint16(36 + 0) / 65535 * window.innerWidth;
-            let y = data.getUint16(36 + 2) / 65535 * window.innerHeight;
-            movePlayer(uuid, x, y);
+            let x = data.getUint16(2 + 0) / 65535 * window.innerWidth;
+            let y = data.getUint16(2 + 2) / 65535 * window.innerHeight;
+            movePlayer(socketId, x, y);
             break;
     }
 }

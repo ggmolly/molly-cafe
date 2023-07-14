@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	dispatchers = make(map[uint8]func(string, []byte))
+	dispatchers = make(map[uint8]func(uint16, []byte))
 )
 
 func init() {
 	dispatchers[packets.MOUSE_MOVE_ID] = actions.HandleMouseMove
 }
 
-func HandlePacket(senderUUID string, packetId uint8, data []byte) {
-	dispatchers[packetId](senderUUID, data)
+func HandlePacket(socketId uint16, packetId uint8, data []byte) {
+	dispatchers[packetId](socketId, data)
 }

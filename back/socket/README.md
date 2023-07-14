@@ -27,7 +27,7 @@ Packet ID (1 byte) | Data (n bytes)
 Packet regarding a specific client :
 
 ```
-Packet ID (1 byte) | Client UUID (36 bytes) | Data (n bytes)
+Packet ID (1 byte) | Client ID (2 bytes) | Data (n bytes)
 ```
 
 ## Packet IDs
@@ -50,7 +50,7 @@ First two bits of the packet ID are used to define the type of the packet :
 Sent by the server to every clients (except the one who just connected) when a new client connects.
 
 ```
-Client UUID (36 bytes)
+Client ID (2 bytes)
 ```
 
 ### `0x81` - Cya
@@ -58,5 +58,5 @@ Client UUID (36 bytes)
 Sent by the server to every clients (except the one who just disconnected) when a client disconnects.
 
 ```
-Client UUID (36 bytes)
+Client ID (2 bytes)
 ```

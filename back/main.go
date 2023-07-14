@@ -8,7 +8,6 @@ import (
 	"github.com/bettercallmolly/molly/socket"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 var (
@@ -50,10 +49,10 @@ func main() {
 			c.Close()
 			return
 		}
-		uuid := uuid.New().String()
-		socket.ConnectedClients.Add(c, uuid)
+		socketId := socket.GenerateClientId()
+		socket.ConnectedClients.Add(c, socketId)
 		defer func() { // Avoid resource leak
-			socket.ConnectedClients.Remove(uuid)
+			socket.ConnectedClients.Remove(socketId)
 		}()
 		for {
 			if mt, msg, err = c.ReadMessage(); err != nil {
@@ -68,10 +67,10 @@ func main() {
 					}
 					receivedPackets++
 					bandwidth += len(msg)
-					game.HandlePacket(uuid, id, msg)
+					game.HandlePacket(socketId, id, msg)
 				} else { // Invalid message type, disconnect the client and break the loop
 					log.Printf("Invalid message type: %d, disconnecting client", mt)
-					socket.ConnectedClients.Remove(uuid)
+					socket.ConnectedClients.Remove(socketId)
 					break
 				}
 			}
