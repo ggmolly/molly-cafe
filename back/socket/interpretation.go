@@ -2,6 +2,7 @@ package socket
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/bettercallmolly/molly/socket/packets"
 )
@@ -18,7 +19,7 @@ var (
 )
 
 func init() {
-	okayPackets[packets.MOUSE_MOVE_ID] = Requirements{Equal: 6, Function: nil} // expecting two float32
+	okayPackets[packets.MOUSE_MOVE_ID] = Requirements{Equal: 5, Function: nil} // expecting two float32
 }
 
 func validPacket(data []byte, reqs Requirements) (bool, bool) {
@@ -50,6 +51,7 @@ func SanitizePacket(data []byte) (uint8, error) {
 		return 0, fmt.Errorf("empty packet?")
 	}
 	packetId := data[0]
+	log.Printf("Packet ID: %d\n", packetId)
 	if _, ok := okayPackets[packetId]; !ok {
 		return 0, fmt.Errorf("invalid packet type: %d", packetId)
 	}
