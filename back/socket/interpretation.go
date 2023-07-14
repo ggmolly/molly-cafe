@@ -18,10 +18,10 @@ var (
 )
 
 func init() {
-	okayPackets[packets.MOUSE_MOVE_ID] = Requirements{Equal: 4, Function: nil} // expecting two float32
+	okayPackets[packets.MOUSE_MOVE_ID] = Requirements{Equal: 6, Function: nil} // expecting two float32
 }
 
-func validPacket(data []byte, reqs Requirements) bool {
+func validPacket(data []byte, reqs Requirements) (bool, bool) {
 	// Check size requirements
 	length := len(data)
 	var lengthOk bool = true
@@ -36,13 +36,13 @@ func validPacket(data []byte, reqs Requirements) bool {
 		}
 	}
 	if !lengthOk {
-		return false
+		return false, false
 	}
 	// Check function requirements
 	if reqs.Function != nil {
-		return (*reqs.Function)(data)
+		return (*reqs.Function)(data), true
 	}
-	return true
+	return true, true
 }
 
 func SanitizePacket(data []byte) (uint8, error) {
@@ -53,8 +53,12 @@ func SanitizePacket(data []byte) (uint8, error) {
 	if _, ok := okayPackets[packetId]; !ok {
 		return 0, fmt.Errorf("invalid packet type: %d", packetId)
 	}
-	if !validPacket(data[1:], okayPackets[packetId]) {
-		return 0, fmt.Errorf("invalid packet size: %d", len(data))
+	lengthOk, functionOk := validPacket(data, okayPackets[packetId])
+	if !lengthOk {
+		return 0, fmt.Errorf("invalid packet length: %d, expected %d", len(data), okayPackets[packetId].Equal)
+	}
+	if !functionOk {
+		return 0, fmt.Errorf("invalid packet data: %v", data)
 	}
 	return packetId, nil
 }
