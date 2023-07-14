@@ -6,9 +6,19 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <script>var exports = {};</script>
+    <script src='swindle.js'></script>
+    <script defer src='main.js'></script>
 </head>
-<body>
-    
+<body style="margin: 0; padding: 0; background-color: skyblue;">
+
+    <!-- center vertically and horizontally container -->
+    <div id="container" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; min-width: 50vw; padding: 0;">
+        <canvas id="canvas">
+
+        </canvas>
+    </div>
+
+
 </body>
 </html>
