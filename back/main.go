@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/bettercallmolly/molly/game"
 	"github.com/bettercallmolly/molly/socket"
@@ -10,12 +11,26 @@ import (
 	"github.com/google/uuid"
 )
 
+var (
+	receivedPackets = 0
+	bandwidth       = 0
+)
+
 func init() {
 	socket.ConnectedClients = socket.NewClients()
 }
 
 func main() {
 	app := fiber.New()
+
+	go func() {
+		for {
+			time.Sleep(1 * time.Second)
+			log.Printf("Received %d packets in the last second (%.3f KB/s)", receivedPackets, float64(bandwidth)/1024)
+			receivedPackets = 0
+			bandwidth = 0
+		}
+	}()
 
 	app.Use("/ws", func(c *fiber.Ctx) error {
 		if websocket.IsWebSocketUpgrade(c) {
@@ -51,6 +66,8 @@ func main() {
 						log.Printf("Error interpreting packet: %s", err)
 						continue
 					}
+					receivedPackets++
+					bandwidth += len(msg)
 					game.HandlePacket(uuid, id, msg)
 				} else { // Invalid message type, disconnect the client and break the loop
 					log.Printf("Invalid message type: %d, disconnecting client", mt)
