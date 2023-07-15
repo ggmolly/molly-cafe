@@ -108,7 +108,6 @@ class Swindle {
     private tileHeight: number = 0;
     private fpsCounter?: HTMLElement;
     private lastFrameTime: number = 0;
-    private frameCount: number = 0;
     public tilemaps: Array<Tilemap> = new Array<Tilemap>();
     public onSwindleClick: ((e: SwindleClickEvent) => void) | null = null;
     public onSwindleTileHover: ((e: SwindleTileHoverEvent) => void) | null = null;
@@ -170,7 +169,6 @@ class Swindle {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let layer of this.tilemaps) {
             if (!layer.dirty) continue;
-            console.log("Rendering layer: " + layer)
             for (let y = 0; y < layer.height; y++) {
                 for (let x = 0; x < layer.width; x++) {
                     let tile = layer.getTile(x, y);
@@ -181,11 +179,10 @@ class Swindle {
             }
             layer.dirty = false;
         }
-        this.frameCount++;
         let now = performance.now();
         let fps = 1000 / (now - this.lastFrameTime);
         this.lastFrameTime = now;
-        if (this.fpsCounter && this.frameCount % 10 == 0) {
+        if (this.fpsCounter) {
             this.fpsCounter.innerText = fps.toFixed(2) + " FPS";
         }
     }
