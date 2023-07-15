@@ -7,7 +7,7 @@ class Tile {
     public readonly height: number;
     public readonly image?: HTMLImageElement = undefined;
     public skip: boolean = false;
-    constructor (image?: HTMLImageElement, skip: boolean = false) {
+    constructor(image?: HTMLImageElement, skip: boolean = false) {
         if (image) {
             this.width = image.width;
             this.height = image.height;
@@ -22,11 +22,15 @@ class Tilemap {
     private tiles: Array<Tile>; // Flatten'd Matrix
     public readonly width: number;
     public readonly height: number;
-    constructor(width: number, height: number, tiles: Array<Tile>) {
+    constructor(width: number, height: number, preFillImage?: HTMLImageElement) {
         this.width = width;
         this.height = height;
-        this.tiles = tiles;
-        if (width * height !== tiles.length) throw new Error("Tilemap size does not match tile array size.");
+        this.tiles = new Array<Tile>(width * height);
+        // fill with empty tiles
+        if (!preFillImage) return;
+        for (let i = 0; i < this.tiles.length; i++) {
+            this.tiles[i] = new Tile(preFillImage);
+        }
     }
 
     public getTile(x: number, y: number): Tile {
@@ -38,24 +42,56 @@ class Tilemap {
         if (x >= this.width || y >= this.height || x < 0 || y < 0) throw new Error("Tilemap index out of bounds.");
         this.tiles[y * this.width + x] = tile;
     }
+
+    public removeTile(x: number, y: number) {
+        if (x >= this.width || y >= this.height || x < 0 || y < 0) throw new Error("Tilemap index out of bounds.");
+        this.tiles[y * this.width + x] = null;
+    }
 }
 
-class Layer {
-    public readonly width: number;
-    public readonly height: number;
-    public readonly tilemap: Tilemap;
-    constructor(width: number, height: number, tilemap: Tilemap) {
-        this.width = width;
-        this.height = height;
-        this.tilemap = tilemap;
-        // Assert that all tiles are the same size
-        for (let y = 0; y < this.height; y++) {
-            let tile = this.tilemap.getTile(0, y);
-            for (let x = 0; x < this.width; x++) {
-                let currentTile = this.tilemap.getTile(x, y);
-                if (currentTile.skip && (currentTile.width !== tile.width || currentTile.height !== tile.height)) throw new Error("All tiles must be the same size.");
-            }
-        }
+/**
+ * A SwindleClickEvent is fired when the user clicks on the canvas.
+ * 
+ * @param x The x coordinate of the click.
+ * @param y The y coordinate of the click.
+ * @param tile The tile that was clicked on.
+ */
+class SwindleClickEvent {
+    public readonly x: number;
+    public readonly y: number;
+    public readonly tileX: number;
+    public readonly tileY: number;
+    public readonly tile: Tile;
+    constructor(x: number, y: number, tileX: number, tileY: number, tile: Tile) {
+        this.x = x;
+        this.y = y;
+        this.tileX = tileX;
+        this.tileY = tileY;
+        this.tile = tile;
+    }
+}
+
+/**
+ * A SwindleTileHoverEvent is fired when the user hovers over a tile.
+ * 
+ * @param x The x coordinate of the hover.
+ * @param y The y coordinate of the hover.
+ * @param tileX The x coordinate of the tile that was hovered over.
+ * @param tileY The y coordinate of the tile that was hovered over.
+ * @param tile The tile that was hovered over.
+ */
+class SwindleTileHoverEvent {
+    public readonly x: number;
+    public readonly y: number;
+    public readonly tileX: number;
+    public readonly tileY: number;
+    public readonly tile: Tile;
+    constructor(x: number, y: number, tileX: number, tileY: number, tile: Tile) {
+        this.x = x;
+        this.y = y;
+        this.tileX = tileX;
+        this.tileY = tileY;
+        this.tile = tile;
     }
 }
 
@@ -63,12 +99,51 @@ class Swindle {
     private spriteMap: Map<string, HTMLImageElement> = new Map<string, HTMLImageElement>();
     private canvas?: HTMLCanvasElement;
     private ctx?: CanvasRenderingContext2D;
+    private tileWidth: number = 0;
+    private tileHeight: number = 0;
+    private fpsCounter?: HTMLElement;
+    private lastFrameTime: number = 0;
+    private frameCount: number = 0;
+    public tilemaps: Array<Tilemap> = new Array<Tilemap>();
+    public onSwindleClick: ((e: SwindleClickEvent) => void) | null = null;
+    public onSwindleTileHover: ((e: SwindleTileHoverEvent) => void) | null = null;
 
-    constructor () { }
+    constructor() { }
 
-    public async init(canvas: HTMLCanvasElement): Promise<void> {
+    public async init(tileWidth: number, tileHeight: number, canvas: HTMLCanvasElement, fpsCounter?: HTMLElement) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
+        if (!this.ctx) throw new Error("Could not get 2D context.");
+        this.ctx.imageSmoothingEnabled = false;
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
+        // add click event
+        canvas.addEventListener("click", (e) => {
+            if (!this.ctx) throw new Error("Swindle not initialized.");
+            let rect = this.canvas.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+            let tileX = Math.floor(x / this.tileWidth);
+            let tileY = Math.floor(y / this.tileHeight);
+            let tile = this.tilemaps[this.tilemaps.length - 1].getTile(tileX, tileY);
+            let event = new SwindleClickEvent(x, y, tileX, tileY, tile);
+            if (this.onSwindleClick) this.onSwindleClick(event);
+        });
+        // add hover event
+        canvas.addEventListener("mousemove", (e) => {
+            if (!this.ctx) throw new Error("Swindle not initialized.");
+            let rect = this.canvas.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+            let tileX = Math.floor(x / this.tileWidth);
+            let tileY = Math.floor(y / this.tileHeight);
+            const tilemap = this.tilemaps[this.tilemaps.length - 1];
+            if (tileX >= tilemap.width || tileY >= tilemap.height || tileX < 0 || tileY < 0) return;
+            let tile = this.tilemaps[this.tilemaps.length - 1].getTile(tileX, tileY);
+            let event = new SwindleTileHoverEvent(x, y, tileX, tileY, tile);
+            if (this.onSwindleTileHover) this.onSwindleTileHover(event);
+        });
+        this.fpsCounter = fpsCounter;
     }
 
     public async loadSprite(name: string, path: string): Promise<HTMLImageElement> {
@@ -85,17 +160,25 @@ class Swindle {
         return this.spriteMap.get(name);
     }
 
-    public async render(layers: Array<Layer>): Promise<void> {
+    public async render(): Promise<void> {
         if (!this.ctx) throw new Error("Swindle not initialized.");
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        for (let layer of layers) {
+        for (let layer of this.tilemaps) {
             for (let y = 0; y < layer.height; y++) {
                 for (let x = 0; x < layer.width; x++) {
-                    let tile = layer.tilemap.getTile(x, y);
+                    let tile = layer.getTile(x, y);
+                    if (!tile) continue;
                     if (tile.skip) continue;
                     this.ctx.drawImage(tile.image, x * tile.width, y * tile.height);
                 }
             }
+        }
+        this.frameCount++;
+        let now = performance.now();
+        let fps = 1000 / (now - this.lastFrameTime);
+        this.lastFrameTime = now;
+        if (this.fpsCounter && this.frameCount % 10 == 0) {
+            this.fpsCounter.innerText = fps.toFixed(2) + " FPS";
         }
     }
 }
