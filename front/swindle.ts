@@ -22,7 +22,6 @@ class Tilemap {
     private tiles: Array<Tile>; // Flatten'd Matrix
     public readonly width: number;
     public readonly height: number;
-    public dirty: boolean = true;
     constructor(width: number, height: number, preFillImage?: HTMLImageElement) {
         this.width = width;
         this.height = height;
@@ -42,14 +41,11 @@ class Tilemap {
     public setTile(x: number, y: number, tile: Tile) {
         if (x >= this.width || y >= this.height || x < 0 || y < 0) throw new Error("Tilemap index out of bounds.");
         const oldState = this.tiles[y * this.width + x];
-        if (oldState.image === tile.image) return;
-        this.dirty = true;
         this.tiles[y * this.width + x] = tile;
     }
 
     public removeTile(x: number, y: number) {
         if (x >= this.width || y >= this.height || x < 0 || y < 0) throw new Error("Tilemap index out of bounds.");
-        this.dirty = true;
         this.tiles[y * this.width + x] = null;
     }
 }
@@ -168,16 +164,16 @@ class Swindle {
         if (!this.ctx) throw new Error("Swindle not initialized.");
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let layer of this.tilemaps) {
-            if (!layer.dirty) continue;
-            for (let y = 0; y < layer.height; y++) {
-                for (let x = 0; x < layer.width; x++) {
-                    let tile = layer.getTile(x, y);
-                    if (!tile) continue;
-                    if (tile.skip) continue;
-                    this.ctx.drawImage(tile.image, x * tile.width, y * tile.height);
+            requestAnimationFrame(() => {
+                for (let y = 0; y < layer.height; y++) {
+                    for (let x = 0; x < layer.width; x++) {
+                        let tile = layer.getTile(x, y);
+                        if (!tile) continue;
+                        if (tile.skip) continue;
+                        this.ctx.drawImage(tile.image, x * tile.width, y * tile.height);
+                    }
                 }
-            }
-            layer.dirty = false;
+            });
         }
         let now = performance.now();
         let fps = 1000 / (now - this.lastFrameTime);
