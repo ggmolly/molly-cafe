@@ -18,7 +18,6 @@ type UpdateDetails struct {
 
 var (
 	packets       = make(map[string]*socket.Packet)
-	hashes        = make(map[string]uint64)
 	REFRESH_DELAY = 5 * time.Second
 )
 
