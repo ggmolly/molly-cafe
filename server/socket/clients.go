@@ -1,7 +1,6 @@
 package socket
 
 import (
-	"math/rand"
 	"sync"
 
 	"github.com/gofiber/contrib/websocket"
@@ -27,12 +26,13 @@ var (
 func GenerateClientId() uint32 {
 	MapMutex.Lock()
 	defer MapMutex.Unlock()
-	var id uint32
+	// Check if NbClients is not already in the map
 	for {
-		id = rand.Uint32()
-		if _, ok := ConnectedClients[id]; !ok {
-			return id
+		_, ok := ConnectedClients[NbClients]
+		if !ok {
+			return NbClients
 		}
+		NbClients++
 	}
 }
 
