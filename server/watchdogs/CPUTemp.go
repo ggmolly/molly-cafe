@@ -21,7 +21,7 @@ func getCPUPacket(packetMaps *map[string]*socket.Packet, label string) *socket.P
 	return packet
 }
 
-func MonitorCPUTemp(packetMaps *map[string]*socket.Packet, clients *socket.Clients) {
+func MonitorCPUTemp(packetMaps *map[string]*socket.Packet) {
 	var sensorDir string
 	// Find all the sensor directories, and return the first k10temp or coretemp in /sys/class/hwmon
 	dirEntry, err := os.ReadDir("/sys/class/hwmon")

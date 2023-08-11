@@ -39,7 +39,7 @@ func getDiskPacket(packetMaps *map[string]*socket.Packet, path string) *socket.P
 	return packet
 }
 
-func MonitorDiskSpace(packetMaps *map[string]*socket.Packet, clients *socket.Clients) {
+func MonitorDiskSpace(packetMaps *map[string]*socket.Packet) {
 	mountPoints := []string{}
 	mounts, err := os.OpenFile("/proc/mounts", os.O_RDONLY, 0)
 	if err != nil {

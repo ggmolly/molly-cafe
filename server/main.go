@@ -50,11 +50,11 @@ func init() {
 	// go watchdogs.MonitorLoggedUsers(packets["usersLoggedIn"])
 
 	// Containers / Services
-	go watchdogs.MonitorContainers(&packets, &socket.ConnectedClients)
-	go watchdogs.ManualServices(&packets, &socket.ConnectedClients, "nginx", "mariadb", "docker", "cron", "smbd")
+	go watchdogs.MonitorContainers(&packets)
+	go watchdogs.ManualServices(&packets, "nginx", "mariadb", "docker", "cron", "smbd")
 
 	// CPU temperature
-	go watchdogs.MonitorCPUTemp(&packets, &socket.ConnectedClients)
+	go watchdogs.MonitorCPUTemp(&packets)
 
 	// Internet Speed
 	packets["downSpeed"] = socket.NewPacket(socket.C_MISC, socket.DT_UINT32, "down speed (Mbps)")
@@ -65,7 +65,7 @@ func init() {
 	go watchdogs.MonitorMemUsage(packets["ramUsage"])
 
 	// Disk usage
-	go watchdogs.MonitorDiskSpace(&packets, &socket.ConnectedClients)
+	go watchdogs.MonitorDiskSpace(&packets)
 }
 
 func main() {

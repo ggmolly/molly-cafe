@@ -9,7 +9,7 @@ import (
 
 // check if file '/run/systemd/units/invocation:{name}.service' exists
 
-func ManualServices(packetMaps *map[string]*socket.Packet, clients *socket.Clients, services ...string) {
+func ManualServices(packetMaps *map[string]*socket.Packet, services ...string) {
 	watcher, err := fsnotify.NewWatcher()
 	for _, service := range services {
 		serviceSocket := socket.NewPacket(socket.C_SERVICE, socket.DT_UINT8, service)
@@ -48,11 +48,11 @@ func ManualServices(packetMaps *map[string]*socket.Packet, clients *socket.Clien
 				(*packetMaps)[serviceName].SetState(socket.S_OK)
 				// Broadcast to clients
 				packet := (*packetMaps)[serviceName]
-				clients.Broadcast(packet.GetRawBytes())
+				socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 			} else if event.Op.Has(fsnotify.Remove) {
 				(*packetMaps)[serviceName].SetState(socket.S_DEAD)
 				packet := (*packetMaps)[serviceName]
-				clients.Broadcast(packet.GetRawBytes())
+				socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 			}
 		}
 	}

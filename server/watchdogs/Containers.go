@@ -23,7 +23,7 @@ func getDockerPacket(packetMaps *map[string]*socket.Packet, containerName string
 	}
 }
 
-func MonitorContainers(packetMaps *map[string]*socket.Packet, clients *socket.Clients) {
+func MonitorContainers(packetMaps *map[string]*socket.Packet) {
 	client, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
 		panic(err)
@@ -88,7 +88,7 @@ func MonitorContainers(packetMaps *map[string]*socket.Packet, clients *socket.Cl
 				} else if event.Action == "destroy" {
 					packet.SetState(socket.S_DEAD)
 				}
-				clients.Broadcast(packet.GetRawBytes())
+				socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 			}
 		case err := <-errChan:
 			if err != nil {
