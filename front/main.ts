@@ -1,4 +1,4 @@
-const websocket = new WebSocket('ws://localhost:3000/ws');
+const websocket = new WebSocket('ws://localhost:50154/ws');
 websocket.binaryType = 'arraybuffer';
 
 let connectedClients: number = 0;
