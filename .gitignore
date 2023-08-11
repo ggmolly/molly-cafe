@@ -134,3 +134,12 @@ front/main.js
 front/swindle.js
 front/assets/
 front/main.css
+
+# fonts assets
+front/fonts
+
+# compiled binary
+illustrious
+
+# deploy script
+deploy.sh

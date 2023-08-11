@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Illustrious</title>
+    <!-- Open Graph -->
+    <meta property='og:title' content='Illustrious' />
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content='https://mana.rip' />
+    <meta property='og:description' content='Illustrious is a server hosted on Mana&apos;s infrastructure. This is its monitoring page.' />
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+
+<body>
+    <main>
+        <br/>
+        <!-- go to next line if necessary -->
+        <div class="flex gap-3 flex-wrap justify-around">
+            <div class="card" id="services">
+                <h1 class="stone">services</h1>
+            </div>
+            <div class="card" id="hard-resources">
+                <h1 class="stone">hard resources</h1>
+            </div>
+            <div class="card" id="soft-resources">
+                <h1 class="stone">soft resources</h1>
+            </div>
+            <div class="card" id="misc">
+                <h1 class="stone">misc</h1>
+                <!--
+                    <h3>users logged in................ [<span class="green">OK</span>]</h3>
+                    <h3>nvme temp..................... [<span class="green">OK</span>]</h3>
+                    <h3>last up....................... [<span class="green">OK</span>]</h3>
+                -->
+                <h3>currently here................ [<span class="fuchsia" id="connected-count">?</span>]</h3>
+                <!-- todo: track monitor up/down -->
+            </div>
+        </div>
+
+    </main>
+    <script>
+    </script>
+</body>
+
+</html>

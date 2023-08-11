@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 400;
+        src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2'),
+    }
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 700;
+        src: url('/fonts/BerkeleyMono-Bold.woff2') format('woff2'),
+    }
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 400;
+        font-style: italic;
+        src: url('/fonts/BerkeleyMono-Italic.woff2') format('woff2'),
+    }
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 700;
+        font-style: italic;
+        src: url('/fonts/BerkeleyMono-BoldItalic.woff2') format('woff2'),
+    }
+}
+
+* {
+    @apply font-mono;
+}
+
+body {
+    @apply w-full h-full bg-neutral-900 text-white;
+}
+
+h1 {
+    @apply text-4xl font-bold;
+}
+
+h3 {
+    @apply text-2xl;
+}
+
+.yellow {
+    @apply text-yellow-400;
+    text-shadow: 0 0 8px rgb(250 204 21);
+}
+
+.orange {
+    @apply text-amber-400;
+    text-shadow: 0 0 8px rgb(251 191 36);
+}
+
+.stone {
+    @apply text-stone-200;
+    text-shadow: 0 0 2px rgb(231 229 228);
+}
+
+.green {
+    @apply text-emerald-500;
+    text-shadow: 0 0 8px rgb(16 185 129);
+}
+
+.red {
+    @apply text-rose-500;
+    text-shadow: 0 0 8px rgb(244 63 94);
+}
+
+.white {
+    @apply text-white;
+    text-shadow: 0 0 3px rgb(255 255 255);
+}
+
+.fuchsia {
+    @apply text-fuchsia-400;
+    text-shadow: 0 0 8px rgb(232 121 249);
+}
+
+.blue {
+    @apply text-blue-500;
+    text-shadow: 0 0 8px rgb(59 130 246);
+}
+
+.stone {
+    @apply text-stone-200;
+    text-shadow: 0 0 2px rgb(231 229 228);
+}
+
+small {
+    @apply text-sm;
+}
+
+main {
+    @apply mx-4 my-4;
+}
+
+div.card {
+    @apply flex flex-col gap-y-2.5 border border-white w-fit p-6;
+}
