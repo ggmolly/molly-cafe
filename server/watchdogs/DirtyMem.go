@@ -26,6 +26,8 @@ func MonitorDirtyMem(dirtyMemPacket *socket.Packet) {
 		file, err := os.OpenFile("/proc/meminfo", os.O_RDONLY, 0)
 		if err != nil {
 			log.Println("/!\\ Failed to open /proc/meminfo", err)
+			time.Sleep(REFRESH_DELAY)
+			continue
 		}
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
