@@ -197,8 +197,6 @@ websocket.onmessage = (event) => {
         default:
             // create packet
             let packet = new Packet(data);
-            // print packet
-            console.log(packet);
             packet.renderOrUpdate();
             break;
     }
