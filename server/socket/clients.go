@@ -19,6 +19,9 @@ var (
 	NbClients        uint32
 	ConnectedClients Clients
 	MapMutex         sync.Mutex
+
+	// Use to store clients that have been disconnected while a Broadcast or BroadcastExcept call
+	deadClients []uint32
 )
 
 func GenerateClientId() uint32 {
@@ -55,14 +58,26 @@ func (c Clients) Remove(socketId uint32) {
 	MapMutex.Unlock()
 }
 
+func (c Clients) RemoveLocked(socketId uint32) {
+	NbClients--
+	delete(c, socketId)
+}
+
 // Broadcast sends a message to all clients
 func (c Clients) Broadcast(data []byte) {
 	MapMutex.Lock()
 	for _, client := range c {
 		client.Mutex.Lock()
-		client.Conn.WriteMessage(websocket.BinaryMessage, data)
+		err := client.Conn.WriteMessage(websocket.BinaryMessage, data)
+		if err != nil {
+			deadClients = append(deadClients, client.SocketId)
+		}
 		client.Mutex.Unlock()
 	}
+	for _, deadClient := range deadClients {
+		c.RemoveLocked(deadClient)
+	}
+	deadClients = deadClients[:0]
 	MapMutex.Unlock()
 }
 
@@ -72,10 +87,17 @@ func (c Clients) BroadcastExcept(socketId uint32, data []byte) {
 	for _, client := range c {
 		if client.SocketId != socketId {
 			client.Mutex.Lock()
-			client.Conn.WriteMessage(websocket.BinaryMessage, data)
+			err := client.Conn.WriteMessage(websocket.BinaryMessage, data)
+			if err != nil {
+				deadClients = append(deadClients, client.SocketId)
+			}
 			client.Mutex.Unlock()
 		}
 	}
+	for _, deadClient := range deadClients {
+		c.RemoveLocked(deadClient)
+	}
+	deadClients = deadClients[:0]
 	MapMutex.Unlock()
 }
 
