@@ -97,5 +97,5 @@ main {
 }
 
 div.card {
-    @apply flex flex-col gap-y-2.5 border border-white w-fit p-6;
+    @apply flex flex-col gap-y-2.5 w-fit p-6;
 }
