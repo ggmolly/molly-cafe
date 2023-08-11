@@ -41,20 +41,6 @@ The netcode is the part of the code that handles (for the moment) the websocket 
 - [proto.go](server/socket/proto.go) : Creation, modification of custom packets
 - [main.go:85](server/main.go#L85) : Handling of HTTP -> Websocket upgrade
 
-There is currently a huge design flaw in the code :
-
-### Socket ID generation
-
-When a client connects to the websocket, a unique ID is generated for it, and stored in a map.
-
-You can observe the code in the file [clients.go:24](server/socket/clients.go#L24).
-
-The code is generating a random `uint32` and checking if it's already in the map, if it is, it generates another one, and so on.
-
-Well, even if `uint32` has 4,294,967,296 possible values, it's still possible (in an extremely unlikely case) that the code will generate a duplicate ID every time, and thus, never be able to generate a new ID.
-
-Even if we all agree that my server will never have +100,000 clients connected at the same time, it's still a bad choice in my opinion.
-
 ## Monitoring <a name="monitoring"></a>
 
 The monitoring part of the code is where the program is gathering data from other programs / from the kernel.
