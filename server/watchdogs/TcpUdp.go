@@ -14,13 +14,11 @@ func MonitorSocketConnections(tcpPacket, udpPacket *socket.Packet) {
 	for {
 		tcp, err := os.OpenFile("/proc/net/tcp", os.O_RDONLY, 0)
 		if err != nil {
-			log.Printf("/!\\ Error while opening /proc/net/tcp: %s\n", err)
-			panic(err)
+			log.Fatal("/!\\ Error while opening /proc/net/tcp", err)
 		}
 		udp, err := os.OpenFile("/proc/net/udp", os.O_RDONLY, 0)
 		if err != nil {
-			log.Printf("/!\\ Error while opening /proc/net/tcp: %s\n", err)
-			panic(err)
+			log.Fatal("/!\\ Error while opening /proc/net/tcp", err)
 		}
 		// Count number of lines in each files
 		var tcpCount, udpCount uint32

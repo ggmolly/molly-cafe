@@ -18,7 +18,7 @@ func MonitorIdleUptime(packet *socket.Packet) {
 		var idleUptime, totalUptime float64
 		_, err = fmt.Fscanf(file, "%f %f", &totalUptime, &idleUptime)
 		if err != nil {
-			log.Fatal(err)
+			log.Println("/!\\ Failed to parse uptime file", err)
 		}
 		packet.SetPercentage(float32(idleUptime) / float32(totalUptime))
 		file.Close()

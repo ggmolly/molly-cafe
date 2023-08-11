@@ -12,13 +12,13 @@ func MonitorOpenFiles(openFilePacket *socket.Packet) {
 	for {
 		file, err := os.OpenFile("/proc/sys/fs/file-nr", os.O_RDONLY, 0)
 		if err != nil {
-			log.Println("/!\\ Could not open /proc/sys/fs/file-nr", err)
+			log.Fatal("/!\\ Could not open /proc/sys/fs/file-nr", err)
 		}
 		var openedFiles uint32
 		buf := make([]byte, 19) // length of uint64 max's string representation
 		_, err = file.Read(buf)
 		if err != nil {
-			log.Println("/!\\ Could not read /proc/sys/fs/file-nr", err)
+			log.Fatal("/!\\ Could not read /proc/sys/fs/file-nr", err)
 		}
 		// god tier optimisation right here
 		for i := 0; i < 19; i++ {
