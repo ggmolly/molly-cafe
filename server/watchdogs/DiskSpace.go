@@ -2,6 +2,7 @@ package watchdogs
 
 import (
 	"bufio"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -54,10 +55,14 @@ func MonitorDiskSpace(packetMaps *map[string]*socket.Packet, clients *socket.Cli
 		}
 	}
 	mounts.Close()
+	var stat syscall.Statfs_t
 	for {
 		for _, mountPoint := range mountPoints {
-			var stat syscall.Statfs_t
-			syscall.Statfs(mountPoint, &stat)
+			err := syscall.Statfs(mountPoint, &stat)
+			if err != nil {
+				log.Println("/!\\ Unable to stat", mountPoint, err)
+				continue
+			}
 			available := stat.Bavail * uint64(stat.Bsize)
 			total := stat.Blocks * uint64(stat.Bsize)
 			used := 100 - (float64(available) / float64(total) * 100)
