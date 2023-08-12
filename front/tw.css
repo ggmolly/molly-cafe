@@ -53,11 +53,6 @@ h3 {
     text-shadow: 0 0 8px rgb(251 191 36);
 }
 
-.stone {
-    @apply text-stone-200;
-    text-shadow: 0 0 2px rgb(231 229 228);
-}
-
 .green {
     @apply text-emerald-500;
     text-shadow: 0 0 8px rgb(16 185 129);
