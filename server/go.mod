@@ -4,6 +4,8 @@ go 1.19
 
 require (
 	github.com/docker/docker v24.0.5+incompatible
+	github.com/fasthttp/websocket v1.5.4
+	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gofiber/contrib/websocket v1.1.0
 	github.com/gofiber/fiber/v2 v2.48.0
 )
@@ -14,8 +16,6 @@ require (
 	github.com/docker/distribution v2.8.2+incompatible // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
-	github.com/fasthttp/websocket v1.5.4 // indirect
-	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
