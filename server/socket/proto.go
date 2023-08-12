@@ -31,6 +31,8 @@ const (
 	S_UNHEALTHY = 0x01
 	S_HEALTHY   = 0x02
 	S_OK        = 0x02
+
+	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
 
 var (
@@ -49,7 +51,7 @@ func NewPacket(category uint8, dataType uint8, name string) *Packet {
 
 func (p *Packet) SetState(state uint8) *Packet {
 	if p.DataType != DT_UINT8 {
-		panic("dataType does not match the passed value")
+		panic(ERR_DATA_TYPE_MISMATCH)
 	}
 	newData := []byte{state}
 	if !bytes.Equal(newData, p.Data) {
@@ -71,7 +73,7 @@ func (p *Packet) setFloat32(value float32) *Packet {
 
 func (p *Packet) SetUint32(value uint32) *Packet {
 	if p.DataType != DT_UINT32 {
-		panic("dataType does not match the passed value")
+		panic(ERR_DATA_TYPE_MISMATCH)
 	}
 	newData := []byte{byte(value >> 24), byte(value >> 16), byte(value >> 8), byte(value)}
 	if !bytes.Equal(newData, p.Data) {
@@ -83,21 +85,21 @@ func (p *Packet) SetUint32(value uint32) *Packet {
 
 func (p *Packet) SetPercentage(value float32) *Packet {
 	if p.DataType != DT_PERCENTAGE {
-		panic("dataType does not match the passed value")
+		panic(ERR_DATA_TYPE_MISMATCH)
 	}
 	return p.setFloat32(value)
 }
 
 func (p *Packet) SetTemperature(value float32) *Packet {
 	if p.DataType != DT_TEMPERATURE {
-		panic("dataType does not match the passed value")
+		panic(ERR_DATA_TYPE_MISMATCH)
 	}
 	return p.setFloat32(value)
 }
 
 func (p *Packet) SetLoadUsage(value float32) *Packet {
 	if p.DataType != DT_LOAD_USAGE {
-		panic("dataType does not match the passed value")
+		panic(ERR_DATA_TYPE_MISMATCH)
 	}
 	return p.setFloat32(value)
 }
