@@ -160,8 +160,8 @@ class Packet {
             return idA - idB;
         });
         // Reorder elements
-        for (let i = 0; i < children.length; i++) {
-            element.appendChild(children[i]);
+        for (let child of children) {
+            element.appendChild(child);
         }
     }
 
