@@ -9,25 +9,27 @@ import (
 
 // check if file '/run/systemd/units/invocation:{name}.service' exists
 
+func setServiceState(serviceName string, packet *socket.Packet) {
+	_, err := os.Lstat("/run/systemd/units/invocation:" + serviceName + ".service")
+	if err != nil {
+		packet.SetState(socket.S_DEAD)
+	} else {
+		packet.SetState(socket.S_OK)
+	}
+}
+
 func ManualServices(packetMaps *map[string]*socket.Packet, services ...string) {
 	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		panic(err)
+	}
 	for _, service := range services {
 		serviceSocket := socket.NewPacket(socket.C_SERVICE, socket.DT_UINT8, service)
 		(*packetMaps)[service] = serviceSocket
-		if err != nil {
-			panic(err)
-		}
-		err = watcher.Add("/run/systemd/units")
-		if err != nil {
-			panic(err)
-		}
+		// Since we're iterating over files, there cannot be duplicates, `watcher.Add` cannot fail, so we can ignore the error
+		watcher.Add("/run/systemd/units")
 		// Check if service's file exists
-		_, err := os.Lstat("/run/systemd/units/invocation:" + service + ".service")
-		if err != nil {
-			serviceSocket.SetState(socket.S_DEAD)
-		} else {
-			serviceSocket.SetState(socket.S_OK)
-		}
+		setServiceState(service, serviceSocket)
 	}
 	for {
 		select {
