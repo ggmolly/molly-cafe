@@ -74,7 +74,8 @@ function newLine(packet: Packet): HTMLHeadingElement {
     h3.id = "m-" + packet.id.toString();
     // pad with enough '.' to have a string of length 30
     let name: string = packet.name;
-    name += '.'.repeat(30 - name.length);
+    let padLength = 30 - name.length;
+    name += '.'.repeat(padLength > 0 ? padLength : 0);
     h3.innerText = name;
     // add a span for the unit
     let span: HTMLSpanElement = getColoredSpan(packet);
