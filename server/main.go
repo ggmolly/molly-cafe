@@ -79,7 +79,7 @@ func main() {
 	)
 
 	app.Use(cache.New(cache.Config{
-		Expiration:   8 * time.Hour,
+		Expiration:   1 * time.Hour,
 		CacheControl: true,
 	}))
 
