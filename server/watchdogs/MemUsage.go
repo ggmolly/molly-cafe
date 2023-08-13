@@ -11,6 +11,20 @@ import (
 	"github.com/bettercallmolly/illustrious/socket"
 )
 
+func parseMemLine(line *string, memAvailable, memTotal *float32) {
+	var scanErr error
+	if strings.HasPrefix(*line, "MemAvailable:") {
+		*line = strings.TrimSpace((*line)[13 : len(*line)-2])
+		_, scanErr = fmt.Sscanf(*line, "%f", memAvailable)
+	} else if strings.HasPrefix(*line, "MemTotal:") {
+		*line = strings.TrimSpace((*line)[9 : len(*line)-2])
+		_, scanErr = fmt.Sscanf(*line, "%f", memTotal)
+	}
+	if scanErr != nil {
+		log.Println("/!\\ Failed to parse field /proc/meminfo", scanErr)
+	}
+}
+
 func MonitorMemUsage(packet *socket.Packet) {
 	file, err := os.OpenFile("/proc/meminfo", os.O_RDONLY, 0)
 	if err != nil {
@@ -23,21 +37,7 @@ func MonitorMemUsage(packet *socket.Packet) {
 		var memAvailable, memTotal float32
 		for scanner.Scan() {
 			line := scanner.Text()
-			if strings.HasPrefix(line, "MemAvailable:") {
-				line = strings.TrimSpace(line[13 : len(line)-2])
-				_, err := fmt.Sscanf(line, "%f", &memAvailable)
-				if err != nil {
-					log.Println("/!\\ Failed to parse field MemAvailable /proc/meminfo", err)
-					break
-				}
-			} else if strings.HasPrefix(line, "MemTotal:") {
-				line = strings.TrimSpace(line[9 : len(line)-2])
-				_, err := fmt.Sscanf(line, "%f", &memTotal)
-				if err != nil {
-					log.Println("/!\\ Failed to parse field MemTotal /proc/meminfo", err)
-					break
-				}
-			}
+			parseMemLine(&line, &memAvailable, &memTotal)
 			if memAvailable > 0 && memTotal > 0 {
 				packet.SetLoadUsage(100 - (memAvailable / memTotal * 100))
 				break
