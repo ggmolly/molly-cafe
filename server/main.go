@@ -26,28 +26,28 @@ func init() {
 	socket.ConnectedClients = socket.NewClients()
 
 	// TCP / UDP connections
-	socket.PacketMap["tcp"] = socket.NewPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "tcp connections")
-	socket.PacketMap["udp"] = socket.NewPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "udp connections")
+	socket.PacketMap["tcp"] = socket.NewMonitoringPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "tcp connections")
+	socket.PacketMap["udp"] = socket.NewMonitoringPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "udp connections")
 	go watchdogs.MonitorSocketConnections(socket.PacketMap["tcp"], socket.PacketMap["udp"])
 
 	// Dirtymem
-	socket.PacketMap["packetDirtyMem"] = socket.NewPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "dirty mem (kB)")
+	socket.PacketMap["packetDirtyMem"] = socket.NewMonitoringPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "dirty mem (kB)")
 	go watchdogs.MonitorDirtyMem(socket.PacketMap["packetDirtyMem"])
 
 	// Opened file descriptors
-	socket.PacketMap["openFiles"] = socket.NewPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "opened fds")
+	socket.PacketMap["openFiles"] = socket.NewMonitoringPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "opened fds")
 	go watchdogs.MonitorOpenFiles(socket.PacketMap["openFiles"])
 
 	// Running processes
-	socket.PacketMap["proccesses"] = socket.NewPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "running proccesses")
+	socket.PacketMap["proccesses"] = socket.NewMonitoringPacket(socket.C_SOFT_RESOURCE, socket.DT_UINT32, "running proccesses")
 	go watchdogs.MonitorRunningProcesses(socket.PacketMap["proccesses"])
 
 	// Idle uptime
-	socket.PacketMap["idleUptime"] = socket.NewPacket(socket.C_SOFT_RESOURCE, socket.DT_PERCENTAGE, "idle uptime")
+	socket.PacketMap["idleUptime"] = socket.NewMonitoringPacket(socket.C_SOFT_RESOURCE, socket.DT_PERCENTAGE, "idle uptime")
 	go watchdogs.MonitorIdleUptime(socket.PacketMap["idleUptime"])
 
 	// Users logged in (disabled until a more efficient way is used)
-	// socket.PacketMap["usersLoggedIn"] = socket.NewPacket(socket.C_MISC, socket.DT_UINT32, "users logged in")
+	// socket.PacketMap["usersLoggedIn"] = socket.NewMonitoringPacket(socket.C_MISC, socket.DT_UINT32, "users logged in")
 	// go watchdogs.MonitorLoggedUsers(socket.PacketMap["usersLoggedIn"])
 
 	// Containers / Services
@@ -58,11 +58,11 @@ func init() {
 	go watchdogs.MonitorCPUTemp(&socket.PacketMap)
 
 	// Internet Speed
-	socket.PacketMap["downSpeed"] = socket.NewPacket(socket.C_MISC, socket.DT_UINT32, "down speed (Mbps)")
+	socket.PacketMap["downSpeed"] = socket.NewMonitoringPacket(socket.C_MISC, socket.DT_UINT32, "down speed (Mbps)")
 	go watchdogs.MonitorInternetSpeed(socket.PacketMap["downSpeed"])
 
 	// RAM usage
-	socket.PacketMap["ramUsage"] = socket.NewPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, "ram usage")
+	socket.PacketMap["ramUsage"] = socket.NewMonitoringPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, "ram usage")
 	go watchdogs.MonitorMemUsage(socket.PacketMap["ramUsage"])
 
 	// Disk usage

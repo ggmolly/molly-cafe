@@ -34,7 +34,7 @@ func getCPUPacket(packetMaps *map[string]*socket.Packet, label string) *socket.P
 	label = strings.ToLower(label)
 	packet, ok := (*packetMaps)[label]
 	if !ok {
-		packet = socket.NewPacket(socket.C_MISC, socket.DT_TEMPERATURE, label)
+		packet = socket.NewMonitoringPacket(socket.C_MISC, socket.DT_TEMPERATURE, label)
 		(*packetMaps)[label] = packet
 		return packet
 	}

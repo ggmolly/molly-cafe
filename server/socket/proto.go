@@ -6,6 +6,7 @@ import (
 )
 
 type Packet struct {
+	Target     uint8
 	Category   uint8
 	Id         uint16
 	DataType   uint8
@@ -16,6 +17,8 @@ type Packet struct {
 }
 
 const (
+	T_MONITORING = 0x00
+
 	C_SERVICE       = 0x00
 	C_HARD_RESOURCE = 0x01
 	C_SOFT_RESOURCE = 0x02
@@ -39,14 +42,19 @@ var (
 	packedId uint16 = 0
 )
 
-func NewPacket(category uint8, dataType uint8, name string) *Packet {
+func NewPacket(target, category, dataType uint8, name string) *Packet {
 	packedId++
 	return &Packet{
+		Target:   target,
 		Category: category,
 		Id:       packedId,
 		DataType: dataType,
 		Name:     name,
 	}
+}
+
+func NewMonitoringPacket(category, dataType uint8, name string) *Packet {
+	return NewPacket(T_MONITORING, category, dataType, name)
 }
 
 func (p *Packet) SetState(state uint8) *Packet {
@@ -105,7 +113,8 @@ func (p *Packet) SetLoadUsage(value float32) *Packet {
 }
 
 func (p *Packet) GetRawBytes() []byte {
-	buffer := make([]byte, 0, 7+len(p.Name)+len(p.Data))
+	buffer := make([]byte, 0, 8+len(p.Name)+len(p.Data))
+	buffer = append(buffer, p.Target)
 	buffer = append(buffer, p.Category)
 	buffer = append(buffer, byte(p.Id>>8), byte(p.Id))
 	buffer = append(buffer, p.DataType)

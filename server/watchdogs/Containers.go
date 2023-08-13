@@ -16,7 +16,7 @@ func getDockerPacket(packetMaps *map[string]*socket.Packet, containerName string
 	packet, ok := (*packetMaps)[containerName]
 	// If the packet does not exist, create it
 	if !ok {
-		(*packetMaps)[containerName] = socket.NewPacket(socket.C_SERVICE, socket.DT_UINT8, containerName)
+		(*packetMaps)[containerName] = socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, containerName)
 		return (*packetMaps)[containerName]
 	} else {
 		return packet

@@ -24,7 +24,7 @@ func ManualServices(packetMaps *map[string]*socket.Packet, services ...string) {
 		panic(err)
 	}
 	for _, service := range services {
-		serviceSocket := socket.NewPacket(socket.C_SERVICE, socket.DT_UINT8, service)
+		serviceSocket := socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, service)
 		(*packetMaps)[service] = serviceSocket
 		// Since we're iterating over files, there cannot be duplicates, `watcher.Add` cannot fail, so we can ignore the error
 		watcher.Add("/run/systemd/units")

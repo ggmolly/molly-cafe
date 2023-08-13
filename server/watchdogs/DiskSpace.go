@@ -32,7 +32,7 @@ func getDiskPacket(packetMaps *map[string]*socket.Packet, path string) *socket.P
 	path = strings.ToLower(getTranslatedName(path))
 	packet, ok := (*packetMaps)[path]
 	if !ok {
-		packet = socket.NewPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, path)
+		packet = socket.NewMonitoringPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, path)
 		(*packetMaps)[path] = packet
 		return packet
 	}
