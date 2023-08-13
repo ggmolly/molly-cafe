@@ -10,18 +10,19 @@ import (
 )
 
 func MonitorIdleUptime(packet *socket.Packet) {
+	file, err := os.Open("/proc/uptime")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
 	for {
-		file, err := os.Open("/proc/uptime")
-		if err != nil {
-			log.Fatal(err)
-		}
+		file.Seek(0, 0)
 		var idleUptime, totalUptime float64
 		_, err = fmt.Fscanf(file, "%f %f", &totalUptime, &idleUptime)
 		if err != nil {
 			log.Println("/!\\ Failed to parse uptime file", err)
 		}
 		packet.SetPercentage(float32(idleUptime) / float32(totalUptime))
-		file.Close()
 		time.Sleep(REFRESH_DELAY)
 	}
 }

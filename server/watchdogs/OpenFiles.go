@@ -9,11 +9,13 @@ import (
 )
 
 func MonitorOpenFiles(openFilePacket *socket.Packet) {
+	file, err := os.OpenFile("/proc/sys/fs/file-nr", os.O_RDONLY, 0)
+	if err != nil {
+		log.Fatal("/!\\ Could not open /proc/sys/fs/file-nr", err)
+	}
+	defer file.Close()
 	for {
-		file, err := os.OpenFile("/proc/sys/fs/file-nr", os.O_RDONLY, 0)
-		if err != nil {
-			log.Fatal("/!\\ Could not open /proc/sys/fs/file-nr", err)
-		}
+		file.Seek(0, 0)
 		var openedFiles uint32
 		buf := make([]byte, 19) // length of uint64 max's string representation
 		_, err = file.Read(buf)

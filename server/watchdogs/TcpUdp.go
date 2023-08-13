@@ -11,15 +11,19 @@ import (
 
 func MonitorSocketConnections(tcpPacket, udpPacket *socket.Packet) {
 	log.Println("Monitoring socket connections...")
+	tcp, tcpErr := os.OpenFile("/proc/net/tcp", os.O_RDONLY, 0)
+	udp, udpErr := os.OpenFile("/proc/net/udp", os.O_RDONLY, 0)
+	if tcpErr != nil {
+		log.Fatal("/!\\ Error while opening /proc/net/tcp", tcpErr)
+	}
+	if udpErr != nil {
+		log.Fatal("/!\\ Error while opening /proc/net/udp", udpErr)
+	}
+	defer tcp.Close()
+	defer udp.Close()
 	for {
-		tcp, err := os.OpenFile("/proc/net/tcp", os.O_RDONLY, 0)
-		if err != nil {
-			log.Fatal("/!\\ Error while opening /proc/net/tcp", err)
-		}
-		udp, err := os.OpenFile("/proc/net/udp", os.O_RDONLY, 0)
-		if err != nil {
-			log.Fatal("/!\\ Error while opening /proc/net/tcp", err)
-		}
+		tcp.Seek(0, 0)
+		udp.Seek(0, 0)
 		// Count number of lines in each files
 		var tcpCount, udpCount uint32
 		for {

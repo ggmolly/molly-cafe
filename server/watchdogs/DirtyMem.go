@@ -22,11 +22,13 @@ func parseKb(s string) (uint64, error) {
 }
 
 func MonitorDirtyMem(dirtyMemPacket *socket.Packet) {
+	file, err := os.OpenFile("/proc/meminfo", os.O_RDONLY, 0)
+	if err != nil {
+		log.Fatal("/!\\ Failed to open /proc/meminfo", err)
+	}
+	defer file.Close()
 	for {
-		file, err := os.OpenFile("/proc/meminfo", os.O_RDONLY, 0)
-		if err != nil {
-			log.Fatal("/!\\ Failed to open /proc/meminfo", err)
-		}
+		file.Seek(0, 0)
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
 			line := scanner.Text()
@@ -40,7 +42,6 @@ func MonitorDirtyMem(dirtyMemPacket *socket.Packet) {
 				break
 			}
 		}
-		file.Close()
 		time.Sleep(REFRESH_DELAY)
 	}
 }

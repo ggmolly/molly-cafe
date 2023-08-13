@@ -35,6 +35,7 @@ func MonitorContainers(packetMaps *map[string]*socket.Packet) {
 	})
 	if err != nil {
 		log.Println("/!\\ Could not list containers", err)
+		return // Let's assert docker daemon is not reachable
 	}
 	for _, container := range containers {
 		packet := getDockerPacket(packetMaps, container.Names[0])
