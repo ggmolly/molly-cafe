@@ -20,7 +20,7 @@ func MonitorRunningProcesses(packet *socket.Packet) {
 		for {
 			// Read directory entry
 			entry, err := dir.Readdir(1)
-			if err != nil {
+			if err != nil || len(entry) == 0 {
 				break
 			}
 			// Check if it's a directory
