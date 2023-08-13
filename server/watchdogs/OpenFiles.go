@@ -31,7 +31,6 @@ func MonitorOpenFiles(openFilePacket *socket.Packet) {
 			}
 		}
 		openFilePacket.SetUint32(openedFiles)
-		file.Close()
 		time.Sleep(REFRESH_DELAY)
 	}
 }

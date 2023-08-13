@@ -44,8 +44,6 @@ func MonitorSocketConnections(tcpPacket, udpPacket *socket.Packet) {
 		}
 		tcpPacket.SetUint32(tcpCount)
 		udpPacket.SetUint32(udpCount)
-		tcp.Close()
-		udp.Close()
 		time.Sleep(REFRESH_DELAY)
 	}
 }
