@@ -17,20 +17,127 @@
 
 <body>
     <main class="container mx-auto">
-        <br />
-        <div class="flex gap-3 flex-wrap justify-around border-2 border-neutral-700 p-2">
-            <div class="card" id="services">
-                <h1 class="stone">services</h1>
+        <div class="card min-h-[128px] my-2">
+            <h3 class="ml-1">Welcome!</h3>
+            <div>
+                <img src="https://avatars.githubusercontent.com/u/20666343" width="96" height="96"
+                    class="p-0.5 border border-fuchsia-500 float-left m-3" />
+                <p class="ml-2">
+                    Hey! I'm <span class="fuchsia">Molly</span>, a 20 years old <a href="https://www.42network.org/">42 Paris</a> student. <br />
+                    I enjoy programming, and when I have free time or inspiration I enjoy adding useless but cool features on this website. <br />
+                    It is not very pretty *yet* but I'd love to make it look better one day. (functionality > design) I have some cool ideas for it. <br />
+                    You can check the source code of this website <a href="https://github.com/BetterCallMolly/molly-cafe">here</a> and it is hosted on a server I own, and you can see its status below.
+                </p>
+                <br/>
+                <div class="ml-2">
+                    me summarized:
+                    <p class="ml-2">
+                        * I love to code in <span class="text-cyan-400">Go</span>, <span class="text-white">C</span> and <span class="text-pink-300">C++</span> (also <span class="text-blue-400">Python</span> sometimes)
+                        <br/>
+                        * I plan to learn <span class="text-yellow-400">Zig</span>
+                        <br/>
+                        * I love <span class="text-red-400">low-level</span> programming and <span class="text-green-400">systems</span> programming
+                        <br/>
+                        * I love <span class="text-yellow-400">networking</span>, <span class="text-blue-400">security</span> and <span class="text-violet-400">data science</span> / <span class="text-violet-400">machine learning</span>
+                        <br/>
+                        * <span class="text-blue-400">Docker</span> stan (containers are very cool)
+                        <br/>
+                        * <span class="text-cyan-500">Fedora</span> user
+                        <br/>
+                        * I never do <span class="text-red-400">bug bounties</span> but you can check my <a href="https://hackerone.com/bettercallmolly">HackerOne</a> profile
+                        <br/>
+                    </p>
+                    <!-- <p ml-2 text-lg>
+                        I also have a <a href="">blog</a> where I post some stuff from time to time.
+                    </p> -->
+                </div>
             </div>
-            <div class="card" id="hard-resources">
-                <h1 class="stone">hard resources</h1>
+        </div>
+        <div class="card min-h-[128px] my-2">
+            <h3 class="ml-1">Projects</h3>
+            <div class="m-4">
+                <h4 class="text-center">School projects</h4>
+                <table class="table-fixed w-full text-left">
+                    <thead>
+                        <tr>
+                            <th class="w-1/12">name</th>
+                            <th class="w-8/12 text-left">description</th>
+                            <th class="w-2/12">grade</th>
+                            <th class="w-1/12">difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody class="high">
+                        <tr>
+                            <td><a href="https://github.com/BetterCallMolly/darkly">darkly</a></td>
+                            <td>Web CTF (SQLi, XSS, Scraping)</td>
+                            <td class="grade-max-bonus">125%</td>
+                            <td><span class="badge badge-green">easy</span></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://github.com/BetterCallMolly/snow-crash">snow-crash</a></td>
+                            <td>Linux CTF (RE, beginner exploits / reconnaissance)</td>
+                            <td class="grade-wip">Not graded yet</td>
+                            <td><span class="badge badge-green">easy</span></td>
+                        </tr>
+                        <tr>
+                            <td>rainfall</td>
+                            <td>Linux CTF (RE, buffer overflow, ROP, ...)</td>
+                            <td class="grade-wip">WIP</td>
+                            <td><span class="badge badge-yellow">medium</span></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://github.com/BetterCallMolly/piscine-cybersecurity/tree/main/arachnida">arachnida</a></td>
+                            <td>Recursive spider bot that download all images of a site, EXIF parsing</td>
+                            <td class="grade-max-bonus">125%</td>
+                            <td><span class="badge badge-green">easy</span></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://github.com/BetterCallMolly/piscine-cybersecurity/tree/main/ft_otp">ft_otp</a></td>
+                            <td>RFC 4226 (HOTP) reimplementation</td>
+                            <td class="grade-max-bonus">125%</td>
+                            <td><span class="badge badge-green">easy</span></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://github.com/BetterCallMolly/piscine-cybersecurity/tree/main/ft_onion">ft_onion</a></td>
+                            <td>Creating a Tor hidden service</td>
+                            <td class="grade-max-bonus">125%</td>
+                            <td><span class="badge badge-green">easy</span></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://github.com/BetterCallMolly/piscine-cybersecurity/tree/main/reverse_me">reverse_me</a></td>
+                            <td>Reverse, reimplement and crack three x86_64 ELF binaries</td>
+                            <td class="grade-wip">Not graded yet</td>
+                            <td><span class="badge badge-green">easy</span></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://github.com/BetterCallMolly/piscine-cybersecurity/tree/main/stockholm">stockholm</a></td>
+                            <td>Implementation of a crypto-locker (I used Golang)</td>
+                            <td class="grade-wip">Not graded yet</td>
+                            <td><span class="badge badge-green">easy</span></td>
+                        </tr>
+                        <tr>
+                            <td>webserv</td>
+                            <td>Reimplementation of a HTTP server in C++ (GET, POST, DELETE)</td>
+                            <td class="grade-max">110%</td>
+                            <td><span class="badge badge-yellow">medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="card" id="soft-resources">
-                <h1 class="stone">soft resources</h1>
+        </div>
+        <div class="card card-flex">
+            <div class="inner-card" id="services">
+                <h3 class="stone">services</h3>
             </div>
-            <div class="card" id="misc">
-                <h1 class="stone">misc</h1>
-                <h3>currently here................ [<span class="fuchsia" id="connected-count">?</span>]</h3>
+            <div class="inner-card" id="hard-resources">
+                <h3 class="stone">hard resources</h3>
+            </div>
+            <div class="inner-card" id="soft-resources">
+                <h3 class="stone">soft resources</h3>
+            </div>
+            <div class="inner-card" id="misc">
+                <h3 class="stone">misc</h3>
+                <h4>currently here................ [<span class="fuchsia" id="connected-count">?</span>]</h4>
             </div>
         </div>
     </main>
