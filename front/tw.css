@@ -39,8 +39,20 @@ h1 {
     @apply text-4xl font-bold;
 }
 
+h2 {
+    @apply text-3xl;
+}
+
 h3 {
     @apply text-2xl;
+}
+
+h4 {
+    @apply text-xl;
+}
+
+h5 {
+    @apply text-lg;
 }
 
 .yellow {
@@ -92,5 +104,118 @@ main {
 }
 
 div.card {
+    @apply border-2 border-neutral-600 p-2;
+}
+
+div.lighter-card {
+    @apply border !important;
+}
+
+div.card-flex {
+    @apply flex gap-3 flex-wrap justify-around;
+}
+
+div.inner-card {
     @apply flex flex-col gap-y-2.5 w-fit p-6;
+}
+
+a {
+    @apply text-fuchsia-500 hover:text-fuchsia-400 underline;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:visited {
+    @apply text-fuchsia-400;
+}
+
+a:visited:hover {
+    @apply underline;
+}
+
+span.badge {
+    @apply inline-block rounded-full px-2 py-1 text-xs font-bold;
+}
+
+span.badge-rose {
+    @apply bg-rose-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(251 113 133);
+}
+
+span.badge-blue {
+    @apply bg-blue-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(96 165 250);
+}
+
+span.badge-fuchsia {
+    @apply bg-fuchsia-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(232 121 249);
+}
+
+span.badge-yellow {
+    @apply bg-yellow-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(250 204 21);
+}
+
+span.badge-green {
+    @apply bg-emerald-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(52 211 153);
+}
+
+span.badge-orange {
+    @apply bg-amber-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(251 191 36);
+}
+
+span.badge-stone {
+    @apply bg-stone-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(231 229 228);
+}
+
+span.badge-white {
+    @apply bg-white text-neutral-900;
+    box-shadow: 0 0 8px rgb(255 255 255);
+}
+
+span.badge-cyan {
+    @apply bg-cyan-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(42 209 204);
+}
+
+.grade-max-bonus {
+    @apply text-emerald-400;
+}
+
+.grade-max {
+    @apply text-emerald-500;
+}
+
+.grade-ok {
+    @apply text-green-400;
+}
+
+.grade-fail {
+    @apply text-red-400;
+}
+
+.grade-wip {
+    @apply text-stone-400;
+}
+
+tr {
+    @apply border-b border-neutral-600;
+}
+
+tbody > tr:hover {
+    @apply bg-neutral-800 transition-colors;
+}
+
+tbody.high > tr {
+    @apply h-10;
+}
+
+tbody.high > tr > td:nth-child(2) {
+    @apply text-left;
 }

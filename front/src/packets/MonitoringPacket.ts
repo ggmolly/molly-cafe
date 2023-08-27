@@ -69,20 +69,20 @@ export class MonitoringPacket extends APacket {
     }
 
     newLine(): HTMLHeadingElement {
-        let h3: HTMLHeadingElement = document.createElement('h3');
-        h3.id = "m-" + this.id.toString();
+        let h4: HTMLHeadingElement = document.createElement('h4');
+        h4.id = "m-" + this.id.toString();
         // pad with enough '.' to have a string of length 30
         let name: string = this.name;
         let padLength = 30 - name.length;
         name += '.'.repeat(padLength > 0 ? padLength : 0);
-        h3.innerText = name;
+        h4.innerText = name;
         // add a span for the unit
         let span: HTMLSpanElement = this.getColoredSpan();
-        // add a space between the h3's text and the span
-        h3.appendChild(document.createTextNode(' ['));
-        h3.appendChild(span);
-        h3.appendChild(document.createTextNode(']'));
-        return h3;
+        // add a space between the h4's text and the span
+        h4.appendChild(document.createTextNode(' ['));
+        h4.appendChild(span);
+        h4.appendChild(document.createTextNode(']'));
+        return h4;
     }
 
     render() {
