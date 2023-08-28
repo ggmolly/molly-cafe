@@ -23,6 +23,7 @@ func ManualServices(packetMaps *map[string]*socket.Packet, services ...string) {
 	if err != nil {
 		panic(err)
 	}
+	defer watcher.Close()
 	for _, service := range services {
 		serviceSocket := socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, service)
 		(*packetMaps)[service] = serviceSocket
