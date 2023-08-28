@@ -59,7 +59,6 @@ func init() {
 	} else {
 		loadConfig()
 	}
-	os.Exit(0)
 	socket.ConnectedClients = socket.NewClients()
 
 	// TCP / UDP connections
