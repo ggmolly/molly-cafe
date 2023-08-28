@@ -102,7 +102,7 @@ func init() {
 	go watchdogs.MonitorMemUsage(socket.PacketMap["ramUsage"])
 
 	// Disk usage
-	go watchdogs.MonitorDiskSpace(&socket.PacketMap)
+	go watchdogs.MonitorDiskSpace(&socket.PacketMap, &Config.DiskTranslations)
 }
 
 func main() {
