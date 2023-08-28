@@ -13,11 +13,8 @@ import (
 )
 
 var (
-	diskTranslations = map[string]string{
-		"miku":      "brooklyn",
-		"origami":   "baltimore",
-		"Fasterino": "testSSD",
-	}
+	diskTranslations = map[string]string{}
+	translationsSet  = false
 )
 
 func getTranslatedName(path string) string {
@@ -39,7 +36,12 @@ func getDiskPacket(packetMaps *map[string]*socket.Packet, path string) *socket.P
 	return packet
 }
 
-func MonitorDiskSpace(packetMaps *map[string]*socket.Packet) {
+// TODO: Optimize this
+func MonitorDiskSpace(packetMaps *map[string]*socket.Packet, translations *map[string]string) {
+	if !translationsSet {
+		diskTranslations = *translations
+		translationsSet = true
+	}
 	mountPoints := []string{}
 	mounts, err := os.OpenFile("/proc/mounts", os.O_RDONLY, 0)
 	if err != nil {

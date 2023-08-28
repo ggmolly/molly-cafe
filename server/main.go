@@ -21,7 +21,8 @@ type UpdateDetails struct {
 }
 
 type Configuration struct {
-	MonitoredServices []string `json:"services"`
+	MonitoredServices []string          `json:"services"`
+	DiskTranslations  map[string]string `json:"disk_translations"`
 }
 
 var (
@@ -44,6 +45,10 @@ func loadConfig() {
 	log.Println("Monitored services:")
 	for _, service := range Config.MonitoredServices {
 		log.Println("  -", service)
+	}
+	log.Println("Disk translations:")
+	for key, value := range Config.DiskTranslations {
+		log.Println("  -", key, "->", value)
 	}
 }
 
