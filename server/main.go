@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"os"
 	"time"
 
@@ -18,11 +20,41 @@ type UpdateDetails struct {
 	Status uint8  `json:"status"` // 0 = dead, 1 = unhealthy, 2 = healthy
 }
 
+type Configuration struct {
+	MonitoredServices []string `json:"services"`
+}
+
 var (
 	REFRESH_DELAY = 5 * time.Second
+	Config        = Configuration{}
 )
 
+func loadConfig() {
+	data, err := os.ReadFile("config.json")
+	if err != nil {
+		log.Println("Failed to read the config.json file")
+		return
+	}
+	err = json.Unmarshal(data, &Config)
+	if err != nil {
+		log.Println("Failed to parse the config.json file")
+		return
+	}
+	log.Println("Configuration loaded !")
+	log.Println("Monitored services:")
+	for _, service := range Config.MonitoredServices {
+		log.Println("  -", service)
+	}
+}
+
 func init() {
+	// Load config file
+	if _, err := os.Stat("config.json"); os.IsNotExist(err) {
+		log.Println("Failed to load the config.json file, using default values")
+	} else {
+		loadConfig()
+	}
+	os.Exit(0)
 	socket.ConnectedClients = socket.NewClients()
 
 	// TCP / UDP connections
@@ -52,7 +84,7 @@ func init() {
 
 	// Containers / Services
 	go watchdogs.MonitorContainers(&socket.PacketMap)
-	go watchdogs.ManualServices(&socket.PacketMap, "nginx", "mariadb", "docker", "cron", "smbd")
+	go watchdogs.ManualServices(&socket.PacketMap, Config.MonitoredServices...)
 
 	// CPU temperature
 	go watchdogs.MonitorCPUTemp(&socket.PacketMap)
