@@ -10,9 +10,6 @@ import (
 
 var (
 	LoadedConfiguration = Configuration{}
-
-	oldMonitoredServices = []string{}
-
 	// Will be used to notify the services watchdogs that the configuration has changed
 	// The map contains the services that have been added or removed (true if added, false if removed)
 	ServicesChanges = make(chan map[string]bool)
@@ -23,8 +20,8 @@ type Configuration struct {
 	DiskTranslations  map[string]string `json:"disk_translations"`
 }
 
-func contains(slice *[]string, element string) bool {
-	for _, item := range *slice {
+func contains(slice []string, element string) bool {
+	for _, item := range slice {
 		if item == element {
 			return true
 		}
@@ -35,46 +32,38 @@ func contains(slice *[]string, element string) bool {
 func LoadConfig() {
 	data, err := os.ReadFile("config.json")
 	if err != nil {
-		log.Println("Failed to read the config.json file")
 		return
 	}
+	// Deep copy the old services
+	var oldServices = make([]string, len(LoadedConfiguration.MonitoredServices))
+	copy(oldServices, LoadedConfiguration.MonitoredServices)
 	err = json.Unmarshal(data, &LoadedConfiguration)
 	if err != nil {
-		log.Println("Failed to parse the config.json file")
 		return
 	}
-	log.Println("Configuration loaded !")
-	log.Println("Monitored services:")
+	var changes = make(map[string]bool)
 	for _, service := range LoadedConfiguration.MonitoredServices {
-		log.Println("  -", service)
-	}
-	var change = make(map[string]bool)
-	for _, service := range LoadedConfiguration.MonitoredServices {
-		if !contains(&oldMonitoredServices, service) {
-			change[service] = true
+		if !contains(oldServices, service) {
+			changes[service] = true
 		}
 	}
-	for _, service := range oldMonitoredServices {
-		if !contains(&LoadedConfiguration.MonitoredServices, service) {
-			change[service] = false
+	for _, service := range oldServices {
+		if !contains(LoadedConfiguration.MonitoredServices, service) {
+			changes[service] = false
 		}
 	}
-	if len(change) > 0 {
+	if len(changes) > 0 {
 		// We're using a goroutine to avoid blocking the main thread
 		// the channel will not be read until Configuration package inits
 		// so we don't have to worry about the channel being full
 		go func() {
-			ServicesChanges <- change
+			ServicesChanges <- changes
 		}()
 	}
-	log.Println("Disk translations:")
-	for key, value := range LoadedConfiguration.DiskTranslations {
-		log.Println("  -", key, "->", value)
-	}
-	oldMonitoredServices = LoadedConfiguration.MonitoredServices
 }
 
 func PollConfig() {
+	LoadConfig()
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Println("Failed to create a watcher for the config file")
@@ -94,7 +83,6 @@ func PollConfig() {
 				return
 			}
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				log.Println("Config file changed, reloading...")
 				LoadConfig()
 			}
 		case err, ok := <-watcher.Errors:
@@ -108,6 +96,6 @@ func PollConfig() {
 }
 
 func init() {
-	LoadConfig()
+	log.Println("Loading configuration...")
 	go PollConfig()
 }
