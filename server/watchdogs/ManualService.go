@@ -1,7 +1,6 @@
 package watchdogs
 
 import (
-	"log"
 	"os"
 
 	"github.com/bettercallmolly/illustrious/configuration"
@@ -35,7 +34,6 @@ func ManualServices(packetMaps *map[string]*socket.Packet) {
 		setServiceState(service, serviceSocket)
 	}
 
-	log.Println("Monitoring services...")
 	go func() {
 		for {
 			select {
@@ -48,6 +46,11 @@ func ManualServices(packetMaps *map[string]*socket.Packet) {
 						setServiceState(serviceName, serviceSocket)
 						socket.ConnectedClients.Broadcast(serviceSocket.GetRawBytes())
 					} else {
+						packet, ok := (*packetMaps)[serviceName]
+						if !ok {
+							continue
+						}
+						packet.RemoveDOM()
 						delete(*packetMaps, serviceName)
 					}
 				}
