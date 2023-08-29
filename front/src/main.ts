@@ -30,6 +30,7 @@ websocket.onmessage = (event) => {
             break;
         case 0xFC: // DOMPopPacket
             document.getElementById(new TextDecoder().decode(event.data.slice(1)))!!.remove();
+            break;
         default:
             const target: number = new Uint8Array(event.data)[0];
             const buff: DataView = new DataView(event.data.slice(1));
