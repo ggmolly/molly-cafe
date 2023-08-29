@@ -2,6 +2,7 @@ package socket
 
 import (
 	"bytes"
+	"fmt"
 	"math"
 )
 
@@ -40,6 +41,10 @@ const (
 
 var (
 	packedId uint16 = 0
+	// targetIdPrefix is used to generate the DOM element id for the packet
+	targetIdPrefix = map[uint8]string{
+		T_MONITORING: "m",
+	}
 )
 
 func NewPacket(target, category, dataType uint8, name string) *Packet {
@@ -55,6 +60,14 @@ func NewPacket(target, category, dataType uint8, name string) *Packet {
 
 func NewMonitoringPacket(category, dataType uint8, name string) *Packet {
 	return NewPacket(T_MONITORING, category, dataType, name)
+}
+
+// This function will remove the packet from the map, and remove the DOM element in the web page
+func (p *Packet) RemoveDOM() {
+	var buffer bytes.Buffer
+	buffer.WriteByte(0xFC) // DOMPopPacket
+	buffer.WriteString(fmt.Sprintf("%s-%d", targetIdPrefix[p.Target], p.Id))
+	ConnectedClients.Broadcast(buffer.Bytes())
 }
 
 func (p *Packet) SetState(state uint8) *Packet {
