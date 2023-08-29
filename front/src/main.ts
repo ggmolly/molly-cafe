@@ -28,6 +28,8 @@ websocket.onmessage = (event) => {
             connectedClients = data.getUint32(1);
             document.getElementById('connected-count')!!.innerText = connectedClients.toString();
             break;
+        case 0xFC: // DOMPopPacket
+            document.getElementById(new TextDecoder().decode(event.data.slice(1)))!!.remove();
         default:
             const target: number = new Uint8Array(event.data)[0];
             const buff: DataView = new DataView(event.data.slice(1));
