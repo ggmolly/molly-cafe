@@ -1,6 +1,11 @@
 import { APacket } from "./APacket";
 import { DataType } from "./DataTypes";
 
+function padString(s: string, targetLength: number = 30, character: string = '.') {
+    let padLength = targetLength - s.length;
+    return s + character.repeat(padLength > 0 ? padLength : 0);
+}
+
 export class MonitoringPacket extends APacket {
     interpretState(): Array<string> {
         switch (this.data) {
@@ -21,13 +26,20 @@ export class MonitoringPacket extends APacket {
             throw new Error('Element not found');
         }
         let span: HTMLSpanElement = this.getColoredSpan(); 
-        let elSpan: HTMLSpanElement = element.getElementsByTagName('span')[0];
+        let elSpan: HTMLSpanElement = element.querySelector('span.value')!!;
+        // remove all leading dots from the name to check if new name is longer than old one
+        let nameSpan: HTMLSpanElement | null = element.querySelector('span.name');
+        if (!nameSpan) { return ; } // should never happen
+        if (nameSpan.innerText.replace(/^\.*\s*/, '') != this.name) {
+            nameSpan.innerText = padString(this.name);
+        }
         // replace old span with new one
         element.replaceChild(span, elSpan);
     }
 
     getColoredSpan(): HTMLSpanElement {
         let span: HTMLSpanElement = document.createElement('span');
+        span.classList.add('value');
         switch (this.datatype) {
             case DataType.UINT8: // state
                 let state: Array<string> = this.interpretState();
@@ -71,14 +83,13 @@ export class MonitoringPacket extends APacket {
     newLine(): HTMLHeadingElement {
         let h4: HTMLHeadingElement = document.createElement('h4');
         h4.id = "m-" + this.id.toString();
-        // pad with enough '.' to have a string of length 30
-        let name: string = this.name;
-        let padLength = 30 - name.length;
-        name += '.'.repeat(padLength > 0 ? padLength : 0);
-        h4.innerText = name;
+        let nameSpan: HTMLSpanElement = document.createElement('span');
+        nameSpan.classList.add('name');
+        nameSpan.innerText = padString(this.name);
         // add a span for the unit
         let span: HTMLSpanElement = this.getColoredSpan();
         // add a space between the h4's text and the span
+        h4.appendChild(nameSpan);
         h4.appendChild(document.createTextNode(' ['));
         h4.appendChild(span);
         h4.appendChild(document.createTextNode(']'));
