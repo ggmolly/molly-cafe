@@ -9,17 +9,13 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/bettercallmolly/illustrious/configuration"
 	"github.com/bettercallmolly/illustrious/socket"
-)
-
-var (
-	diskTranslations = map[string]string{}
-	translationsSet  = false
 )
 
 func getTranslatedName(path string) string {
 	baseName := filepath.Base(path)
-	if val, ok := diskTranslations[baseName]; ok {
+	if val, ok := configuration.LoadedConfiguration.DiskTranslations[baseName]; ok {
 		return val
 	}
 	return baseName
@@ -37,11 +33,7 @@ func getDiskPacket(packetMaps *map[string]*socket.Packet, path string) *socket.P
 }
 
 // TODO: Optimize this
-func MonitorDiskSpace(packetMaps *map[string]*socket.Packet, translations *map[string]string) {
-	if !translationsSet {
-		diskTranslations = *translations
-		translationsSet = true
-	}
+func MonitorDiskSpace(packetMaps *map[string]*socket.Packet) {
 	mountPoints := []string{}
 	mounts, err := os.OpenFile("/proc/mounts", os.O_RDONLY, 0)
 	if err != nil {
