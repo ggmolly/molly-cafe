@@ -92,7 +92,7 @@ func PollConfig() {
 		return
 	}
 	defer watcher.Close()
-	err = watcher.Add("config.json")
+	err = watcher.Add(".") // Monitor the current directory to detect creation, or VIM writes
 	if err != nil {
 		log.Println("Failed to add the config file to the watcher")
 		return
@@ -104,7 +104,10 @@ func PollConfig() {
 				log.Println("Failed to get the event from the watcher")
 				return
 			}
-			if event.Op&fsnotify.Write == fsnotify.Write {
+			if event.Name != "./config.json" {
+				continue
+			}
+			if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
 				LoadConfig()
 			}
 		case err, ok := <-watcher.Errors:
