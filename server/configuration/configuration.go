@@ -9,6 +9,10 @@ import (
 )
 
 var (
+	hotReloadCallables = []func(){
+		hotReloadServices,
+	}
+	OldConfiguration    Configuration
 	LoadedConfiguration = Configuration{}
 	// Will be used to notify the services watchdogs that the configuration has changed
 	// The map contains the services that have been added or removed (true if added, false if removed)
@@ -29,25 +33,14 @@ func contains(slice []string, element string) bool {
 	return false
 }
 
-func LoadConfig() {
-	data, err := os.ReadFile("config.json")
-	if err != nil {
-		return
-	}
-	// Deep copy the old services
-	var oldServices = make([]string, len(LoadedConfiguration.MonitoredServices))
-	copy(oldServices, LoadedConfiguration.MonitoredServices)
-	err = json.Unmarshal(data, &LoadedConfiguration)
-	if err != nil {
-		return
-	}
+func hotReloadServices() {
 	var changes = make(map[string]bool)
 	for _, service := range LoadedConfiguration.MonitoredServices {
-		if !contains(oldServices, service) {
+		if !contains(OldConfiguration.MonitoredServices, service) {
 			changes[service] = true
 		}
 	}
-	for _, service := range oldServices {
+	for _, service := range OldConfiguration.MonitoredServices {
 		if !contains(LoadedConfiguration.MonitoredServices, service) {
 			changes[service] = false
 		}
@@ -59,6 +52,35 @@ func LoadConfig() {
 		go func() {
 			ServicesChanges <- changes
 		}()
+	}
+}
+
+func deepCopyConfig() Configuration {
+	new := Configuration{
+		MonitoredServices: make([]string, len(LoadedConfiguration.MonitoredServices)),
+		DiskTranslations:  make(map[string]string),
+	}
+	copy(new.MonitoredServices, LoadedConfiguration.MonitoredServices)
+	for key, value := range LoadedConfiguration.DiskTranslations {
+		new.DiskTranslations[key] = value
+	}
+	return new
+}
+
+func LoadConfig() {
+	data, err := os.ReadFile("config.json")
+	if err != nil {
+		return
+	}
+	// Deep copy the old configuration
+	OldConfiguration = deepCopyConfig()
+	err = json.Unmarshal(data, &LoadedConfiguration)
+	if err != nil {
+		return
+	}
+	// Call the hot reload functions
+	for _, callable := range hotReloadCallables {
+		callable()
 	}
 }
 
