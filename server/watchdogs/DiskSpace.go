@@ -22,17 +22,19 @@ func getTranslatedName(path string) string {
 }
 
 func getDiskPacket(packetMaps *map[string]*socket.Packet, path string) *socket.Packet {
-	path = strings.ToLower(getTranslatedName(path))
+	baseName := strings.ToLower(getTranslatedName(path))
 	packet, ok := (*packetMaps)[path]
 	if !ok {
-		packet = socket.NewMonitoringPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, path)
+		packet = socket.NewMonitoringPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, strings.ToLower(getTranslatedName(baseName)))
 		(*packetMaps)[path] = packet
-		return packet
+	}
+	if packet.Name != baseName {
+		packet.Name = baseName
+		packet.Dirty = true
 	}
 	return packet
 }
 
-// TODO: Optimize this
 func MonitorDiskSpace(packetMaps *map[string]*socket.Packet) {
 	mountPoints := []string{}
 	mounts, err := os.OpenFile("/proc/mounts", os.O_RDONLY, 0)
