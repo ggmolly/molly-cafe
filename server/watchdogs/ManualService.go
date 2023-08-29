@@ -1,8 +1,10 @@
 package watchdogs
 
 import (
+	"log"
 	"os"
 
+	"github.com/bettercallmolly/illustrious/configuration"
 	"github.com/bettercallmolly/illustrious/socket"
 	"github.com/fsnotify/fsnotify"
 )
@@ -18,13 +20,13 @@ func setServiceState(serviceName string, packet *socket.Packet) {
 	}
 }
 
-func ManualServices(packetMaps *map[string]*socket.Packet, services ...string) {
+func ManualServices(packetMaps *map[string]*socket.Packet) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		panic(err)
 	}
 	defer watcher.Close()
-	for _, service := range services {
+	for _, service := range configuration.LoadedConfiguration.MonitoredServices {
 		serviceSocket := socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, service)
 		(*packetMaps)[service] = serviceSocket
 		// Since we're iterating over files, there cannot be duplicates, `watcher.Add` cannot fail, so we can ignore the error
@@ -32,6 +34,27 @@ func ManualServices(packetMaps *map[string]*socket.Packet, services ...string) {
 		// Check if service's file exists
 		setServiceState(service, serviceSocket)
 	}
+
+	log.Println("Monitoring services...")
+	go func() {
+		for {
+			select {
+			case changes := <-configuration.ServicesChanges:
+				for serviceName, added := range changes {
+					if added {
+						serviceSocket := socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, serviceName)
+						(*packetMaps)[serviceName] = serviceSocket
+						watcher.Add("/run/systemd/units")
+						setServiceState(serviceName, serviceSocket)
+						socket.ConnectedClients.Broadcast(serviceSocket.GetRawBytes())
+					} else {
+						delete(*packetMaps, serviceName)
+					}
+				}
+			}
+		}
+	}()
+
 	for {
 		select {
 		case event, ok := <-watcher.Events:
