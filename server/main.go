@@ -20,6 +20,7 @@ type UpdateDetails struct {
 
 var (
 	REFRESH_DELAY = 5 * time.Second
+	PistacheRoot  = "./pistache"
 )
 
 func init() {
@@ -67,6 +68,11 @@ func init() {
 
 	// Disk usage
 	go watchdogs.MonitorDiskSpace(&socket.PacketMap)
+
+	// Check if pistache root exists, otherwise look for it in the parent directory
+	if _, err := os.Stat(PistacheRoot); os.IsNotExist(err) {
+		PistacheRoot = "../pistache"
+	}
 }
 
 func main() {
@@ -108,5 +114,6 @@ func main() {
 		panic("Directory does not exist")
 	}
 	app.Static("/", os.Args[1])
+	app.Static("/pistache", PistacheRoot)
 	app.Listen("127.0.0.1:50154")
 }
