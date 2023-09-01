@@ -3,8 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
+	"path/filepath"
 	"regexp"
+	"strings"
+	"unicode"
 
 	"github.com/akamensky/argparse"
 	"github.com/yuin/goldmark"
@@ -14,6 +18,8 @@ import (
 	"github.com/yuin/goldmark/util"
 	"go.abhg.dev/goldmark/anchor"
 	"go.abhg.dev/goldmark/toc"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
 )
 
 const (
@@ -36,6 +42,16 @@ const (
 	<body>
 		<script>hljs.highlightAll();</script>
 		%s
+		<footer class='pistache-footer'>
+		<h6>
+			<a href="https://tailwindcss.com">tailwindcss</a>
+			&
+			built with <a href="https://github.com/BetterCallMolly">molly</a>'s pistache toolkit
+			-
+			silk icons by <a href="https://frhun.de/silk-icon-scalable/preview/">frhun</a> (originals by Mark
+			James)
+		</h6>
+		</footer>
 	</body>
 	`
 )
@@ -43,9 +59,10 @@ const (
 var (
 	ADDITIONNAL_LANGUAGE = `<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/%s.min.js"></script>`
 
-	Title *string
-	Desc  *string
-	URL   *string
+	Title     *string
+	Desc      *string
+	InputFile *string
+	URL       string
 )
 
 // TODO:
@@ -62,16 +79,29 @@ func injectLanguages(lang ...string) string {
 	return output
 }
 
+// taken from: https://stackoverflow.com/a/26722698
+func isMn(r rune) bool {
+	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
+}
+
+func formatTitle(title string) string {
+	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
+	min := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
+	s, _, _ := transform.String(t, min)
+	return s
+}
+
 func init() {
 	args := argparse.NewParser("pistache", "Quickly generate blog posts from markdown files")
 	Title = args.String("t", "title", &argparse.Options{Required: true, Help: "Title of the blog post (used for the HTML title and the OG title)"})
 	Desc = args.String("d", "description", &argparse.Options{Required: true, Help: "Description of the blog post (used for the OG description)"})
-	// TODO: deprecate this
-	URL = args.String("u", "url", &argparse.Options{Required: false, Help: "URL of the blog post (used for the OG URL)"})
+	InputFile = args.String("i", "input", &argparse.Options{Required: true, Help: "Input markdown file"})
 	err := args.Parse(os.Args)
 	if err != nil {
 		panic(err)
 	}
+	URL = "https://mana.rip/pistache/" + formatTitle(*Title) + ".html"
+	log.Println("url:", URL)
 }
 
 func main() {
@@ -87,13 +117,13 @@ func main() {
 			}, 100),
 		),
 	)
-	file, err := os.OpenFile("test.html", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	file, err := os.OpenFile(filepath.Base(URL), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
 	var buffer bytes.Buffer
-	mdData, err := os.ReadFile("test.md")
+	mdData, err := os.ReadFile(*InputFile)
 	if err != nil {
 		panic(err)
 	}
@@ -110,7 +140,7 @@ func main() {
 		HTML_BASE,
 		*Title,
 		*Title,
-		*URL,
+		URL,
 		*Desc,
 		injectLanguages(langs...),
 		buffer.String(),
@@ -118,4 +148,6 @@ func main() {
 	if _, err := file.WriteString(html); err != nil {
 		panic(err)
 	}
+	log.Println("HTML file generated successfully")
+	log.Println(file.Name())
 }
