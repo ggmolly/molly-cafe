@@ -23,7 +23,7 @@ const (
 	<head>
 		<meta charset="utf-8">
 		<title>%s</title>
-		<link rel="stylesheet" href="//cdn.mana.rip/pistache.css">
+		<link rel="stylesheet" href="pistache.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/a11y-dark.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 		<meta property="og:title" content="%s">
