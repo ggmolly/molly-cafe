@@ -49,8 +49,6 @@ var (
 )
 
 // TODO:
-//	- Inject custom badges at the beginning of the page (tags) -> goldmark extension (custom MD tags)
-//  - Silk icons as emojis? (fork goldmark-emoji ?)
 //  - Pipe output to minify
 
 func injectLanguages(lang ...string) string {
