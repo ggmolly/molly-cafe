@@ -10,6 +10,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
 	"go.abhg.dev/goldmark/anchor"
 	"go.abhg.dev/goldmark/toc"
@@ -78,6 +79,7 @@ func init() {
 func main() {
 	md := goldmark.New(
 		goldmark.WithExtensions(extension.GFM, &anchor.Extender{}),
+		goldmark.WithRendererOptions(html.WithUnsafe()),
 	)
 	md.Parser().AddOptions(
 		parser.WithAutoHeadingID(),
