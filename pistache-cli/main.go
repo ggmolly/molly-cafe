@@ -23,8 +23,7 @@ import (
 )
 
 const (
-	HTML_BASE = `
-	<!DOCTYPE html>
+	HTML_BASE = `<!DOCTYPE html>
 	<html lang="en">
 	<head>
 		<meta charset="utf-8">
