@@ -143,3 +143,23 @@ illustrious
 
 # deploy script
 deploy.sh
+
+# pistache assets
+pistache/silk-icons
+pistache/pistache.css
+pistache/*.html
+
+# projects / config
+projects
+server/config.json
+
+# source maps
+*.map
+
+# vscode config
+.vscode
+
+# sonarqube config
+sonar-project.properties
+.sonar_lock
+.scannerwork
