@@ -55,7 +55,7 @@ export class SchoolProjectPacket extends APacket {
             gradeCell.classList.add('grade-wip');
             return gradeCell;
         } else {
-            gradeCell.innerText = this.grade.toString();
+            gradeCell.innerText = this.grade.toString() + "%";
         }
 
         // Grade color
