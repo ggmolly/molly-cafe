@@ -18,6 +18,7 @@ type Packet struct {
 }
 
 const (
+	// Monitoring stuff
 	T_MONITORING = 0x00
 
 	C_SERVICE       = 0x00
@@ -30,11 +31,22 @@ const (
 	DT_PERCENTAGE  = 0x02
 	DT_TEMPERATURE = 0x03
 	DT_LOAD_USAGE  = 0x04
+	DT_SPECIAL     = 0xFF
 
 	S_DEAD      = 0x00
 	S_UNHEALTHY = 0x01
 	S_HEALTHY   = 0x02
 	S_OK        = 0x02
+
+	// School projects stuff
+	T_SCHOOL_PROJECTS = 0x01
+
+	C_SCHOOL   = 0x00
+	C_PERSONAL = 0x01
+
+	P_WIP           = 0x00
+	P_GRADING       = 0x01
+	P_NOT_CONCERNED = 0xFF // mostly for personal projects
 
 	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
@@ -43,7 +55,8 @@ var (
 	packedId uint16 = 0
 	// targetIdPrefix is used to generate the DOM element id for the packet
 	targetIdPrefix = map[uint8]string{
-		T_MONITORING: "m",
+		T_MONITORING:      "m",
+		T_SCHOOL_PROJECTS: "sp",
 	}
 )
 
