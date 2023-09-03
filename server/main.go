@@ -3,8 +3,10 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
+	"github.com/bettercallmolly/illustrious/configuration"
 	"github.com/bettercallmolly/illustrious/middlewares"
 	"github.com/bettercallmolly/illustrious/routes"
 	"github.com/bettercallmolly/illustrious/socket"
@@ -21,6 +23,7 @@ type UpdateDetails struct {
 
 var (
 	REFRESH_DELAY = 5 * time.Second
+	ProjectPath   string
 )
 
 func init() {
@@ -72,6 +75,14 @@ func init() {
 
 	// Disk usage
 	go watchdogs.MonitorDiskSpace(&socket.PacketMap)
+
+	ProjectPath, err := configuration.GetRootPath("projects")
+	if err != nil {
+		log.Println("'projects' folder could not be found. project management will be disabled")
+	} else {
+		log.Printf("Monitoring projects from %s", ProjectPath)
+		go watchdogs.MonitorSchoolProjects(&socket.PacketMap, filepath.Join(ProjectPath, "school"))
+	}
 }
 
 func main() {
