@@ -1,5 +1,13 @@
 # Lists
 
+## Pistache's entities
+
+`$read_time` -> {$read_time}
+
+`$created_at` -> {$created_at}
+
+`$updated_at` -> {$updated_at}
+
 ## Unordered lists
 
 * Unordered

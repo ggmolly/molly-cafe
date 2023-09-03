@@ -8,9 +8,11 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/akamensky/argparse"
+	"github.com/bettercallmolly/molly-cafe/pistache/entities"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
@@ -44,8 +46,9 @@ const (
 			&
 			built with <a href="https://github.com/BetterCallMolly">molly</a>'s pistache toolkit
 			-
-			silk icons by <a href="https://frhun.de/silk-icon-scalable/preview/">frhun</a> (originals by Mark
-			James)
+			silk icons by <a href="https://frhun.de/silk-icon-scalable/preview/">frhun</a> (originals by Mark James)
+			-
+			generated in %.3fµs
 		</h6>
 		</footer>
 	</body>
@@ -59,11 +62,17 @@ var (
 	Desc      *string
 	InputFile *string
 	URL       string
+
+	// Pistache entities to replace
+	entitiesFuncs = map[string]func(*string, string) string{
+		"{$read_time}":  entities.ReadTime,
+		"{$created_at}": entities.CreatedAt,
+		"{$updated_at}": entities.UpdatedAt,
+	}
 )
 
 // TODO:
-//  - Pipe output to minify
-
+//   - Pipe output to minify
 func injectLanguages(lang ...string) string {
 	if len(lang) == 0 {
 		return ""
@@ -87,6 +96,17 @@ func formatTitle(title string) string {
 	return s
 }
 
+func pistacheEntities(html *string, path string) {
+	// Loop through each entities, if not found, skip and warn
+	for entity, f := range entitiesFuncs {
+		if !strings.Contains(*html, entity) {
+			log.Printf("entity %s not found, skipping", entity)
+			continue
+		}
+		*html = strings.ReplaceAll(*html, entity, f(html, path))
+	}
+}
+
 func init() {
 	args := argparse.NewParser("pistache", "Quickly generate blog posts from markdown files")
 	Title = args.String("t", "title", &argparse.Options{Required: true, Help: "Title of the blog post (used for the HTML title and the OG title)"})
@@ -101,6 +121,7 @@ func init() {
 }
 
 func main() {
+	start := time.Now()
 	md := goldmark.New(
 		goldmark.WithExtensions(extension.GFM),
 		goldmark.WithRendererOptions(html.WithUnsafe()),
@@ -135,7 +156,11 @@ func main() {
 		*Desc,
 		injectLanguages(langs...),
 		buffer.String(),
+		time.Since(start).Seconds()*1000000,
 	)
+
+	pistacheEntities(&html, *InputFile)
+
 	if _, err := file.WriteString(html); err != nil {
 		panic(err)
 	}
