@@ -188,12 +188,8 @@ span.badge-cyan {
     @apply text-emerald-400;
 }
 
-.grade-max {
-    @apply text-emerald-500;
-}
-
 .grade-ok {
-    @apply text-green-400;
+    @apply text-emerald-500;
 }
 
 .grade-fail {

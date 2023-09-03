@@ -1,9 +1,12 @@
 package main
 
 import (
+	"log"
 	"os"
+	"path/filepath"
 	"time"
 
+	"github.com/bettercallmolly/illustrious/configuration"
 	"github.com/bettercallmolly/illustrious/middlewares"
 	"github.com/bettercallmolly/illustrious/routes"
 	"github.com/bettercallmolly/illustrious/socket"
@@ -20,10 +23,15 @@ type UpdateDetails struct {
 
 var (
 	REFRESH_DELAY = 5 * time.Second
+	ProjectPath   string
 	PistacheRoot  = "./pistache"
 )
 
 func init() {
+	// Load config file
+	if _, err := os.Stat("config.json"); os.IsNotExist(err) {
+		log.Println("Failed to load the config.json file, using default values")
+	}
 	socket.ConnectedClients = socket.NewClients()
 
 	// TCP / UDP connections
@@ -53,7 +61,7 @@ func init() {
 
 	// Containers / Services
 	go watchdogs.MonitorContainers(&socket.PacketMap)
-	go watchdogs.ManualServices(&socket.PacketMap, "nginx", "mariadb", "docker", "cron", "smbd")
+	go watchdogs.ManualServices(&socket.PacketMap)
 
 	// CPU temperature
 	go watchdogs.MonitorCPUTemp(&socket.PacketMap)
@@ -68,6 +76,14 @@ func init() {
 
 	// Disk usage
 	go watchdogs.MonitorDiskSpace(&socket.PacketMap)
+
+	ProjectPath, err := configuration.GetRootPath("projects")
+	if err != nil {
+		log.Println("'projects' folder could not be found. project management will be disabled")
+	} else {
+		log.Printf("Monitoring projects from %s", ProjectPath)
+		go watchdogs.MonitorSchoolProjects(&socket.PacketMap, filepath.Join(ProjectPath, "school"))
+	}
 
 	// Check if pistache root exists, otherwise look for it in the parent directory
 	if _, err := os.Stat(PistacheRoot); os.IsNotExist(err) {

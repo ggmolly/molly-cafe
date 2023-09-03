@@ -79,5 +79,4 @@ Docker containers states are watched through [docker events](https://docs.docker
 
 #### Flaws
 
-- Hardcoded services / name translation
 - Handling of errors in the code is poorly done

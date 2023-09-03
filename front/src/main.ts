@@ -1,4 +1,5 @@
 import { MonitoringPacket } from "./packets/MonitoringPacket";
+import { SchoolProjectPacket } from "./packets/SchoolProjectPacket";
 
 const websocket = new WebSocket('ws://localhost:50154/ws');
 websocket.binaryType = 'arraybuffer';
@@ -11,6 +12,7 @@ websocket.onopen = () => {
 
 const packetTypes: Record<number, any> = {
     0x00: MonitoringPacket,
+    0x01: SchoolProjectPacket,
 }
 
 websocket.onmessage = (event) => {
@@ -27,6 +29,9 @@ websocket.onmessage = (event) => {
         case 0xFD:
             connectedClients = data.getUint32(1);
             document.getElementById('connected-count')!!.innerText = connectedClients.toString();
+            break;
+        case 0xFC: // DOMPopPacket
+            document.getElementById(new TextDecoder().decode(event.data.slice(1)))!!.remove();
             break;
         default:
             const target: number = new Uint8Array(event.data)[0];
