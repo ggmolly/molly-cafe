@@ -119,19 +119,23 @@ div.inner-card {
     @apply flex flex-col gap-y-2.5 w-fit p-6;
 }
 
-a {
+a:not(.green) {
     @apply text-fuchsia-500 hover:text-fuchsia-400 underline;
 }
 
-a:hover {
+a.green {
+    @apply text-emerald-500 hover:text-emerald-400;
+}
+
+a:not(.green):hover {
     text-decoration: none;
 }
 
-a:visited {
+a::not(.green):visited {
     @apply text-fuchsia-400;
 }
 
-a:visited:hover {
+a::not(.green):visited:hover {
     @apply underline;
 }
 
