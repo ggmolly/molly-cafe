@@ -121,6 +121,7 @@ func MonitorSchoolProjects(packetMap *map[string]*socket.Packet, rootPath string
 			if event.Op.Has(fsnotify.Remove) || event.Op.Has(fsnotify.Rename) {
 				if packet, ok := (*packetMap)[event.Name]; ok {
 					packet.RemoveDOM()
+					delete(*packetMap, event.Name)
 				}
 			}
 		}
