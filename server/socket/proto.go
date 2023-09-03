@@ -48,6 +48,11 @@ const (
 	P_GRADING       = 0x01
 	P_NOT_CONCERNED = 0xFF // mostly for personal projects
 
+	// Pistache stuff
+	T_PISTACHE = 0x02
+
+	C_PISTACHE = 0x00
+
 	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
 
@@ -57,6 +62,7 @@ var (
 	targetIdPrefix = map[uint8]string{
 		T_MONITORING:      "m",
 		T_SCHOOL_PROJECTS: "sp",
+		T_PISTACHE:        "pb",
 	}
 )
 
