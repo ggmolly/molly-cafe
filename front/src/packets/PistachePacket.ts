@@ -66,11 +66,21 @@ export class PistachePacket extends APacket {
         listElement.appendChild(this.createTitleLink());
         listElement.appendChild(document.createTextNode(" — "));
         listElement.appendChild(this.dateSpan());
+        listElement.setAttribute("data-timestamp", this.creationDate.getTime().toString());
         list.appendChild(listElement);
     }
 
     sort() {
-        
+        const list: HTMLUListElement = document.getElementById("blog-posts")!! as HTMLUListElement;
+        const items: HTMLLIElement[] = Array.from(list.children) as HTMLLIElement[];
+        items.sort((a: HTMLLIElement, b: HTMLLIElement) => {
+            const aTimestamp: number = parseInt(a.getAttribute("data-timestamp")!!);
+            const bTimestamp: number = parseInt(b.getAttribute("data-timestamp")!!);
+            return bTimestamp - aTimestamp;
+        });
+        items.forEach((item: HTMLLIElement) => {
+            list.appendChild(item);
+        });
     }
 
     renderOrUpdate() {
