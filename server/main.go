@@ -85,9 +85,12 @@ func init() {
 		go watchdogs.MonitorSchoolProjects(&socket.PacketMap, filepath.Join(ProjectPath, "school"))
 	}
 
-	// Check if pistache root exists, otherwise look for it in the parent directory
-	if _, err := os.Stat(PistacheRoot); os.IsNotExist(err) {
-		PistacheRoot = "../pistache"
+	PistacheRoot, err = configuration.GetRootPath("pistache")
+	if err != nil {
+		log.Println("'pistache' folder could not be found. pistache will be disabled")
+	} else {
+		log.Printf("Pistache root set to %s", PistacheRoot)
+		go watchdogs.MonitorPistachePosts(&socket.PacketMap, PistacheRoot)
 	}
 }
 
