@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 400;
+        src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2'),
+    }
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 700;
+        src: url('/fonts/BerkeleyMono-Bold.woff2') format('woff2'),
+    }
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 400;
+        font-style: italic;
+        src: url('/fonts/BerkeleyMono-Italic.woff2') format('woff2'),
+    }
+    @font-face {
+        font-family: 'Berkeley Mono';
+        font-weight: 700;
+        font-style: italic;
+        src: url('/fonts/BerkeleyMono-BoldItalic.woff2') format('woff2'),
+    }
+}
+
+* { @apply font-mono; }
+
+h1 { @apply text-4xl text-stone-100; }
+h2 { @apply text-3xl text-stone-100; }
+h3 { @apply text-2xl text-stone-100; }
+h4 { @apply text-xl text-stone-100; }
+h5 { @apply text-lg text-stone-100; }
+
+body {
+    @apply w-full h-full bg-neutral-900 text-white;
+    @apply container mx-auto p-4;
+}
+.yellow {
+    @apply text-yellow-400;
+    text-shadow: 0 0 8px rgb(250 204 21);
+}
+
+.orange {
+    @apply text-amber-400;
+    text-shadow: 0 0 8px rgb(251 191 36);
+}
+
+.green {
+    @apply text-emerald-500;
+    text-shadow: 0 0 8px rgb(16 185 129);
+}
+
+.red {
+    @apply text-rose-500;
+    text-shadow: 0 0 8px rgb(244 63 94);
+}
+
+.white {
+    @apply text-white;
+    text-shadow: 0 0 3px rgb(255 255 255);
+}
+
+.fuchsia {
+    @apply text-fuchsia-400;
+    text-shadow: 0 0 8px rgb(232 121 249);
+}
+
+.blue {
+    @apply text-blue-500;
+    text-shadow: 0 0 8px rgb(59 130 246);
+}
+
+.stone {
+    @apply text-stone-200;
+    text-shadow: 0 0 2px rgb(231 229 228);
+}
+
+a:not(.green) { @apply text-fuchsia-500 hover:text-fuchsia-400 underline; }
+a.green { @apply text-emerald-500 hover:text-emerald-400; }
+a:not(.green):hover { text-decoration: none; }
+a::not(.green):visited { @apply text-fuchsia-400; }
+a::not(.green):visited:hover { @apply underline; }
+
+span.badge { @apply inline-block rounded-full px-2 py-1 text-xs font-bold; }
+
+span.badge-rose {
+    @apply bg-rose-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(251 113 133);
+}
+
+span.badge-blue {
+    @apply bg-blue-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(96 165 250);
+}
+
+span.badge-fuchsia {
+    @apply bg-fuchsia-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(232 121 249);
+}
+
+span.badge-yellow {
+    @apply bg-yellow-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(250 204 21);
+}
+
+span.badge-green {
+    @apply bg-emerald-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(52 211 153);
+}
+
+span.badge-orange {
+    @apply bg-amber-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(251 191 36);
+}
+
+span.badge-stone {
+    @apply bg-stone-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(231 229 228);
+}
+
+span.badge-white {
+    @apply bg-white text-neutral-900;
+    box-shadow: 0 0 8px rgb(255 255 255);
+}
+
+span.badge-cyan {
+    @apply bg-cyan-400 text-neutral-900;
+    box-shadow: 0 0 8px rgb(42 209 204);
+}
+
+tr { @apply border-b border-neutral-600; }
+tbody > tr:hover { @apply bg-neutral-800 transition-colors; }
+
+hr {
+    @apply border-teal-50;
+    @apply my-4;
+}
+
+footer {
+    @apply text-neutral-500 text-sm;
+    @apply flex flex-col items-center justify-center;
+    @apply mt-8;
+    @apply border-y border-neutral-600;
+}
