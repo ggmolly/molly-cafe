@@ -71,7 +71,11 @@ if __name__ == "__main__":
 
 # Blockquotes
 
-> Test
+> This is a test
+
+# Code oneliners
+
+This is a `code` oneliner.
 
 # Horizontal rules
 
