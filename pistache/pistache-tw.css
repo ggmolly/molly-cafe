@@ -132,11 +132,18 @@ span.badge-cyan {
     box-shadow: 0 0 8px rgb(42 209 204);
 }
 
-tr { @apply border-b border-neutral-600; }
-tbody > tr:hover { @apply bg-neutral-800 transition-colors; }
+table {
+    border-collapse: collapse;
+}
+
+tr { @apply border-b border-solid border-neutral-800; }
+td,th { @apply px-2 py-1; }
+
+tbody > tr:hover {
+    @apply bg-neutral-800 transition-colors;
+}
 
 hr {
-    @apply border-teal-50;
     @apply my-4;
 }
 
@@ -144,5 +151,15 @@ footer {
     @apply text-neutral-500 text-sm;
     @apply flex flex-col items-center justify-center;
     @apply mt-8;
-    @apply border-y border-neutral-600;
+}
+
+code:not(.hljs) {
+    @apply bg-neutral-800 text-neutral-200;
+    @apply px-1 py-0.5 rounded-sm;
+}
+
+blockquote {
+    @apply border-solid border-l-4 border-neutral-800;
+    @apply border-b-0 border-r-0 border-t-0;
+    @apply pl-4 py-0.5;
 }
