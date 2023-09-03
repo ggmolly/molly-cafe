@@ -1,4 +1,5 @@
 import { MonitoringPacket } from "./packets/MonitoringPacket";
+import { SchoolProjectPacket } from "./packets/SchoolProjectPacket";
 
 const websocket = new WebSocket('ws://localhost:50154/ws');
 websocket.binaryType = 'arraybuffer';
@@ -11,6 +12,7 @@ websocket.onopen = () => {
 
 const packetTypes: Record<number, any> = {
     0x00: MonitoringPacket,
+    0x01: SchoolProjectPacket,
 }
 
 websocket.onmessage = (event) => {
