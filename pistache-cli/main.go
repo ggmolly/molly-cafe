@@ -15,9 +15,6 @@ import (
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
-	"github.com/yuin/goldmark/util"
-	"go.abhg.dev/goldmark/anchor"
-	"go.abhg.dev/goldmark/toc"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
 )
@@ -105,16 +102,11 @@ func init() {
 
 func main() {
 	md := goldmark.New(
-		goldmark.WithExtensions(extension.GFM, &anchor.Extender{}),
+		goldmark.WithExtensions(extension.GFM),
 		goldmark.WithRendererOptions(html.WithUnsafe()),
 	)
 	md.Parser().AddOptions(
 		parser.WithAutoHeadingID(),
-		parser.WithASTTransformers(
-			util.Prioritized(&toc.Transformer{
-				Title: "Table of content",
-			}, 100),
-		),
 	)
 	file, err := os.OpenFile(filepath.Base(URL), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
