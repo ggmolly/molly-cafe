@@ -14,6 +14,7 @@ import (
 	"github.com/akamensky/argparse"
 	"github.com/bettercallmolly/molly-cafe/pistache/entities"
 	"github.com/bettercallmolly/molly-cafe/pistache/minify"
+	"github.com/fsnotify/fsnotify"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
@@ -62,6 +63,7 @@ var (
 	Title     *string
 	Desc      *string
 	InputFile *string
+	WatchMode *bool
 	URL       string
 
 	// Pistache entities to replace
@@ -108,28 +110,9 @@ func pistacheEntities(html *string, path string) {
 	}
 }
 
-func init() {
-	args := argparse.NewParser("pistache", "Quickly generate blog posts from markdown files")
-	Title = args.String("t", "title", &argparse.Options{Required: true, Help: "Title of the blog post (used for the HTML title and the OG title)"})
-	Desc = args.String("d", "description", &argparse.Options{Required: true, Help: "Description of the blog post (used for the OG description)"})
-	InputFile = args.String("i", "input", &argparse.Options{Required: true, Help: "Input markdown file"})
-	err := args.Parse(os.Args)
-	if err != nil {
-		panic(err)
-	}
-	URL = "https://mana.rip/pistache/" + formatTitle(*Title) + ".html"
-	log.Println("url:", URL)
-}
-
-func main() {
+// Parses the markdown file and converts it to HTML, minifies if not in watch mode, and saves it to a file
+func convertToHTML(md goldmark.Markdown) {
 	start := time.Now()
-	md := goldmark.New(
-		goldmark.WithExtensions(extension.GFM),
-		goldmark.WithRendererOptions(html.WithUnsafe()),
-	)
-	md.Parser().AddOptions(
-		parser.WithAutoHeadingID(),
-	)
 	file, err := os.OpenFile(filepath.Base(URL), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
@@ -159,13 +142,68 @@ func main() {
 		buffer.String(),
 		time.Since(start).Seconds()*1000000,
 	)
-
 	pistacheEntities(&html, *InputFile)
-	html, err = minify.MinifyHTML(html)
-
+	if !*WatchMode {
+		log.Printf("Minifying HTML file... ")
+		html, err = minify.MinifyHTML(html)
+		if err != nil {
+			log.Printf("Failed to minify: %s\n", err)
+		}
+	}
 	if _, err := file.WriteString(html); err != nil {
 		panic(err)
 	}
-	log.Println("HTML file generated successfully")
-	log.Println(file.Name())
+	log.Println("Output file:", file.Name())
+}
+
+func init() {
+	args := argparse.NewParser("pistache", "Quickly generate blog posts from markdown files")
+	Title = args.String("t", "title", &argparse.Options{Required: true, Help: "Title of the blog post (used for the HTML title and the OG title)"})
+	Desc = args.String("d", "description", &argparse.Options{Required: true, Help: "Description of the blog post (used for the OG description)"})
+	InputFile = args.String("i", "input", &argparse.Options{Required: true, Help: "Input markdown file"})
+	WatchMode = args.Flag("w", "watch", &argparse.Options{Required: false, Help: "Saves the HTML file and watches for changes in the markdown file (does not minify the HTML file)"})
+	err := args.Parse(os.Args)
+	if err != nil {
+		panic(err)
+	}
+	URL = "https://mana.rip/pistache/" + formatTitle(*Title) + ".html"
+	log.Println("Generated URL:", URL)
+}
+
+func main() {
+	md := goldmark.New(
+		goldmark.WithExtensions(extension.GFM),
+		goldmark.WithRendererOptions(html.WithUnsafe()),
+	)
+	md.Parser().AddOptions(
+		parser.WithAutoHeadingID(),
+	)
+	if *WatchMode {
+		convertToHTML(md)
+		log.Println("Watching markdown file for changes... Press CTRL+C to stop.")
+		watcher, err := fsnotify.NewWatcher()
+		if err != nil {
+			panic(err)
+		}
+		watcher.Add(*InputFile)
+		defer watcher.Close()
+		for {
+			select {
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				if event.Op&fsnotify.Write == fsnotify.Write {
+					convertToHTML(md)
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				log.Println("error:", err)
+			}
+		}
+	} else {
+		convertToHTML(md)
+	}
 }
