@@ -13,6 +13,7 @@ import (
 
 	"github.com/akamensky/argparse"
 	"github.com/bettercallmolly/molly-cafe/pistache/entities"
+	"github.com/bettercallmolly/molly-cafe/pistache/minify"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
@@ -160,6 +161,7 @@ func main() {
 	)
 
 	pistacheEntities(&html, *InputFile)
+	html, err = minify.MinifyHTML(html)
 
 	if _, err := file.WriteString(html); err != nil {
 		panic(err)
