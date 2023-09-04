@@ -53,6 +53,13 @@ const (
 
 	C_PISTACHE = 0x00
 
+	// Strawberry stuff
+	T_STRAWBERRY       = 0x03
+	T_STRAWBERRY_SEEK  = 0x04
+	T_STRAWBERRY_STATE = 0x05
+
+	C_STRAWBERRY = 0x00
+
 	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
 

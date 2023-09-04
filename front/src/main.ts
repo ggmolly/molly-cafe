@@ -1,6 +1,9 @@
 import { MonitoringPacket } from "./packets/MonitoringPacket";
 import { PistachePacket } from "./packets/PistachePacket";
 import { SchoolProjectPacket } from "./packets/SchoolProjectPacket";
+import { StrawberryPacket } from "./packets/StrawberryPacket";
+import { StrawberrySeekPacket } from "./packets/StrawberrySeekPacket";
+import { StrawberryStatePacket } from "./packets/StrawberryStatePacket";
 
 const websocket = new WebSocket('ws://localhost:50154/ws');
 websocket.binaryType = 'arraybuffer';
@@ -15,6 +18,9 @@ const packetTypes: Record<number, any> = {
     0x00: MonitoringPacket,
     0x01: SchoolProjectPacket,
     0x02: PistachePacket,
+    0x03: StrawberryPacket,
+    0x04: StrawberrySeekPacket,
+    0x05: StrawberryStatePacket,
 }
 
 websocket.onmessage = (event) => {

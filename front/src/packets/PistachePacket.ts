@@ -84,11 +84,9 @@ export class PistachePacket extends APacket {
     }
 
     renderOrUpdate() {
-        console.log(this)
         try {
             this.update();
         } catch (error) {
-            console.error(error)
             this.render();
         }
         this.sort();

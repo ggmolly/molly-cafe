@@ -77,6 +77,28 @@ func init() {
 	// Disk usage
 	go watchdogs.MonitorDiskSpace(&socket.PacketMap)
 
+	// Init strawberry packet
+	socket.PacketMap["strawberry"] = socket.NewPacket(
+		socket.T_STRAWBERRY,
+		socket.C_STRAWBERRY,
+		socket.DT_SPECIAL,
+		"",
+	)
+
+	socket.PacketMap["strawberryState"] = socket.NewPacket(
+		socket.T_STRAWBERRY_STATE,
+		socket.C_STRAWBERRY,
+		socket.DT_SPECIAL,
+		"",
+	)
+
+	socket.PacketMap["strawberrySeek"] = socket.NewPacket(
+		socket.T_STRAWBERRY_SEEK,
+		socket.C_STRAWBERRY,
+		socket.DT_SPECIAL,
+		"",
+	)
+
 	ProjectPath, err := configuration.GetRootPath("projects")
 	if err != nil {
 		log.Println("'projects' folder could not be found. project management will be disabled")
@@ -111,6 +133,11 @@ func main() {
 	app.Use("/ws", middlewares.WebSocketUpgrade)
 
 	app.Get("/ws", websocket.New(routes.WSRoutine))
+
+	strawberryAPI := app.Group("/api/strawberry", middlewares.LANOnly)
+	strawberryAPI.Post("/", routes.StrawberryUpdate)
+	strawberryAPI.Patch("/seek", routes.SetStrawberrySeek)
+	strawberryAPI.Patch("/state", routes.SetStrawberryState)
 
 	go func() {
 		for {
