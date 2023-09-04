@@ -24,76 +24,107 @@
 
 <body>
     <main class="container mx-auto">
-        <div class="card min-h-[128px] my-2">
-            <h3 class="ml-1">Welcome!</h3>
-            <div>
-                <img src="https://avatars.githubusercontent.com/u/20666343" width="96" height="96"
-                    class="p-0.5 border border-fuchsia-500 float-left m-3" alt="Molly's profile picture"/>
-                <p class="ml-2">
-                    Hey! I'm <span class="fuchsia">Molly</span>, a 20 years old <a href="https://www.42network.org/">42 Paris</a> student. <br />
-                    I enjoy programming, and when I have free time or inspiration I enjoy adding useless but cool features on this website. <br />
-                    It is not very pretty *yet* but I'd love to make it look better one day. (functionality > design) I have some cool ideas for it. <br />
-                    You can check the source code of this website <a href="https://github.com/BetterCallMolly/molly-cafe">here</a> and it is hosted on a server I own, and you can see its status below.
-                </p>
-                <br/>
-                <div class="ml-2">
-                    me summarized:
-                    <p class="ml-2">
-                        * I love to code in <span class="text-cyan-400">Go</span>, <span class="text-white">C</span> and <span class="text-pink-300">C++</span> (also <span class="text-blue-400">Python</span> sometimes)
+        <div class="grid grid-cols-9">
+            <div class="col-span-8">
+                <div class="card min-h-[128px] my-2">
+                    <h3 class="ml-1">Welcome!</h3>
+                    <div>
+                        <img src="https://avatars.githubusercontent.com/u/20666343" width="96" height="96"
+                            class="p-0.5 border border-fuchsia-500 float-left m-3" alt="Molly's profile picture"/>
+                        <p class="ml-2">
+                            Hey! I'm <span class="fuchsia">Molly</span>, a 20 years old <a href="https://www.42network.org/">42 Paris</a> student. <br />
+                            I enjoy programming, and when I have free time or inspiration I enjoy adding useless but cool features on this website. <br />
+                            It is not very pretty *yet* but I'd love to make it look better one day. (functionality > design) I have some cool ideas for it. <br />
+                            You can check the source code of this website <a href="https://github.com/BetterCallMolly/molly-cafe">here</a> and it is hosted on a server I own, and you can see its status below.
+                        </p>
                         <br/>
-                        * I plan to learn <span class="text-yellow-400">Zig</span>
-                        <br/>
-                        * I love <span class="text-red-400">low-level</span> programming and <span class="text-green-400">systems</span> programming
-                        <br/>
-                        * I love <span class="text-yellow-400">networking</span>, <span class="text-blue-400">security</span> and <span class="text-violet-400">data science</span> / <span class="text-violet-400">machine learning</span>
-                        <br/>
-                        * <span class="text-blue-400">Docker</span> stan (containers are very cool)
-                        <br/>
-                        * <span class="text-cyan-500">Fedora</span> user
-                        <br/>
-                        * I never do <span class="text-red-400">bug bounties</span> but you can check my <a href="https://hackerone.com/bettercallmolly">HackerOne</a> profile
-                        <br/>
-                    </p>
+                        <div class="ml-2">
+                            me summarized:
+                            <p class="ml-2">
+                                * I love to code in <span class="text-cyan-400">Go</span>, <span class="text-white">C</span> and <span class="text-pink-300">C++</span> (also <span class="text-blue-400">Python</span> sometimes)
+                                <br/>
+                                * I plan to learn <span class="text-yellow-400">Zig</span>
+                                <br/>
+                                * I love <span class="text-red-400">low-level</span> programming and <span class="text-green-400">systems</span> programming
+                                <br/>
+                                * I love <span class="text-yellow-400">networking</span>, <span class="text-blue-400">security</span> and <span class="text-violet-400">data science</span> / <span class="text-violet-400">machine learning</span>
+                                <br/>
+                                * <span class="text-blue-400">Docker</span> stan (containers are very cool)
+                                <br/>
+                                * <span class="text-cyan-500">Fedora</span> user
+                                <br/>
+                                * I never do <span class="text-red-400">bug bounties</span> but you can check my <a href="https://hackerone.com/bettercallmolly">HackerOne</a> profile
+                                <br/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card min-h-[128px] my-2">
+                    <h3 class="ml-1">Projects</h3>
+                    <div class="m-4">
+                        <h4 class="text-center">School projects</h4>
+                        <table class="table-fixed w-full text-left">
+                            <thead>
+                                <tr>
+                                    <th class="w-3/12">name</th>
+                                    <th class="w-8/12 text-left">description</th>
+                                    <th class="w-1/12">grade</th>
+                                </tr>
+                            </thead>
+                            <tbody class="high" id="school-projects">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card min-h-[128px] my-2">
+                    <h3 class="ml-1">Blog posts</h3>
+                    <div class="m-4">
+                        <ul id="blog-posts">
+                        </ul>
+                    </div>
+                </div>
+                <div class="card card-flex">
+                    <div class="inner-card" id="services">
+                        <h3 class="stone">services</h3>
+                    </div>
+                    <div class="inner-card" id="hard-resources">
+                        <h3 class="stone">hard resources</h3>
+                    </div>
+                    <div class="inner-card" id="soft-resources">
+                        <h3 class="stone">soft resources</h3>
+                    </div>
+                    <div class="inner-card" id="misc">
+                        <h3 class="stone">misc</h3>
+                        <h4>currently here................ [<span class="fuchsia" id="connected-count">?</span>]</h4>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card min-h-[128px] my-2">
-            <h3 class="ml-1">Projects</h3>
-            <div class="m-4">
-                <h4 class="text-center">School projects</h4>
-                <table class="table-fixed w-full text-left">
-                    <thead>
-                        <tr>
-                            <th class="w-3/12">name</th>
-                            <th class="w-8/12 text-left">description</th>
-                            <th class="w-1/12">grade</th>
-                        </tr>
-                    </thead>
-                    <tbody class="high" id="school-projects">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="card min-h-[128px] my-2">
-            <h3 class="ml-1">Blog posts</h3>
-            <div class="m-4">
-                <ul id="blog-posts">
-                </ul>
-            </div>
-        </div>
-        <div class="card card-flex">
-            <div class="inner-card" id="services">
-                <h3 class="stone">services</h3>
-            </div>
-            <div class="inner-card" id="hard-resources">
-                <h3 class="stone">hard resources</h3>
-            </div>
-            <div class="inner-card" id="soft-resources">
-                <h3 class="stone">soft resources</h3>
-            </div>
-            <div class="inner-card" id="misc">
-                <h3 class="stone">misc</h3>
-                <h4>currently here................ [<span class="fuchsia" id="connected-count">?</span>]</h4>
+            <div>
+                <div class="-ml-0.5 card min-h-[72px] w-80 my-2">
+                    <h4 class="text-center">listening to</h4>
+                    <hr class="border-fuchsia-500"/>
+                    <div class="m-4 flex">
+                        <div class="flex flex-row spinning" id="strawberry-disc">
+                            <span class="hole"></span>
+                            <img
+                                class="cd"
+                                height="196"
+                                width="196"
+                                src="data:image/webp;base64,UklGRm4CAABXRUJQVlA4WAoAAAAgAAAAwwAAwwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDgggAAAAPAMAJ0BKsQAxAA//f7/f7+7NrIgqAPwP4lpbuF2sRtAJ73EXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtIT4h4sf0sbEXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtAAA/v8UMAAUPJXQ2gAAAAAA"
+                                alt="album cover"
+                            />
+                        </div>
+                        <div class="flex flex-col ml-2 w-full">
+                            <marquee scrollamount="0">
+                                <h6 id="song-title">Unknown title</h6>
+                            </marquee>
+                            <marquee scrollamount="0">
+                                <small id="song-artist">Unknown artist</small>
+                            </marquee>
+                            <small id="song-time">??:?? / ??:??</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
