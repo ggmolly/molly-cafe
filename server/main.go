@@ -92,13 +92,6 @@ func init() {
 		"",
 	)
 
-	socket.PacketMap["strawberrySeek"] = socket.NewPacket(
-		socket.T_STRAWBERRY_SEEK,
-		socket.C_STRAWBERRY,
-		socket.DT_SPECIAL,
-		"",
-	)
-
 	ProjectPath, err := configuration.GetRootPath("projects")
 	if err != nil {
 		log.Println("'projects' folder could not be found. project management will be disabled")
