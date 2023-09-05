@@ -50,7 +50,10 @@ websocket.onmessage = (event) => {
 }
 
 // Make the disc spin, if he has the spinning class
-document.addEventListener("readystatechange", () => {
+document.addEventListener("readystatechange", (event: Event) => {
+    if (document.readyState != "complete") {
+        return;
+    }
     let disc: HTMLElement | null = document.getElementById("strawberry-disc");
     let angle: number = 0;
     setInterval(() => {
