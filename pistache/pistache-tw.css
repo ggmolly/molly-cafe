@@ -29,11 +29,11 @@
 
 * { @apply font-mono; }
 
-h1 { @apply text-4xl text-stone-100; }
-h2 { @apply text-3xl text-stone-100; }
-h3 { @apply text-2xl text-stone-100; }
-h4 { @apply text-xl text-stone-100; }
-h5 { @apply text-lg text-stone-100; }
+h1 { @apply text-4xl text-amber-500; }
+h2 { @apply text-3xl text-amber-500; }
+h3 { @apply text-2xl text-amber-500; }
+h4 { @apply text-xl text-amber-500; }
+h5 { @apply text-lg text-amber-500; }
 
 body {
     @apply w-full h-full bg-neutral-900 text-white;
@@ -79,7 +79,7 @@ body {
     text-shadow: 0 0 2px rgb(231 229 228);
 }
 
-a { @apply text-emerald-500 hover:text-emerald-400 green; text-decoration: none; }
+a { @apply text-fuchsia-500 hover:text-fuchsia-400; text-decoration: none; }
 
 span.badge { @apply inline-block rounded-full px-2 py-1 text-xs font-bold; }
 
