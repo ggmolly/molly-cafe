@@ -79,11 +79,7 @@ body {
     text-shadow: 0 0 2px rgb(231 229 228);
 }
 
-a:not(.green) { @apply text-fuchsia-500 hover:text-fuchsia-400 underline; }
-a.green { @apply text-emerald-500 hover:text-emerald-400; }
-a:not(.green):hover { text-decoration: none; }
-a::not(.green):visited { @apply text-fuchsia-400; }
-a::not(.green):visited:hover { @apply underline; }
+a { @apply text-emerald-500 hover:text-emerald-400 green; text-decoration: none; }
 
 span.badge { @apply inline-block rounded-full px-2 py-1 text-xs font-bold; }
 
