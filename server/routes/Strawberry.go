@@ -3,6 +3,8 @@ package routes
 import (
 	"bytes"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/bettercallmolly/illustrious/socket"
 	"github.com/gofiber/fiber/v2"
@@ -24,7 +26,11 @@ type dtoState struct {
 }
 
 var (
-	Playing = false
+	Playing            = false
+	CurrentTime uint32 = 0
+	TimeMutex          = &sync.Mutex{}
+
+	SeekPacket socket.Packet
 )
 
 const (
@@ -32,7 +38,22 @@ const (
 	InvalidCover   = "Invalid cover image"
 )
 
+func updateTime(newTime uint32) {
+	packet := socket.PacketMap["strawberry"]
+	length := len(packet.Data)
+	packet.Data[length-4] = byte(CurrentTime >> 24)
+	packet.Data[length-3] = byte(CurrentTime >> 16)
+	packet.Data[length-2] = byte(CurrentTime >> 8)
+	packet.Data[length-1] = byte(CurrentTime)
+}
+
 func publishNewSong(dto dtoUpdate) {
+	// Update the current time
+	TimeMutex.Lock()
+	Playing = true
+	CurrentTime = 0
+	TimeMutex.Unlock()
+
 	packet := socket.PacketMap["strawberry"]
 	var dataBuffer bytes.Buffer
 
@@ -59,6 +80,11 @@ func publishNewSong(dto dtoUpdate) {
 		dataBuffer.WriteByte(byte(dto.Length >> uint(24-i*8)))
 	}
 
+	// Write current time
+	for i := 0; i < 4; i++ {
+		dataBuffer.WriteByte(byte(CurrentTime >> uint(24-i*8)))
+	}
+
 	packet.Data = dataBuffer.Bytes()
 	// Send the packet to all connected clients
 	socket.ConnectedClients.Broadcast(packet.GetRawBytes())
@@ -75,14 +101,14 @@ func publishState(dto dtoState) {
 }
 
 func publishSeek(dto dtoSeek) {
-	packet := socket.PacketMap["strawberrySeek"]
 	// Send the packet to all connected clients
 	var dataBuffer bytes.Buffer
 	for i := 0; i < 4; i++ {
 		dataBuffer.WriteByte(byte(dto.Position >> uint(24-i*8)))
 	}
-	packet.Data = dataBuffer.Bytes()
-	socket.ConnectedClients.Broadcast(packet.GetRawBytes())
+	updateTime(CurrentTime)
+	SeekPacket.Data = dataBuffer.Bytes()
+	socket.ConnectedClients.Broadcast(SeekPacket.GetRawBytes())
 }
 
 func StrawberryUpdate(c *fiber.Ctx) error {
@@ -102,6 +128,9 @@ func SetStrawberrySeek(c *fiber.Ctx) error {
 		c.Status(400).SendString(InvalidReqBody)
 		return err
 	}
+	TimeMutex.Lock()
+	CurrentTime = dto.Position
+	TimeMutex.Unlock()
 	publishSeek(dto)
 	return nil
 }
@@ -113,5 +142,25 @@ func SetStrawberryState(c *fiber.Ctx) error {
 		return err
 	}
 	publishState(dto)
+	TimeMutex.Lock()
+	Playing = dto.Playing
+	TimeMutex.Unlock()
 	return nil
+}
+
+func init() {
+	go func() {
+		// Increment the current time every second, if the song is playing
+		for {
+			time.Sleep(1 * time.Second)
+			if !Playing {
+				continue
+			}
+			TimeMutex.Lock()
+			CurrentTime += 1000000
+			updateTime(CurrentTime)
+			TimeMutex.Unlock()
+		}
+	}()
+	SeekPacket = *socket.NewPacket(socket.T_STRAWBERRY_SEEK, socket.C_STRAWBERRY, socket.DT_SPECIAL, "")
 }
