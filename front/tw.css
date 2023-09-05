@@ -223,32 +223,29 @@ tbody.high > tr > td:nth-child(2) {
 img.cd {
     /* turn into a circle */
     @apply rounded-full;
+    @apply object-cover object-center;
 }
 
-#strawberry-disc, #strawberry-disc > span.hole {
+#strawberry-disc, #strawberry-disc > span.hole, #strawberry-disc > span.white-border {
     @apply relative;
+    @apply max-w-[196px] max-w-[196px];
 }
 
 #strawberry-disc {
     @apply inline-block;
 }
 
-/* hole in the center */
-#strawberry-disc > span.hole {
+#strawberry-disc > span.hole,
+#strawberry-disc > span.white-border
+{
     @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
-    @apply w-8 h-8 bg-neutral-900;
     @apply rounded-full;
 }
 
-#strawberry-disc.spinning {
-    animation: slow-spin 10s linear infinite;
+#strawberry-disc > span.hole {
+    @apply w-8 h-8 bg-neutral-900;
 }
 
-@keyframes slow-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+#strawberry-disc > span.white-border {
+    @apply w-9 h-9 bg-stone-200;
 }
