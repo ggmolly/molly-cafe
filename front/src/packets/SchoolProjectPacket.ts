@@ -15,7 +15,7 @@ export class SchoolProjectPacket extends APacket {
         const stateMask = this.raw.getUint8(this.offset++);
         this.wip = (stateMask & MASK_WIP) != 0;
         this.grading = (stateMask & MASK_GRADING) != 0;
-        this.grade = this.raw.getUint8(this.offset++);
+        this.grade = this.raw.getInt8(this.offset++);
         const descriptionLength = this.raw.getUint8(this.offset++);
         this.description = new TextDecoder().decode(this.raw.buffer.slice(this.offset, this.offset + descriptionLength));
         this.offset += descriptionLength;
