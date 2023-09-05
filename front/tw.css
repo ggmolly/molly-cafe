@@ -131,11 +131,11 @@ a:not(.green):hover {
     text-decoration: none;
 }
 
-a::not(.green):visited {
+a:not(.green):visited {
     @apply text-fuchsia-400;
 }
 
-a::not(.green):visited:hover {
+a:not(.green):visited:hover {
     @apply underline;
 }
 
