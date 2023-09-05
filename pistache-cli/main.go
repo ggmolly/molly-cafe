@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -17,7 +18,6 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
-	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
@@ -50,7 +50,7 @@ const (
 			-
 			silk icons by <a href="https://frhun.de/silk-icon-scalable/preview/">frhun</a> (originals by Mark James)
 			-
-			generated in %.3fµs
+			generated in %.3fµs (git: %s)
 		</h6>
 		</footer>
 	</body>
@@ -85,6 +85,17 @@ func injectLanguages(lang ...string) string {
 		output += fmt.Sprintf(ADDITIONNAL_LANGUAGE, l)
 	}
 	return output
+}
+
+func getShortHash() string {
+	cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		panic(err)
+	}
+	return strings.TrimSpace(out.String())
 }
 
 // taken from: https://stackoverflow.com/a/26722698
@@ -141,6 +152,7 @@ func convertToHTML(md goldmark.Markdown) {
 		injectLanguages(langs...),
 		buffer.String(),
 		time.Since(start).Seconds()*1000000,
+		getShortHash(),
 	)
 	pistacheEntities(&html, *InputFile)
 	if !*WatchMode {
@@ -174,9 +186,6 @@ func main() {
 	md := goldmark.New(
 		goldmark.WithExtensions(extension.GFM),
 		goldmark.WithRendererOptions(html.WithUnsafe()),
-	)
-	md.Parser().AddOptions(
-		parser.WithAutoHeadingID(),
 	)
 	if *WatchMode {
 		convertToHTML(md)
