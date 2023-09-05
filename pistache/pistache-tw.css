@@ -138,6 +138,7 @@ table {
 
 tr { @apply border-b border-solid border-neutral-800; }
 td,th { @apply px-2 py-1; }
+td { @apply p-1.5; }
 
 tbody > tr:hover {
     @apply bg-neutral-800 transition-colors;
@@ -163,3 +164,34 @@ blockquote {
     @apply border-b-0 border-r-0 border-t-0;
     @apply pl-4 py-0.5;
 }
+
+h1 > img { @apply w-10 h-10; }
+h2 > img { @apply w-8 h-8; }
+h3 > img { @apply w-6 h-6; }
+h4 > img { @apply w-4 h-4; }
+h5 > img { @apply w-2 h-2; }
+h6 > img { @apply w-1 h-1; }
+blockquote > p > img { @apply w-6 h-6; }
+
+h1 > img,
+h2 > img,
+h3 > img,
+h4 > img,
+h5 > img,
+h6 > img
+{
+    @apply inline-block;
+    @apply align-middle;
+    @apply mb-1 -mr-2;
+}
+
+blockquote > p > img {
+    @apply inline-block;
+    @apply align-middle;
+    @apply mb-1;
+}
+
+li {
+    @apply my-2;
+}
+
