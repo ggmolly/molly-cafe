@@ -154,5 +154,5 @@ func main() {
 	}
 	app.Static("/", os.Args[1])
 	app.Static("/pistache", PistacheRoot)
-	app.Listen("127.0.0.1:50154")
+	app.Listen("0.0.0.0:50154")
 }
