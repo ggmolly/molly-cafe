@@ -5,8 +5,6 @@ export class StrawberryPacket extends APacket {
     artists: Array<string>;
     cover: string;
     length: number; // in microseconds
-    interval: any; // used to update the time
-    progress: number = 0; // in microseconds
 
     constructor(data: DataView) {
         super(data);
@@ -32,24 +30,32 @@ export class StrawberryPacket extends APacket {
         // Length
         this.length = data.getUint32(this.offset);
         this.offset += 4;
+
+        // Progress
+        window.progress = data.getUint32(this.offset) - 1000000; // -1s to compensate the forced timeTick call
+        this.offset += 4;
         // EOF
 
-        this.timeTick();
-        this.interval = setInterval(() => {
+        // Replace interval for time ticking
+        if (window.interval) {
+            clearInterval(window.interval);
+            window.interval = null;
+        }
+        window.length = this.length;
+        window.interval = setInterval(() => {
             this.timeTick();
         }, 1000);
+        this.timeTick();
     }
 
-    // TODO: Store the progress in the HTML element, to properly manage the seek packet
     timeTick() {
-        if (!document.getElementById("strawberry-disc")!!.classList.contains("spinning")) {
-            return;
+        if (document.getElementById("strawberry-disc")!!.classList.contains("spinning")) {
+            window.progress += 1000000;
         }
-        this.progress += 1000000;
-        if (this.progress > this.length) {
-            this.progress = this.length;
+        if (window.progress > this.length) {
+            window.progress = this.length;
         }
-        document.getElementById("song-time")!!.innerText = this.formatTime(this.progress) + " / " + this.formatTime(this.length);
+        document.getElementById("song-time")!!.innerText = this.formatTime(window.progress) + " / " + this.formatTime(this.length);
     }
 
     formatTime(timeUs: number) {
@@ -62,9 +68,14 @@ export class StrawberryPacket extends APacket {
     render() {}
 
     update() {
+        let titleElement: HTMLElement = document.getElementById("song-title") as HTMLElement;
+        let artistElement: HTMLElement = document.getElementById("song-artist") as HTMLElement;
         document.querySelector("#strawberry-disc > img")!!.setAttribute("src", this.cover);
-        document.getElementById("song-title")!!.innerText = this.title;
-        document.getElementById("song-artist")!!.innerText = this.artists.join(", ");
+        titleElement.innerText = this.title;
+        artistElement.innerText = this.artists.join(", ");
+        if (window.length < 0) {
+            return
+        }
     }
 
     renderOrUpdate() {
