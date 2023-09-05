@@ -102,25 +102,24 @@
             <div>
                 <div class="-ml-0.5 card min-h-[72px] w-80 my-2">
                     <h4 class="text-center">listening to</h4>
-                    <hr class="border-fuchsia-500"/>
-                    <div class="m-4 flex">
-                        <div class="flex flex-row spinning" id="strawberry-disc">
-                            <span class="hole"></span>
-                            <img
-                                class="cd"
-                                height="196"
-                                width="196"
-                                src="data:image/webp;base64,UklGRm4CAABXRUJQVlA4WAoAAAAgAAAAwwAAwwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDgggAAAAPAMAJ0BKsQAxAA//f7/f7+7NrIgqAPwP4lpbuF2sRtAJ73EXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtIT4h4sf0sbEXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtAAA/v8UMAAUPJXQ2gAAAAAA"
-                                alt="album cover"
-                            />
+                    <hr class="border-fuchsia-500 shadow shadow-fuchsia-500"/>
+                    <div class="m-2">
+                        <div class="flex justify-center">
+                            <div class="spinning" id="strawberry-disc">
+                                <span class="white-border"></span>
+                                <span class="hole"></span>
+                                <img
+                                    class="cd"
+                                    height="128"
+                                    width="128"
+                                    src="data:image/webp;base64,UklGRm4CAABXRUJQVlA4WAoAAAAgAAAAwwAAwwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDgggAAAAPAMAJ0BKsQAxAA//f7/f7+7NrIgqAPwP4lpbuF2sRtAJ73EXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtIT4h4sf0sbEXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtAAA/v8UMAAUPJXQ2gAAAAAA"
+                                    alt="album cover"
+                                />
+                            </div>
                         </div>
-                        <div class="flex flex-col ml-2 w-full">
-                            <marquee scrollamount="0">
-                                <h6 id="song-title">Unknown title</h6>
-                            </marquee>
-                            <marquee scrollamount="0">
-                                <small id="song-artist">Unknown artist</small>
-                            </marquee>
+                        <div class="mx-2 flex flex-col my-2">
+                            <small id="song-title" class="font-bold">Unknown title</small>
+                            <small id="song-artist">Unknown artist</small>
                             <small id="song-time">??:?? / ??:??</small>
                         </div>
                     </div>
