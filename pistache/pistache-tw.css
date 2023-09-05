@@ -165,6 +165,10 @@ blockquote {
     @apply pl-4 py-0.5;
 }
 
+p {
+    @apply leading-6;
+}
+
 h1 > img { @apply w-10 h-10; }
 h2 > img { @apply w-8 h-8; }
 h3 > img { @apply w-6 h-6; }
