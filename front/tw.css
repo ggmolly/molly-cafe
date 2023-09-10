@@ -249,3 +249,7 @@ img.cd {
 #strawberry-disc > span.white-border {
     @apply w-9 h-9 bg-stone-200;
 }
+
+div.side-card {
+    @apply -ml-0.5 min-h-[72px] w-80 my-2;
+}
