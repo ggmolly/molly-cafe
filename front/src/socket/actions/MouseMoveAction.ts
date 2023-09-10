@@ -10,6 +10,9 @@ export class MouseMoveAction extends AAction {
     websocket?: WebSocket;
 
     writeLocalStorage(state: boolean): void {
+        if (!state) {
+            document.getElementById("cursors")!!.innerHTML = "";
+        }
         localStorage.setItem(this.localStorageKey, state ? 'true' : 'false');
     }
 
@@ -27,8 +30,8 @@ export class MouseMoveAction extends AAction {
     }
 
     onEvent(event: MouseEvent): void {
-        let x: number = event.clientX / window.innerWidth;
-        let y: number = event.clientY / window.innerHeight;
+        let x: number = event.pageX / document.documentElement.scrollWidth;
+        let y: number = event.pageY / document.documentElement.scrollHeight;
         // Only send the data if it has been 100ms since the last packet
         if (Date.now() - lastPacketAt < MIN_DELAY) {
             return;
