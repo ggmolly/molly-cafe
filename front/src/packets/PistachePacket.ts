@@ -54,7 +54,6 @@ export class PistachePacket extends APacket {
             throw new Error("Element not found");
         }
         listElement = listElement as HTMLLIElement;
-        console.log(listElement.children)
         listElement.children[0].replaceWith(this.createTitleLink());
         listElement.children[1].replaceWith(this.dateSpan());
     }
