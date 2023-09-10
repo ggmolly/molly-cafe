@@ -6,6 +6,6 @@ export class CursorByePacket extends APacket {
     render() {}
 
     renderOrUpdate() {
-        document.getElementById("cursor-" + this.data)!!.remove();
+        document.getElementById("cursor-" + this.data)?.remove();
     }
 }
