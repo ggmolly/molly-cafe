@@ -35,7 +35,7 @@ export class MouseActionPacket {
         let cursor: HTMLImageElement = document.createElement("img");
         cursor.src = "/assets/cursor.png";
         cursor.id = "cursor-" + this.clientId;
-        cursor.style.position = "fixed";
+        cursor.style.position = "absolute";
         cursor.style.left = (this.percentageX * window.innerWidth - window.scrollX).toString() + "px";
         cursor.style.top = (this.percentageY * window.innerHeight - window.scrollY).toString() + "px";
         document.getElementById("cursors")!!.appendChild(cursor);
