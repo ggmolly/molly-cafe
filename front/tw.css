@@ -208,7 +208,7 @@ tr {
     @apply border-b border-neutral-600;
 }
 
-tbody > tr:hover {
+tbody > tr:not(#root):hover {
     @apply bg-neutral-800 transition-colors;
 }
 
@@ -252,4 +252,8 @@ img.cd {
 
 div.side-card {
     @apply -ml-0.5 min-h-[72px] w-80 my-2;
+}
+
+#cursors > img {
+    @apply z-50;
 }
