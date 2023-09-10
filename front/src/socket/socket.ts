@@ -25,14 +25,14 @@ const packetTypes: Record<number, any> = {
 };
 
 // These sessions get (re)populated when the websocket (re)connects to the server, so we need to clear them
-let RECONNECT_CLEANUP: string[] = [
-    "blog-posts",
-    "school-projects",
-    "services",
-    "hard-resources",
-    "soft-resources",
-    "misc",
-]
+let RECONNECT_CLEANUP: Record<string, string> = {
+    "blog-posts": "",
+    "school-projects": "",
+    "services": "",
+    "hard-resources": "",
+    "soft-resources": "",
+    "misc": "",
+}
 
 export class CafeSocket {
     websocket: WebSocket;
@@ -126,14 +126,18 @@ export class CafeSocket {
                 });
             }
             // Clear sections that are populated by the websocket
-            for (let section of RECONNECT_CLEANUP) {
-                document.getElementById(section)!!.innerHTML = "";
+            for (let section in RECONNECT_CLEANUP) {
+                document.getElementById(section)!!.innerHTML = RECONNECT_CLEANUP[section];
             }
             this.setupSubscriptions();
         };
     }
 
     constructor() {
+        // Keep a copy of each original sections, so we can restore them when the websocket reconnects
+        for (let section in RECONNECT_CLEANUP) {
+            RECONNECT_CLEANUP[section] = document.getElementById(section)!!.innerHTML;
+        }
         this.websocket = new WebSocket('ws://localhost:50154/ws');
         this.websocket.binaryType = 'arraybuffer';
         this.connectedClients = 0;
