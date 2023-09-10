@@ -46,8 +46,8 @@ export class MouseActionPacket {
         if (cursor === null) {
             throw new Error("Cursor not found");
         }
-        let x: number = this.percentageX * window.innerWidth - window.scrollX;
-        let y: number = this.percentageY * window.innerHeight - window.scrollY;
+        let x: number = (this.percentageX - window.scrollX) * window.innerWidth;
+        let y: number = (this.percentageY - window.scrollY) * window.innerHeight;
         this.interpolate([parseInt(cursor.style.left), parseInt(cursor.style.top)], [x, y], 8);
     }
 
