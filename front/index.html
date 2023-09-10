@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <div id="cursors"></div>
     <main class="container mx-auto">
         <div class="grid grid-cols-9">
             <div class="col-span-8">
@@ -100,7 +101,7 @@
                 </div>
             </div>
             <div>
-                <div class="-ml-0.5 card min-h-[72px] w-80 my-2">
+                <div class="side-card card">
                     <h4 class="text-center">listening to</h4>
                     <hr class="border-fuchsia-500 shadow shadow-fuchsia-500"/>
                     <div class="m-2">
@@ -123,6 +124,12 @@
                             <small id="song-time">??:?? / ??:??</small>
                         </div>
                     </div>
+                </div>
+                <div class="side-card card">
+                    <h4 class="text-center">cursors</h4>
+                    <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2"/>
+                    <input type="checkbox" id="show-cursors" checked>
+                    <label for="show-cursors">show cursors</label>
                 </div>
             </div>
         </div>
