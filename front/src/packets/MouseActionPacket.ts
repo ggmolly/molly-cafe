@@ -48,7 +48,7 @@ export class MouseActionPacket {
         }
         let x: number = this.percentageX * window.innerWidth - window.scrollX;
         let y: number = this.percentageY * window.innerHeight - window.scrollY;
-        this.interpolate([parseInt(cursor.style.left), parseInt(cursor.style.top)], [x, y], 10);
+        this.interpolate([parseInt(cursor.style.left), parseInt(cursor.style.top)], [x, y], 8);
     }
 
     renderOrUpdate() {

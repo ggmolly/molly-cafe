@@ -2,7 +2,7 @@ import { AAction } from "./AAction";
 import { SubscribeActionTypes } from "./types";
 
 let lastPacketAt: number = 0;
-const MIN_DELAY: number = 13;
+const MIN_DELAY: number = 30;
 export class MouseMoveAction extends AAction {
     readonly domID?: string = "show-cursors";
     readonly actionType: SubscribeActionTypes = SubscribeActionTypes.S_CURSOR;
