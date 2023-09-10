@@ -60,6 +60,10 @@ const (
 
 	C_STRAWBERRY = 0x00
 
+	// Cursor removal (0x06 -> MouseMovePacket)
+	T_CURSOR_BYE = 0x07
+	C_CURSOR_BYE = 0x00
+
 	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
 
@@ -73,12 +77,25 @@ var (
 	}
 )
 
+// Creates a new generic packet, this is the most common packet type
+// and should be used in most cases (to send uint8, uint32, percentages...)
 func NewPacket(target, category, dataType uint8, name string) *Packet {
 	packedId++
 	return &Packet{
 		Target:   target,
 		Category: category,
 		Id:       packedId,
+		DataType: dataType,
+		Name:     name,
+	}
+}
+
+// Creates a new packet, but the packet id stays at 0 and is not incremented
+func NewUntrackedPacket(target, category, dataType uint8, name string) *Packet {
+	return &Packet{
+		Target:   target,
+		Category: category,
+		Id:       0,
 		DataType: dataType,
 		Name:     name,
 	}
