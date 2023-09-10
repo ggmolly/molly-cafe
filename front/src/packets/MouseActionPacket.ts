@@ -14,8 +14,9 @@ export class MouseActionPacket {
         cursor.src = "/assets/cursor.png";
         cursor.id = "cursor-" + this.clientId;
         cursor.style.position = "fixed";
-        cursor.style.left = (this.percentageX * window.innerWidth).toString() + "px";
-        cursor.style.top = (this.percentageY * window.innerHeight).toString() + "px";
+        // remove the scroll offset
+        cursor.style.left = (this.percentageX * window.innerWidth - window.scrollX).toString() + "px";
+        cursor.style.top = (this.percentageY * window.innerHeight - window.scrollY).toString() + "px";
         document.getElementById("cursors")!!.appendChild(cursor);
     }
 
@@ -24,8 +25,9 @@ export class MouseActionPacket {
         if (cursor === null) {
             throw new Error("Cursor not found");
         }
-        cursor.style.left = (this.percentageX * window.innerWidth).toString() + "px";
-        cursor.style.top = (this.percentageY * window.innerHeight).toString() + "px";
+        // restore the scroll offset
+        cursor.style.left = (this.percentageX * window.innerWidth - window.scrollX).toString() + "px";
+        cursor.style.top = (this.percentageY * window.innerHeight - window.scrollY).toString() + "px";
     }
 
     renderOrUpdate() {

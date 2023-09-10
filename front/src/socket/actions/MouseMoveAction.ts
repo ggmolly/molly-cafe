@@ -30,8 +30,11 @@ export class MouseMoveAction extends AAction {
     }
 
     onEvent(event: MouseEvent): void {
-        let x: number = event.pageX / document.documentElement.scrollWidth;
-        let y: number = event.pageY / document.documentElement.scrollHeight;
+        // Get the x and y position of the mouse (the DOM can be scrolled!!!)
+        let x: number = event.clientX + window.scrollX;
+        let y: number = event.clientY + window.scrollY;
+        x = x / window.innerWidth;
+        y = y / window.innerHeight;
         // Only send the data if it has been 100ms since the last packet
         if (Date.now() - lastPacketAt < MIN_DELAY) {
             return;
