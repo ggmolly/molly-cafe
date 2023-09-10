@@ -54,7 +54,16 @@ func publishNewSong(dto dtoUpdate) {
 	CurrentTime = 0
 	TimeMutex.Unlock()
 
-	packet := socket.PacketMap["strawberry"]
+	packet, ok := socket.PacketMap["strawberry"]
+	if !ok {
+		socket.PacketMap["strawberry"] = socket.NewPacket(
+			socket.T_STRAWBERRY,
+			socket.C_STRAWBERRY,
+			socket.DT_SPECIAL,
+			"",
+		)
+		packet = socket.PacketMap["strawberry"]
+	}
 	var dataBuffer bytes.Buffer
 
 	separatedArtists := strings.Join(dto.Artists, ",")
@@ -91,7 +100,16 @@ func publishNewSong(dto dtoUpdate) {
 }
 
 func publishState(dto dtoState) {
-	packet := socket.PacketMap["strawberryState"]
+	packet, ok := socket.PacketMap["strawberryState"]
+	if !ok {
+		socket.PacketMap["strawberryState"] = socket.NewPacket(
+			socket.T_STRAWBERRY_STATE,
+			socket.C_STRAWBERRY,
+			socket.DT_SPECIAL,
+			"",
+		)
+		packet = socket.PacketMap["strawberryState"]
+	}
 	packet.Data = []byte{0x00}
 	if dto.Playing {
 		packet.Data[0] = 0x01
