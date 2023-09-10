@@ -90,11 +90,7 @@ export class CafeSocket {
                 default:
                     const target: number = new Uint8Array(event.data)[0];
                     const buff: DataView = new DataView(event.data.slice(1));
-                    try {
-                        new packetTypes[target](buff).renderOrUpdate();
-                    } catch (e) {
-                        console.error("Failed to render / update packet id " + target + ", is the packet implemented?\nError: " + e);
-                    }
+                    new packetTypes[target](buff).renderOrUpdate();
                     break;
             }
         };
