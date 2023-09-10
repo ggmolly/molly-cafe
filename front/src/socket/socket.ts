@@ -145,7 +145,6 @@ export class CafeSocket {
 
         // For each actions, check if the user is subscribed to it, and if so, check the checkbox
         for (let actionType: SubscribeActionTypes = 0; actionType < Object.keys(this.actions).length; actionType++) {
-            console.log(this.actions[actionType].readLocalStorage(), document.getElementById(this.actions[actionType].domID!!), this.actions[actionType].domID)
             if (this.actions[actionType].readLocalStorage()) {
                 document.getElementById(this.actions[actionType].domID!!)!!.setAttribute("checked", "");
             } else {
