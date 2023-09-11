@@ -33,6 +33,7 @@
 
 body {
     @apply w-full h-full bg-neutral-900 text-white;
+    @apply overflow-x-hidden;
 }
 
 h1 {
