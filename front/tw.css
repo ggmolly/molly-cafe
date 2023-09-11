@@ -204,7 +204,7 @@ span.badge-cyan {
     @apply text-stone-400;
 }
 
-tr {
+tr:not(#root) {
     @apply border-b border-neutral-600;
 }
 
