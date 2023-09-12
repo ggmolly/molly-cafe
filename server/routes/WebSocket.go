@@ -61,7 +61,7 @@ func WSRoutine(c *websocket.Conn) {
 		// Broadcast the disconnected client to all other clients
 		socket.ConnectedClients.BroadcastExcept(socketId, []byte{0xFE})
 		// Check if the client was subscribed to cursors, if so, publish a cursor deletion packet
-		if socket.ConnectedClients[socketId].Subscriptions.Cursors {
+		if ok := socket.ConnectedClients[socketId].Subscriptions.Cursors; ok {
 			socket.ConnectedClients.PublishExcept(
 				socket.MASK_CURSORS,
 				socketId,
