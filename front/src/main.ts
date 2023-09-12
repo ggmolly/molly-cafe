@@ -1,5 +1,6 @@
+import { cloudInit } from "./rendering/objects/weather/clouds";
+import { Sirius } from "./rendering/sirius";
 import { CafeSocket } from "./socket/socket";
-import { cloudMain } from "./weather/elements/clouds";
 
 window.tableRect = {
     x: 0,
@@ -41,11 +42,20 @@ document.addEventListener("readystatechange", (event: Event) => {
 
     // Set the canvas size as the width of the page
     canvas.width = window.innerWidth;
-    canvas.height = 200;
+    canvas.height = window.innerHeight;
 
     updateTableRectangle();
 
-    cloudMain(canvas, ctx);
+    window.windSpeed = (document.getElementById("wind-speed")!! as HTMLInputElement).valueAsNumber;
+
+    document.getElementById("wind-speed")!!.addEventListener("change", (event: Event) => {
+        window.windSpeed = (event.target as HTMLInputElement).valueAsNumber;
+        console.log("Wind speed changed to " + window.windSpeed);
+    });
+
+    let sirius = new Sirius([
+        cloudInit,
+    ], ctx).run();
 });
 
 // When the table is resized, resize the canvas
