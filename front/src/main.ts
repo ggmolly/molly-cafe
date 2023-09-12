@@ -1,5 +1,5 @@
-import { cloudInit } from "./rendering/objects/weather/clouds";
-import { Sirius } from "./rendering/sirius";
+import { cloudInit } from "./sirius/objects/weather/clouds";
+import { Sirius } from "./sirius/sirius";
 import { CafeSocket } from "./socket/socket";
 
 window.tableRect = {
