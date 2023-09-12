@@ -253,7 +253,7 @@ img.cd {
 }
 
 div.side-card {
-    @apply -ml-0.5 min-h-[72px] w-80 my-2;
+    @apply -ml-1 min-h-[72px] w-80 my-2;
 }
 
 #cursors > img {
