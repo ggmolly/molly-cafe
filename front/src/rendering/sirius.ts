@@ -1,6 +1,8 @@
 import { ADrawable } from "./objects/bases/ADrawable";
 
+const avgSampleSize: number = 100;
 let frameCount: number = 0;
+let frameTimes: Array<number> = [];
 
 /**
  * Main class for the rendering engine
@@ -22,6 +24,12 @@ export class Sirius {
         this._init();
     }
 
+    private _getAverageFrameTime(): number {
+        let sum: number = 0;
+        frameTimes.forEach(t => sum += t);
+        return sum / frameTimes.length;
+    }
+
     /**
      * Calls all the init functions and flattens the resulting arrays into a single array (this._objects)
      */
@@ -37,7 +45,7 @@ export class Sirius {
     private _updateDebug(frameTime: number) {
         if (!this._debugSpan) { return; }
         if (frameCount % 30 != 0) { return; }
-        this._debugSpan.innerText = "Frame time: " + frameTime + "ms (" + (1000 / frameTime).toFixed(2) + "fps)";
+        this._debugSpan.innerText = "Frame time: " + frameTime.toFixed(2) + "ms (" + (1000 / frameTime).toFixed(2) + "fps) | Average frame time: " + this._getAverageFrameTime().toFixed(2) + "ms (" + (1000 / this._getAverageFrameTime()).toFixed(2) + "fps)";
     }
 
     /**
@@ -50,9 +58,12 @@ export class Sirius {
             this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
             let frameDelta: number = performance.now() - start;
             this._objects.forEach(o => o._tick(frameDelta));
-            requestAnimationFrame(tick);
+            frameCount = requestAnimationFrame(tick);
             this._updateDebug(frameDelta);
-            frameCount++;
+            if (frameTimes.length >= avgSampleSize) {
+                frameTimes.shift();
+            }
+            frameTimes.push(frameDelta);
             start = performance.now();
         }
         tick();
