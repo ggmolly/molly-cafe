@@ -106,6 +106,7 @@ main {
 
 div.card {
     @apply border-2 border-neutral-600 p-2;
+    @apply z-10 bg-neutral-900;
 }
 
 div.lighter-card {
@@ -258,3 +259,4 @@ div.side-card {
 #cursors > img {
     @apply z-50;
 }
+
