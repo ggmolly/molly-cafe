@@ -7,5 +7,6 @@ declare global {
         interval: any;
         progress: number;
         tableRect: Rect;
+        windSpeed: number;
     }
 }
