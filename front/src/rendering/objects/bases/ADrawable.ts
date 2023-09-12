@@ -42,7 +42,8 @@ export abstract class ADrawable {
      */
     public draw() {
         this._context.globalAlpha = this.alpha;
-        this._context.drawImage(this.sprite, this.pos.x, this.pos.y);
+        // bitwise hack to remove decimals
+        this._context.drawImage(this.sprite, this.pos.x | 0, this.pos.y | 0);
         this._context.globalAlpha = 1;
     }
 
