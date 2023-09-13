@@ -1,4 +1,5 @@
 import { cloudInit } from "./sirius/objects/weather/clouds";
+import { rainInit } from "./sirius/objects/weather/rain";
 import { Sirius } from "./sirius/sirius";
 import { CafeSocket } from "./socket/socket";
 
@@ -41,8 +42,8 @@ document.addEventListener("readystatechange", (event: Event) => {
     let ctx: CanvasRenderingContext2D = canvas.getContext("2d")!!;
 
     // Set the canvas size as the width of the page
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = document.body.scrollWidth;
+    canvas.height = document.body.scrollHeight * 2;
 
     updateTableRectangle();
 
@@ -55,6 +56,7 @@ document.addEventListener("readystatechange", (event: Event) => {
 
     let sirius = new Sirius([
         cloudInit,
+        rainInit,
     ], ctx).run();
 });
 

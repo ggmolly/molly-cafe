@@ -1,3 +1,4 @@
 export enum AssetType {
-    CLOUD = "cloud"
+    CLOUD = "cloud",
+    RAINDROP = "raindrop"
 }
