@@ -1,5 +1,4 @@
 import { APacket } from "./APacket";
-import { DataType } from "./DataTypes";
 
 const GOAL_SECONDS: number = 8 * 60 * 60; // 8 hours
 const COLORS: string[] = [
