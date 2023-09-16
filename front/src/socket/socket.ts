@@ -3,6 +3,7 @@ import { MonitoringPacket } from "../packets/MonitoringPacket";
 import { MouseActionPacket } from "../packets/MouseActionPacket";
 import { PistachePacket } from "../packets/PistachePacket";
 import { SchoolProjectPacket } from "../packets/SchoolProjectPacket";
+import { SleepTrackingPacket } from "../packets/SleepTrackingPacket";
 import { StrawberryPacket } from "../packets/StrawberryPacket";
 import { StrawberrySeekPacket } from "../packets/StrawberrySeekPacket";
 import { StrawberryStatePacket } from "../packets/StrawberryStatePacket";
@@ -20,7 +21,9 @@ const packetTypes: Record<number, any> = {
     0x04: StrawberrySeekPacket,
     0x05: StrawberryStatePacket,
     0x07: CursorByePacket,
+    0x08: SleepTrackingPacket,
 
+    // Special case for mouse actions
     0x06: MouseActionPacket,
 };
 
