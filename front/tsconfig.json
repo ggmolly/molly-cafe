@@ -9,7 +9,11 @@
     "sourceMap": true,
     "strict": true,
     "target": "ES6",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "lib": [
+      "es2017",
+      "dom"
+    ]
   },
   "include": ["src/**/*"]
 }
