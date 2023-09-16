@@ -163,3 +163,6 @@ server/config.json
 sonar-project.properties
 .sonar_lock
 .scannerwork
+
+# misc files
+.last_sleep
