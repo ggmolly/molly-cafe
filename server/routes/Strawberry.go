@@ -40,7 +40,13 @@ const (
 
 func updateTime(newTime uint32) {
 	packet := socket.PacketMap["strawberry"]
-	length := len(packet.Data)
+	var length int
+	if packet.Data == nil {
+		packet.Data = make([]byte, 4)
+		length = 4
+	} else {
+		length = len(packet.Data)
+	}
 	packet.Data[length-4] = byte(CurrentTime >> 24)
 	packet.Data[length-3] = byte(CurrentTime >> 16)
 	packet.Data[length-2] = byte(CurrentTime >> 8)
