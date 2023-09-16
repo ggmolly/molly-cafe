@@ -64,6 +64,10 @@ const (
 	T_CURSOR_BYE = 0x07
 	C_CURSOR_BYE = 0x00
 
+	// Sleep tracking
+	T_SLEEP = 0x08
+	C_SLEEP = 0x00
+
 	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
 
