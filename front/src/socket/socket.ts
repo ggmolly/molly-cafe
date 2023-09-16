@@ -1,4 +1,5 @@
 import { CursorByePacket } from "../packets/CursorByePacket";
+import { LeitnerUpdatePacket } from "../packets/LeitnerUpdatePacket";
 import { MonitoringPacket } from "../packets/MonitoringPacket";
 import { MouseActionPacket } from "../packets/MouseActionPacket";
 import { PistachePacket } from "../packets/PistachePacket";
@@ -22,6 +23,7 @@ const packetTypes: Record<number, any> = {
     0x05: StrawberryStatePacket,
     0x07: CursorByePacket,
     0x08: SleepTrackingPacket,
+    0x09: LeitnerUpdatePacket,
 
     // Special case for mouse actions
     0x06: MouseActionPacket,

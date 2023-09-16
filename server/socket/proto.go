@@ -68,6 +68,10 @@ const (
 	T_SLEEP = 0x08
 	C_SLEEP = 0x00
 
+	// Leitner API
+	T_LEITNER = 0x09
+	C_LEITNER = 0x00
+
 	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
 

@@ -130,6 +130,10 @@ func main() {
 	// iOS shortcuts will send a POST request to this endpoint
 	app.Post("/api/sleep", routes.SleepTracking)
 
+	// Leitner API
+	leitnerAPI := app.Group("/api/leitner", middlewares.LANOnly)
+	leitnerAPI.Post("/:topic", routes.UpdateLeitner)
+
 	go func() {
 		for {
 			// Broadcast the number of clients to all clients
