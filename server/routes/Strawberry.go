@@ -38,15 +38,23 @@ const (
 	InvalidCover   = "Invalid cover image"
 )
 
-func updateTime(newTime uint32) {
-	packet := socket.PacketMap["strawberry"]
-	var length int
-	if packet.Data == nil {
-		packet.Data = make([]byte, 4)
-		length = 4
-	} else {
-		length = len(packet.Data)
+func getStrawberryPacket() *socket.Packet {
+	packet, ok := socket.PacketMap["strawberry"]
+	if !ok {
+		socket.PacketMap["strawberry"] = socket.NewPacket(
+			socket.T_STRAWBERRY,
+			socket.C_STRAWBERRY,
+			socket.DT_SPECIAL,
+			"",
+		)
+		packet = socket.PacketMap["strawberry"]
 	}
+	return packet
+}
+
+func updateTime(newTime uint32) {
+	packet := getStrawberryPacket()
+	length := len(packet.Data)
 	packet.Data[length-4] = byte(CurrentTime >> 24)
 	packet.Data[length-3] = byte(CurrentTime >> 16)
 	packet.Data[length-2] = byte(CurrentTime >> 8)
@@ -60,16 +68,7 @@ func publishNewSong(dto dtoUpdate) {
 	CurrentTime = 0
 	TimeMutex.Unlock()
 
-	packet, ok := socket.PacketMap["strawberry"]
-	if !ok {
-		socket.PacketMap["strawberry"] = socket.NewPacket(
-			socket.T_STRAWBERRY,
-			socket.C_STRAWBERRY,
-			socket.DT_SPECIAL,
-			"",
-		)
-		packet = socket.PacketMap["strawberry"]
-	}
+	packet := getStrawberryPacket()
 	var dataBuffer bytes.Buffer
 
 	separatedArtists := strings.Join(dto.Artists, ",")
