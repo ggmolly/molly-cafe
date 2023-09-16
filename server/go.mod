@@ -10,6 +10,8 @@ require (
 	github.com/gofiber/fiber/v2 v2.49.2
 )
 
+require github.com/joho/godotenv v1.5.1
+
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect

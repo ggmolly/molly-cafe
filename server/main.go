@@ -14,6 +14,7 @@ import (
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
+	"github.com/joho/godotenv"
 )
 
 type UpdateDetails struct {
@@ -28,6 +29,15 @@ var (
 )
 
 func init() {
+	// Load environment variables
+	err := godotenv.Load()
+	if err != nil {
+		// Panic because some endpoints won't be protected by auth if this fails
+		panic("Failed to load .env file.")
+	}
+	if len(os.Getenv("API_KEY")) < 128 {
+		panic("API_KEY must be at least 128 characters long")
+	}
 	// Load config file
 	if _, err := os.Stat("config.json"); os.IsNotExist(err) {
 		log.Println("Failed to load the config.json file, using default values")
@@ -116,6 +126,9 @@ func main() {
 	strawberryAPI.Post("/", routes.StrawberryUpdate)
 	strawberryAPI.Patch("/seek", routes.SetStrawberrySeek)
 	strawberryAPI.Patch("/state", routes.SetStrawberryState)
+
+	// iOS shortcuts will send a POST request to this endpoint
+	app.Post("/api/sleep", routes.SleepTracking)
 
 	go func() {
 		for {
