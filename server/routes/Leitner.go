@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"time"
 
 	"github.com/bettercallmolly/illustrious/socket"
 	"github.com/gofiber/fiber/v2"
@@ -15,7 +16,27 @@ type LeitnerTopic struct {
 }
 
 type LeitnerConfig struct {
-	Topics map[string]LeitnerTopic `json:"topics"`
+	Topics    map[string]LeitnerTopic `json:"topics"`
+	Streak    uint32                  `json:"streak"`
+	UpdatedAt time.Time               `json:"updated_at"`
+}
+
+func (c *LeitnerConfig) Save() error {
+	file, err := os.OpenFile(configPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	return json.NewEncoder(file).Encode(config)
+}
+
+func (c *LeitnerConfig) Load() error {
+	file, err := os.Open(configPath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	return json.NewDecoder(file).Decode(c)
 }
 
 const (
@@ -25,6 +46,26 @@ const (
 var (
 	config LeitnerConfig
 )
+
+func updateStreakPacket(newStreak uint32) {
+	packet, ok := socket.PacketMap["L_STREAK"]
+	if !ok {
+		packet = socket.NewPacket(
+			socket.T_LEITNER,
+			socket.C_LEITNER_STREAK,
+			socket.DT_UINT32,
+			"",
+		)
+		packet.Data = make([]byte, 4)
+		socket.PacketMap["L_STREAK"] = packet
+	}
+	// Update the packet
+	packet.Data[0] = byte(newStreak >> 24)
+	packet.Data[1] = byte(newStreak >> 16)
+	packet.Data[2] = byte(newStreak >> 8)
+	packet.Data[3] = byte(newStreak)
+	socket.ConnectedClients.Broadcast(packet.GetRawBytes())
+}
 
 // Update / set packet, and broadcast to all clients
 func updateLeitnerPacket(topic string) {
@@ -69,14 +110,34 @@ func UpdateLeitner(c *fiber.Ctx) error {
 		Total:          topic.Total,
 	}
 	// Save the config
-	file, err := os.OpenFile(configPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
-	if err != nil {
-		return c.SendStatus(500)
+	config.Save()
+
+	return c.SendStatus(200)
+}
+
+func UpdateLeitnerStreak(c *fiber.Ctx) error {
+	// Check how many days have passed since the last update
+	daysPassed := int(time.Since(config.UpdatedAt).Hours() / 24)
+	if daysPassed == 0 {
+		return c.SendStatus(202)
+	} else if daysPassed > 1 {
+		// Reset the streak
+		config.Streak = 1
+	} else {
+		config.Streak++
 	}
-	defer file.Close()
-	json.NewEncoder(file).Encode(config)
-	// Update the packet
-	updateLeitnerPacket(c.Params("topic"))
+
+	// If the streak was updated, update the streak packet too
+	updateStreakPacket(config.Streak)
+	config.UpdatedAt = time.Now()
+	config.UpdatedAt = config.UpdatedAt.Add(-time.Duration(config.UpdatedAt.Hour()) * time.Hour)
+	config.UpdatedAt = config.UpdatedAt.Add(-time.Duration(config.UpdatedAt.Minute()) * time.Minute)
+	config.UpdatedAt = config.UpdatedAt.Add(-time.Duration(config.UpdatedAt.Second()) * time.Second)
+	config.UpdatedAt = config.UpdatedAt.Add(-time.Duration(config.UpdatedAt.Nanosecond()) * time.Nanosecond)
+
+	// Save the config
+	config.Save()
+
 	return c.SendStatus(200)
 }
 
@@ -85,12 +146,14 @@ func init() {
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Println("Leitner config does not exist. The Leitner API will not be available.")
 	} else {
-		// if it exists, read the config
-		file, _ := os.Open(configPath)
-		defer file.Close()
-		err := json.NewDecoder(file).Decode(&config)
-		if err != nil {
-			log.Println("Error decoding leitner config:", err)
+		// Load the config
+		if err := config.Load(); err != nil {
+			log.Println("Could not load leitner config. The Leitner API will not be available.")
 		}
 	}
+	// Update the packets
+	for topic := range config.Topics {
+		updateLeitnerPacket(topic)
+	}
+	updateStreakPacket(config.Streak)
 }

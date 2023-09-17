@@ -133,6 +133,7 @@ func main() {
 	// Leitner API
 	leitnerAPI := app.Group("/api/leitner", middlewares.LANOnly)
 	leitnerAPI.Post("/:topic", routes.UpdateLeitner)
+	leitnerAPI.Patch("/streak", routes.UpdateLeitnerStreak)
 
 	go func() {
 		for {
