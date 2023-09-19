@@ -59,6 +59,7 @@ export class StrawberryPacket extends APacket {
     }
 
     formatTime(timeUs: number) {
+        if (timeUs < 0) { return "00:00"; }
         let time = Math.floor(timeUs / 1000000);
         let minutes = Math.floor(time / 60);
         let seconds = time % 60;
