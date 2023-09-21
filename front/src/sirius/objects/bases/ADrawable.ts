@@ -96,10 +96,23 @@ export abstract class ADrawable {
         this._context = context;
     }
 
+    /**
+     * Returns the object's position
+     */
+    public get position(): Point {
+        return this.pos;
+    }
+
+    /**
+     * Returns the object's sprite
+     */
     public get sprite(): HTMLImageElement {
         return this._sprite;
     }
 
+    /**
+     * Returns the object's context
+    **/
     public get context(): CanvasRenderingContext2D {
         return this._context;
     }
