@@ -3,7 +3,7 @@
 import { AssetType } from "./types";
 
 const typeCount: Record<AssetType, number> = {
-    [AssetType.CLOUD]: 11,
+    [AssetType.CLOUD]: 5,
     [AssetType.RAINDROP]: 1,
 }
 let assetsMap: Record<AssetType, Array<HTMLImageElement>> = {
