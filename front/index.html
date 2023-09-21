@@ -23,6 +23,25 @@
 </head>
 
 <body>
+    <script>
+        function stopRain() {
+            let raindrops = window.s_Objects.filter((obj) => obj.constructor.name === 'Raindrop');
+            raindrops.forEach((raindrop, index) => {
+                setTimeout(() => {
+                    raindrop.disable();
+                }, Math.log2(index) * 1000);
+            });
+        }
+        function startRain() {
+            let raindrops = window.s_Objects.filter((obj) => obj.constructor.name === 'Raindrop');
+            raindrops.forEach((raindrop, index) => {
+                setTimeout(() => {
+                    raindrop.resetPosition();
+                    raindrop.enable();
+                }, Math.log2(index) * 1000);
+            });
+        }
+    </script>
     <div id="cursors" style="z-index: 1000;"></div>
     <main class="container mx-auto">
         <canvas id="weather" class="absolute top-0 left-0 -z-10"></canvas>
@@ -46,7 +65,6 @@
                                     You can check the source code of this website <a
                                         href="https://github.com/BetterCallMolly/molly-cafe">here</a> and it is
                                     hosted on a server I own, and you can see its status below.
-                                    <span id="sirius-debug"></span>
                                 </p>
                                 <br />
                                 <div class="ml-2">
@@ -146,8 +164,26 @@
                             <label for="show-cursors">show cursors</label>
                         </div>
                         <div class="side-card card">
+                            <h4 class="text-center">sirius debug</h4>
+                            <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2" />
+                            <span class="green" id="sirius-debug-ft"></span>
+                            <br>
+                            <span class="green" id="sirius-debug-fps"></span>
+                            <br>
+                            <span class="blue" id="sirius-debug-objs"></span>
+                            <br>
+                            <span class="fuchsia" id="sirius-debug-rendered-objs"></span>
+                            <br>
+                            <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2" />
+                            <span class="yellow" id="sirius-debug-avg-ft"></span>
+                            <br>
+                            <span class="yellow" id="sirius-debug-avg-fps"></span>
+                            <br>
+                        </div>
+                        <div class="side-card card">
                             <h4 class="text-center">paris' weather</h4>
-                            <input type="range" min="0" max="100" value="0" step="1" id="wind-speed">
+                            <button onclick="stopRain()">Stop Rain</button>
+                            <button onclick="startRain()">Start Rain</button>
                         </div>
                     </td>
                 </tr>
