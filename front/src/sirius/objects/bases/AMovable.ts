@@ -23,6 +23,7 @@ export abstract class AMovable extends ADrawable {
     }
 
     public _tick(frameDelta: number) {
+        if (frameDelta > 100) { return; }
         this.pos.x += this.velocity.x * frameDelta;
         this.pos.y += this.velocity.y * frameDelta;
         this.tick(frameDelta);
