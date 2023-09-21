@@ -9,7 +9,6 @@ let frameTimes: Array<number> = [];
  */
 export class Sirius {
     private _init_functions: Array<CallableFunction>;
-    private _objects: Array<ADrawable>;
     private _ctx: CanvasRenderingContext2D;
     private _debugSpan: HTMLElement | null;
     /**
@@ -17,8 +16,8 @@ export class Sirius {
      * @param functions Array of async functions that return a promise of an array of ADrawable objects
      */
     constructor(functions: Array<CallableFunction>, ctx: CanvasRenderingContext2D) {
+        window.s_Objects = [];
         this._init_functions = functions;
-        this._objects = [];
         this._ctx = ctx;
         this._debugSpan = document.getElementById("sirius-debug");
         this._init();
@@ -31,12 +30,12 @@ export class Sirius {
     }
 
     /**
-     * Calls all the init functions and flattens the resulting arrays into a single array (this._objects)
+     * Calls all the init functions and flattens the resulting arrays into a single array (window.s_Objects)
      */
     private _init() {
         this._init_functions.forEach(f => {
             f(this._ctx).then((objects: Array<ADrawable>) => {
-                this._objects = this._objects.concat(objects);
+                window.s_Objects = window.s_Objects.concat(objects);
                 console.debug("[sirius] Initialized " + objects.length + " objects");
             });
         });
@@ -57,7 +56,7 @@ export class Sirius {
         let tick = () => {
             this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
             let frameDelta: number = performance.now() - start;
-            this._objects.forEach(o => o._tick(frameDelta));
+            window.s_Objects.forEach(o => o._tick(frameDelta));
             frameCount = requestAnimationFrame(tick);
             this._updateDebug(frameDelta);
             if (frameTimes.length >= avgSampleSize) {

@@ -1,4 +1,5 @@
 import { Rect } from "./interfaces/rect.interface";
+import { ADrawable } from "./sirius/objects/bases/ADrawable";
 
 export { };
 
@@ -8,5 +9,6 @@ declare global {
         progress: number;
         tableRect: Rect;
         windSpeed: number;
+        s_Objects: ADrawable[];
     }
 }
