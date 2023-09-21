@@ -20,6 +20,8 @@ function updateTableRectangle() {
     window.tableRect.height = boundingRect.height;
 }
 
+window.windSpeed = 1;
+
 // Make the disc spin, if he has the spinning class
 document.addEventListener("readystatechange", (event: Event) => {
     if (document.readyState != "complete") {
@@ -46,13 +48,6 @@ document.addEventListener("readystatechange", (event: Event) => {
     canvas.height = document.body.scrollHeight * 2;
 
     updateTableRectangle();
-
-    window.windSpeed = (document.getElementById("wind-speed")!! as HTMLInputElement).valueAsNumber;
-
-    document.getElementById("wind-speed")!!.addEventListener("change", (event: Event) => {
-        window.windSpeed = (event.target as HTMLInputElement).valueAsNumber;
-        console.log("Wind speed changed to " + window.windSpeed);
-    });
 
     let sirius = new Sirius([
         cloudInit,
