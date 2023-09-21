@@ -25,14 +25,19 @@ class Raindrop extends AMovable {
 
     tick() {
         if (this.pos.y > this.context.canvas.height) {
-            this.pos.y = this._parentCloud.position.y + this._parentCloud.sprite.height;
+            this.resetPosition();
             this.velocity.y = Math.random() * 2.5 + 2.5;
         }
         // Update velocity
         this.velocity.x = 0.1;
         if (this.pos.x > this.context.canvas.width - 50) {
-            this.pos.x = this._parentCloud.position.x + Math.random() * this._parentCloud.sprite.width;
+            this.resetPosition();
         }
+    }
+
+    resetPosition() {
+        this.pos.x = this._parentCloud.position.x + Math.random() * this._parentCloud.sprite.width;
+        this.pos.y = this._parentCloud.position.y + Math.random() * this.context.canvas.height;
     }
 }
 
