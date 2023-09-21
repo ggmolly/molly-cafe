@@ -5,32 +5,36 @@ import { AssetType } from "../../types";
 import { ADrawable } from "../bases/ADrawable";
 import { AMovable } from "../bases/AMovable";
 
-const N_RAINDROPS: number = 50;
+const N_RAINDROPS: number = 100;
 
 class Raindrop extends AMovable {
     private _initialY: number;
+    private _parentCloud: ADrawable; // rain falls from clouds, did you know?
     constructor(
         sprite: HTMLImageElement,
         context: CanvasRenderingContext2D,
         initialVelocity: Velocity,
     ) {
-        let pos = { x: Math.random() * context.canvas.width, y: 100 };
+        let clouds = window.s_Objects.filter((obj: ADrawable) => obj.constructor.name === "Cloud");
+        const parentCloud = clouds[Math.floor(Math.random() * clouds.length)];
+        let pos = {
+            x: parentCloud.position.x + Math.random() * parentCloud.sprite.width,
+            y: parentCloud.position.y + Math.random() * context.canvas.height,
+        };
         super(sprite, context, pos, initialVelocity);
-        pos.y = Math.random() * this.context.canvas.height;
+        this._parentCloud = parentCloud;
         this._initialY = 0;
     }
 
     tick() {
         if (this.pos.y > this.context.canvas.height) {
-            // random between -50 and 50
-            let rnd = Math.random() * 100 - 50;
-            this.pos.y = this._initialY + rnd;
+            this.pos.y = this._parentCloud.position.y + this._parentCloud.sprite.height;
             this.velocity.y = Math.random() * 2.5 + 2.5;
         }
         // Update velocity
         this.velocity.x = 0.1;
         if (this.pos.x > this.context.canvas.width - 50) {
-            this.pos.x = -5;
+            this.pos.x = this._parentCloud.position.x + Math.random() * this._parentCloud.sprite.width;
         }
     }
 }
