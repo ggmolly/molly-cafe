@@ -10,7 +10,12 @@ let frameTimes: Array<number> = [];
 export class Sirius {
     private _init_functions: Array<CallableFunction>;
     private _ctx: CanvasRenderingContext2D;
-    private _debugSpan: HTMLElement | null;
+    private _debugFrameTime: HTMLSpanElement | null;
+    private _debugFrameRate: HTMLSpanElement | null;
+    private _debugLoadedObjects: HTMLSpanElement | null;
+    private _debugAvgFrameTime: HTMLSpanElement | null;
+    private _debugAvgFrameRate: HTMLSpanElement | null;
+    private _debugRenderedObjects: HTMLSpanElement | null;
     /**
      * Initializes the rendering engine
      * @param functions Array of async functions that return a promise of an array of ADrawable objects
@@ -19,7 +24,12 @@ export class Sirius {
         window.s_Objects = [];
         this._init_functions = functions;
         this._ctx = ctx;
-        this._debugSpan = document.getElementById("sirius-debug");
+        this._debugFrameTime = document.getElementById("sirius-debug-ft");
+        this._debugFrameRate = document.getElementById("sirius-debug-fps");
+        this._debugLoadedObjects = document.getElementById("sirius-debug-objs");
+        this._debugAvgFrameTime = document.getElementById("sirius-debug-avg-ft");
+        this._debugAvgFrameRate = document.getElementById("sirius-debug-avg-fps");
+        this._debugRenderedObjects = document.getElementById("sirius-debug-rendered-objs");
         this._init();
     }
 
@@ -42,9 +52,21 @@ export class Sirius {
     }
 
     private _updateDebug(frameTime: number) {
-        if (!this._debugSpan) { return; }
+        if (
+            !this._debugFrameTime ||
+            !this._debugFrameRate ||
+            !this._debugLoadedObjects ||
+            !this._debugAvgFrameTime ||
+            !this._debugAvgFrameRate || 
+            !this._debugRenderedObjects
+        ) { return; }
         if (frameCount % 30 != 0) { return; }
-        this._debugSpan.innerText = "Frame time: " + frameTime.toFixed(2) + "ms (" + (1000 / frameTime).toFixed(2) + "fps) | Average frame time: " + this._getAverageFrameTime().toFixed(2) + "ms (" + (1000 / this._getAverageFrameTime()).toFixed(2) + "fps)";
+        this._debugFrameTime.innerText = "Frame time: " + frameTime.toFixed(2) + "ms";
+        this._debugFrameRate.innerText = "Frame rate: " + (1000 / frameTime).toFixed(2) + "fps";
+        this._debugLoadedObjects.innerText = "Loaded objects: " + window.s_Objects.length;
+        this._debugAvgFrameTime.innerText = "Average frame time: " + this._getAverageFrameTime().toFixed(2) + "ms";
+        this._debugAvgFrameRate.innerText = "Average frame rate: " + (1000 / this._getAverageFrameTime()).toFixed(2) + "fps";
+        this._debugRenderedObjects.innerText = "Rendered objects: " + window.s_Objects.filter(o => o.enabled).length;
     }
 
     /**
