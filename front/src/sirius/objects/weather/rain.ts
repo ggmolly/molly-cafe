@@ -1,4 +1,3 @@
-import { Rect } from "../../../interfaces/rect.interface";
 import { getAssets, loadAssetsType } from "../../assets";
 import { Velocity } from "../../interfaces/velocity.interface";
 import { AssetType } from "../../types";
@@ -8,7 +7,6 @@ import { AMovable } from "../bases/AMovable";
 const N_RAINDROPS: number = 100;
 
 class Raindrop extends AMovable {
-    private _initialY: number;
     private _parentCloud: ADrawable; // rain falls from clouds, did you know?
     constructor(
         sprite: HTMLImageElement,
@@ -23,7 +21,6 @@ class Raindrop extends AMovable {
         };
         super(sprite, context, pos, initialVelocity);
         this._parentCloud = parentCloud;
-        this._initialY = 0;
     }
 
     tick() {
