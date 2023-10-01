@@ -111,7 +111,8 @@ func UpdateLeitner(c *fiber.Ctx) error {
 	}
 	// Save the config
 	config.Save()
-
+	// Update the packet
+	updateLeitnerPacket(c.Params("topic"))
 	return c.SendStatus(200)
 }
 
