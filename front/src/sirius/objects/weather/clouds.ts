@@ -53,7 +53,7 @@ class Cloud extends AMovable {
         }
         this.enabled = !behindTable({ x: this.pos.x, y: this.pos.y, width: this.sprite.width, height: this.sprite.height });
         // Update velocity
-        this.velocity.x = speedX + Math.log2(window.windSpeed / 100 + 1);
+        this.velocity.x = speedX + Math.log2(window.s_Weather.windSpeed / 100 + 1);
         if (this._consecutiveSteps == this._bounciness) {
             this._consecutiveSteps = this._idleFrames;
             this._lastDirection *= -1;

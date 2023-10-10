@@ -20,6 +20,13 @@ function updateTableRectangle() {
     window.tableRect.height = boundingRect.height;
 }
 
+window.s_Weather = {
+    rainIntensity: 0,
+    temperature: 0,
+    timeOfDay: 0,
+    windSpeed: 1,
+}
+
 // Set sirius_debug localStorage
 if (!localStorage.getItem("sirius_debug")) {
     // Set default value to false
