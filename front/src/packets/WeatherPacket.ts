@@ -34,7 +34,9 @@ export class WeatherPacket extends APacket {
         let currentConditionLength: number = data.getUint8(this.offset++);
         // Byte 26-... = currentCondition (string)
         window.s_Weather.currentCondition = new TextDecoder().decode(data.buffer.slice(this.offset, this.offset + currentConditionLength));
-        console.log(window.s_Weather)
+        if (window.s_Weather.onCloudinessChange !== undefined) {
+            window.s_Weather.onCloudinessChange(window.s_Weather.cloudiness);
+        }
     }
 
     update() {}

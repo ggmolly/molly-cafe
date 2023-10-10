@@ -44,4 +44,11 @@ export interface Weather {
      * Weather condition
      */
     currentCondition: string;
+
+    // Callback functions
+
+    /**
+     * Callback for cloudiness change
+     */
+    onCloudinessChange: (newCloudiness: number) => void | undefined;
 }
