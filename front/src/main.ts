@@ -20,7 +20,11 @@ function updateTableRectangle() {
     window.tableRect.height = boundingRect.height;
 }
 
-window.windSpeed = 1;
+// Set sirius_debug localStorage
+if (!localStorage.getItem("sirius_debug")) {
+    // Set default value to false
+    localStorage.setItem("sirius_debug", "false");
+}
 
 // Make the disc spin, if he has the spinning class
 document.addEventListener("readystatechange", (event: Event) => {

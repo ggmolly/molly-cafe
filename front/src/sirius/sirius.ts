@@ -16,6 +16,7 @@ export class Sirius {
     private _debugAvgFrameTime: HTMLSpanElement | null;
     private _debugAvgFrameRate: HTMLSpanElement | null;
     private _debugRenderedObjects: HTMLSpanElement | null;
+    private _debugEnabled: boolean = false;
     /**
      * Initializes the rendering engine
      * @param functions Array of async functions that return a promise of an array of ADrawable objects
@@ -24,12 +25,18 @@ export class Sirius {
         window.s_Objects = [];
         this._init_functions = functions;
         this._ctx = ctx;
+        // Check the localStorage value
         this._debugFrameTime = document.getElementById("sirius-debug-ft");
         this._debugFrameRate = document.getElementById("sirius-debug-fps");
         this._debugLoadedObjects = document.getElementById("sirius-debug-objs");
         this._debugAvgFrameTime = document.getElementById("sirius-debug-avg-ft");
         this._debugAvgFrameRate = document.getElementById("sirius-debug-avg-fps");
         this._debugRenderedObjects = document.getElementById("sirius-debug-rendered-objs");
+        this._debugEnabled = localStorage.getItem("sirius_debug") === "true";
+        if (!this._debugEnabled) {
+            // remove the DOM element to not take up unnecessary space
+            document.getElementById("sirius-debug")?.remove();
+        }
         this._init();
     }
 
@@ -53,6 +60,7 @@ export class Sirius {
 
     private _updateDebug(frameTime: number) {
         if (
+            !this._debugEnabled ||
             !this._debugFrameTime ||
             !this._debugFrameRate ||
             !this._debugLoadedObjects ||
