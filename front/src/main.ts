@@ -21,10 +21,16 @@ function updateTableRectangle() {
 }
 
 window.s_Weather = {
+    windSpeed: 0,
     rainIntensity: 0,
+    cloudiness: 0,
     temperature: 0,
-    timeOfDay: 0,
-    windSpeed: 1,
+    feelsLike: 0,
+    humidity: 0,
+    timeToSunrise: 0,
+    timeToSunset: 0,
+    currentTime: 0,
+    currentCondition: "",
 }
 
 // Set sirius_debug localStorage
