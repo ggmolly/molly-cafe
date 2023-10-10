@@ -182,8 +182,43 @@
                         </div>
                         <div class="side-card card">
                             <h4 class="text-center">weather @ paris</h4>
-                            <button onclick="stopRain()">Stop Rain</button>
-                            <button onclick="startRain()">Start Rain</button>
+                            <!--
+                                TODO: use pixel art icons instead of just text
+                                display these informations :
+                                0. condition (as text)
+                                1. sunrise
+                                2. current time
+                                3. sunset
+                                4. (later) moon phase
+                                5. wind speed
+                                6. temperature
+                            -->
+                            <span id="w-current-cond">
+                                condition: <span class="value">clear sky</span>
+                            </span>
+                            <br>
+                            <span id="w-current-temperature" title="absolute temperature">
+                                temperature: <span class="value" title="feels like">25.17°C (25.03°C)</span>
+                            </span>
+                            <br>
+                            <span id="w-current-wind-speed">
+                                wind speed: <span class="value">0m/s</span>
+                            </span>
+                            <br>
+                            <span id="w-sunrise">
+                                sunrise: <span class="value">00:00</span>
+                            </span>
+                            <br>
+                            <span id="w-current-time">
+                                current time: <span class="value">00:00</span>
+                            </span>
+                            <br>
+                            <span id="w-sunset">
+                                sunset: <span class="value">00:00</span>
+                            </span>
+                            <br>
+                            <!-- <button onclick="stopRain()">Stop Rain</button>
+                            <button onclick="startRain()">Start Rain</button> -->
                         </div>
                     </td>
                 </tr>
