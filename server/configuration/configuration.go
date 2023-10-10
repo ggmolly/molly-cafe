@@ -22,6 +22,10 @@ var (
 type Configuration struct {
 	MonitoredServices []string          `json:"services"`
 	DiskTranslations  map[string]string `json:"disk_translations"`
+	OpenWeatherMap    struct {
+		API    string `json:"api"`
+		CityID int    `json:"city_id"`
+	} `json:"openweathermap"`
 }
 
 func contains(slice []string, element string) bool {
