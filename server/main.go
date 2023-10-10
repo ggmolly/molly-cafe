@@ -77,6 +77,9 @@ func init() {
 	// Disk usage
 	go watchdogs.MonitorDiskSpace(&socket.PacketMap)
 
+	// Weather
+	go watchdogs.MonitorWeather(&socket.PacketMap)
+
 	ProjectPath, err := configuration.GetRootPath("projects")
 	if err != nil {
 		log.Println("'projects' folder could not be found. project management will be disabled")
