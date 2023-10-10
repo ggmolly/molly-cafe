@@ -249,7 +249,6 @@ func init() {
 		configuration.LoadedConfiguration.OpenWeatherMap.Longitude,
 		configuration.LoadedConfiguration.OpenWeatherMap.API,
 	)
-	log.Println("Weather request URL:", requestURL)
 	file, err := os.OpenFile(".cached_weather", os.O_RDONLY, 0644)
 	if err != nil {
 		log.Println("Failed to open weather cache:", err)
