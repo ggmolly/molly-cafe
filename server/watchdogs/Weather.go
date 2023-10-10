@@ -2,16 +2,22 @@ package watchdogs
 
 import (
 	"bytes"
+	"encoding/gob"
 	"encoding/json"
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strings"
+	"time"
 
+	"github.com/bettercallmolly/illustrious/configuration"
 	"github.com/bettercallmolly/illustrious/socket"
 )
 
 const (
-	MAX_WIND_SPEED = 30 // m/s (108 km/h)
+	MAX_WIND_SPEED         = 30 // m/s (108 km/h)
+	WEATHER_CACHE_DURATION = 30 * time.Minute
 )
 
 type OWM_Data struct {
@@ -55,6 +61,16 @@ type OWM_Data struct {
 	Name     string `json:"name"`
 	Cod      int    `json:"cod"`
 }
+
+type WeatherCache struct {
+	Data       OWM_Data
+	LastUpdate time.Time
+}
+
+var (
+	cachedWeatherData WeatherCache
+	requestURL        string
+)
 
 // Very naive function to compute the rain intensity (who cares)
 func computeRainIntensity(data OWM_Data) uint8 {
@@ -116,20 +132,38 @@ func getWeatherPacket(packetMaps *map[string]*socket.Packet) *socket.Packet {
 }
 
 func getWeatherData() (OWM_Data, error) {
+	// Check if the data is cached
+	if time.Since(cachedWeatherData.LastUpdate) < WEATHER_CACHE_DURATION {
+		return cachedWeatherData.Data, nil
+	}
 	// Do the request to OpenWeatherMap
-	// var data OWM_Data
-	// resp, err := http.Get("https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b1b15e88fa797225412429c1c50c122a1")
-	// if err != nil {
-	// 	return data, err
-	// }
-	// defer resp.Body.Close()
-	// // Serialize the response
-	// err = json.NewDecoder(resp.Body).Decode(&data)
-	// return data, err
-	file, _ := os.OpenFile("./test_data.json", os.O_RDONLY, 0644)
-	defer file.Close()
 	var data OWM_Data
-	err := json.NewDecoder(file).Decode(&data)
+	resp, err := http.Get(requestURL)
+	if err != nil {
+		return data, err
+	}
+	defer resp.Body.Close()
+	// Serialize the response
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		log.Println("Failed to decode weather response:", err)
+		return data, err
+	}
+	// Save the data in the cache
+	cachedWeatherData.Data = data
+	cachedWeatherData.LastUpdate = time.Now()
+	// Save the cache on disk
+	file, err := os.OpenFile(".cached_weather", os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		log.Println("Failed to open weather cache:", err)
+		return data, err
+	}
+	defer file.Close()
+	encoder := gob.NewEncoder(file)
+	err = encoder.Encode(cachedWeatherData)
+	if err != nil {
+		log.Println("Failed to encode weather cache:", err)
+	}
 	return data, err
 }
 
@@ -193,10 +227,6 @@ func serializeWeatherPacket(buffer *bytes.Buffer) error {
 }
 
 func MonitorWeather(packetMaps *map[string]*socket.Packet) {
-	// TODO: Get real data from OpenWeatherMap, use a caching file to avoid spamming the API (one call / hour)
-	// use gob encoding to store old file along with the request timestamp
-	// XXX: use https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b1b15e88fa797225412429c1c50c122a1&units=metric
-
 	// Get the packet from the map, or create it if it doesn't exist
 	packet := getWeatherPacket(packetMaps)
 	var buffer bytes.Buffer
@@ -206,4 +236,27 @@ func MonitorWeather(packetMaps *map[string]*socket.Packet) {
 	}
 	packet.Data = buffer.Bytes()
 	packet.Dirty = true
+}
+
+func init() {
+	requestURL = fmt.Sprintf(
+		"https://api.openweathermap.org/data/2.5/weather?lat=%.6f&lon=%.6f&appid=%s&units=metric&lang=en",
+		configuration.LoadedConfiguration.OpenWeatherMap.Latitude,
+		configuration.LoadedConfiguration.OpenWeatherMap.Longitude,
+		configuration.LoadedConfiguration.OpenWeatherMap.API,
+	)
+	log.Println("Weather request URL:", requestURL)
+	file, err := os.OpenFile(".cached_weather", os.O_RDONLY, 0644)
+	if err != nil {
+		log.Println("Failed to open weather cache:", err)
+		return
+	}
+	defer file.Close()
+	decoder := gob.NewDecoder(file)
+	err = decoder.Decode(&cachedWeatherData)
+	if err != nil {
+		log.Println("Failed to decode weather cache:", err)
+		return
+	}
+	log.Println("Weather cache loaded")
 }
