@@ -23,8 +23,9 @@ type Configuration struct {
 	MonitoredServices []string          `json:"services"`
 	DiskTranslations  map[string]string `json:"disk_translations"`
 	OpenWeatherMap    struct {
-		API    string `json:"api"`
-		CityID int    `json:"city_id"`
+		API       string  `json:"api"`
+		Latitude  float32 `json:"latitude"`
+		Longitude float32 `json:"longitude"`
 	} `json:"openweathermap"`
 }
 
