@@ -6,6 +6,7 @@ import { SchoolProjectPacket } from "../packets/SchoolProjectPacket";
 import { StrawberryPacket } from "../packets/StrawberryPacket";
 import { StrawberrySeekPacket } from "../packets/StrawberrySeekPacket";
 import { StrawberryStatePacket } from "../packets/StrawberryStatePacket";
+import { WeatherPacket } from "../packets/WeatherPacket";
 import { AAction } from "./actions/AAction";
 import { MouseMoveAction } from "./actions/MouseMoveAction";
 import { SubscribeActionTypes } from "./actions/types";
@@ -20,6 +21,7 @@ const packetTypes: Record<number, any> = {
     0x04: StrawberrySeekPacket,
     0x05: StrawberryStatePacket,
     0x07: CursorByePacket,
+    0x08: WeatherPacket,
 
     0x06: MouseActionPacket,
 };
