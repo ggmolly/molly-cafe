@@ -228,14 +228,18 @@ func serializeWeatherPacket(buffer *bytes.Buffer) error {
 
 func MonitorWeather(packetMaps *map[string]*socket.Packet) {
 	// Get the packet from the map, or create it if it doesn't exist
-	packet := getWeatherPacket(packetMaps)
-	var buffer bytes.Buffer
-	if err := serializeWeatherPacket(&buffer); err != nil {
-		log.Println("Failed to serialize weather packet:", err)
-		return
+	for {
+		packet := getWeatherPacket(packetMaps)
+		var buffer bytes.Buffer
+		if err := serializeWeatherPacket(&buffer); err != nil {
+			log.Println("Failed to serialize weather packet:", err)
+			return
+		}
+		packet.Data = buffer.Bytes()
+		packet.Dirty = true
+		// Sleep until the next update with a 1 second margin
+		time.Sleep(WEATHER_CACHE_DURATION - time.Since(cachedWeatherData.LastUpdate) + 1*time.Second)
 	}
-	packet.Data = buffer.Bytes()
-	packet.Dirty = true
 }
 
 func init() {
@@ -258,5 +262,5 @@ func init() {
 		log.Println("Failed to decode weather cache:", err)
 		return
 	}
-	log.Println("Weather cache loaded")
+	log.Println("Weather cache loaded! Cached at:", cachedWeatherData.LastUpdate)
 }
