@@ -90,7 +90,7 @@ export async function cloudInit(ctx: CanvasRenderingContext2D): Promise<Array<AD
 
 /**
  * This function will get called whenever window.s_Weather.cloudiness changes
- * It will be called with the new value of cloudiness, and the old value, allowing a smooth transition
+ * It will be called with the new value of cloudiness, allowing a smooth transition
  */
 export function onCloudinessChange(newCloudiness: number) {
     let clouds = window.s_Objects.filter((obj) => obj.constructor.name === 'Cloud');
