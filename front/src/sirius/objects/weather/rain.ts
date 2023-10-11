@@ -4,7 +4,7 @@ import { AssetType } from "../../types";
 import { ADrawable } from "../bases/ADrawable";
 import { AMovable } from "../bases/AMovable";
 
-const N_RAINDROPS: number = 100;
+const N_RAINDROPS: number = 300;
 
 class Raindrop extends AMovable {
     private _parentCloud: ADrawable; // rain falls from clouds, did you know?
@@ -30,14 +30,16 @@ class Raindrop extends AMovable {
         }
         // Update velocity
         this.velocity.x = 0.1;
-        if (this.pos.x > this.context.canvas.width - 50) {
+        if (this.pos.x > this.context.canvas.width + 40) {
             this.resetPosition();
         }
+        // If the parent cloud is disabled, disable this raindrop
+        this.enabled = this._parentCloud.enabled;
     }
 
     resetPosition() {
         this.pos.x = this._parentCloud.position.x + Math.random() * this._parentCloud.sprite.width;
-        this.pos.y = this._parentCloud.position.y + Math.random() * this.context.canvas.height;
+        this.pos.y = this._parentCloud.position.y + this._parentCloud.sprite.height;
     }
 }
 
@@ -56,4 +58,22 @@ export async function rainInit(ctx: CanvasRenderingContext2D): Promise<Array<ADr
         }
         return raindrops;
     });
+}
+
+/**
+ * This function will get called whenever window.s_Weather.rainIntensity changes
+ * It will be called with the new value of rainIntensity, allowing a smooth transition
+ */
+export function onRainIntensityChange(newIntensity: number) {
+    let raindrops = window.s_Objects.filter((obj) => obj.constructor.name === 'Raindrop');
+    // Show only newIntensity / 240
+    let shownDrops: number = 0;
+    for (const raindrop of raindrops) {
+        if ((shownDrops / raindrops.length) < newIntensity / 240) {
+            raindrop.enable();
+            shownDrops++;
+        } else {
+            raindrop.disable();
+        }
+    }
 }
