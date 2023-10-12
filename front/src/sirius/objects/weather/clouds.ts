@@ -11,6 +11,9 @@ const yDelta: number = 0.003;
 const maxCloudY = 200;
 let constructedClouds = 0;
 
+// We're caching the X velocity to not recalculate it every tick
+let cachedXVelocity: number = 0.0;
+
 function behindTable(imageRect: Rect): boolean {
     if (window.tableRect == undefined) {
         return false;
@@ -60,7 +63,7 @@ class Cloud extends AMovable {
         }
         this.enabled = !behindTable({ x: this.pos.x, y: this.pos.y, width: this.sprite.width, height: this.sprite.height }) || !this.enabled;
         // Update velocity
-        this.velocity.x = speedX + Math.log2(window.s_Weather.windSpeed / 100 + 1);
+        this.velocity.x = cachedXVelocity;
         if (this._consecutiveSteps == this._bounciness) {
             this._consecutiveSteps = this._idleFrames;
             this._lastDirection *= -1;
@@ -72,6 +75,7 @@ class Cloud extends AMovable {
 
 export async function cloudInit(ctx: CanvasRenderingContext2D): Promise<Array<ADrawable>> {
     window.s_Weather.onCloudinessChange = onCloudinessChange;
+    window.s_Weather.onWindSpeedChange = onWindSpeedChange;
     return loadAssetsType(AssetType.CLOUD).then(() => {
         let cloudSprites: Array<HTMLImageElement> = getAssets(AssetType.CLOUD);
         let clouds: Array<Cloud> = new Array<Cloud>();
@@ -104,4 +108,12 @@ export function onCloudinessChange(newCloudiness: number) {
             cloud.disable();
         }
     }
+}
+
+/**
+ * This function will get called whenever window.s_Weather.windSpeed changes
+ * It will be called with the new value of windSpeed, allowing an update of the cached velocity
+ */
+export function onWindSpeedChange(newWindSpeed: number) {
+    cachedXVelocity = speedX + Math.log2(newWindSpeed / 100 + 1);
 }
