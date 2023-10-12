@@ -47,9 +47,9 @@ class Cloud extends AMovable {
         // it represents the number of frames the cloud will stay idle after bouncing
         this._idleFrames = Math.round(Math.random() * 70) + 10;
         if ((constructedClouds / N_CLOUDS) < window.s_Weather.cloudiness) {
-            this.enable();
-        } else {
             this.disable();
+        } else {
+            this.enable();
         }
         constructedClouds++;
     }
