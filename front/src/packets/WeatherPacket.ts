@@ -40,6 +40,9 @@ export class WeatherPacket extends APacket {
         if (window.s_Weather.onRainIntensityChange !== undefined) {
             window.s_Weather.onRainIntensityChange(window.s_Weather.rainIntensity);
         }
+        if (window.s_Weather.onWindSpeedChange !== undefined) {
+            window.s_Weather.onWindSpeedChange(window.s_Weather.windSpeed);
+        }
     }
 
     update() {}
