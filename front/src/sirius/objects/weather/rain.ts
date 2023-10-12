@@ -5,6 +5,7 @@ import { ADrawable } from "../bases/ADrawable";
 import { AMovable } from "../bases/AMovable";
 
 const N_RAINDROPS: number = 300;
+let constructedRaindrops = 0;
 
 class Raindrop extends AMovable {
     private _parentCloud: ADrawable; // rain falls from clouds, did you know?
@@ -21,6 +22,12 @@ class Raindrop extends AMovable {
         };
         super(sprite, context, pos, initialVelocity);
         this._parentCloud = parentCloud;
+        if ((constructedRaindrops / N_RAINDROPS) < window.s_Weather.rainIntensity / 240) {
+            this.enable();
+        } else {
+            this.disable();
+        }
+        constructedRaindrops++;
     }
 
     tick() {
@@ -34,7 +41,7 @@ class Raindrop extends AMovable {
             this.resetPosition();
         }
         // If the parent cloud is disabled, disable this raindrop
-        this.enabled = this._parentCloud.enabled;
+        this.enabled = this._parentCloud.enabled && this.enabled;
     }
 
     resetPosition() {
