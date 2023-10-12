@@ -115,5 +115,5 @@ export function onCloudinessChange(newCloudiness: number) {
  * It will be called with the new value of windSpeed, allowing an update of the cached velocity
  */
 export function onWindSpeedChange(newWindSpeed: number) {
-    cachedXVelocity = speedX + Math.log2(newWindSpeed / 100 + 1);
+    cachedXVelocity = speedX + Math.log2(newWindSpeed / (512) + 1);
 }
