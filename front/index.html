@@ -23,25 +23,6 @@
 </head>
 
 <body>
-    <script>
-        function stopRain() {
-            let raindrops = window.s_Objects.filter((obj) => obj.constructor.name === 'Raindrop');
-            raindrops.forEach((raindrop, index) => {
-                setTimeout(() => {
-                    raindrop.disable();
-                }, Math.log2(index) * 1000);
-            });
-        }
-        function startRain() {
-            let raindrops = window.s_Objects.filter((obj) => obj.constructor.name === 'Raindrop');
-            raindrops.forEach((raindrop, index) => {
-                setTimeout(() => {
-                    raindrop.resetPosition();
-                    raindrop.enable();
-                }, Math.log2(index) * 1000);
-            });
-        }
-    </script>
     <div id="cursors" style="z-index: 1000;"></div>
     <main class="container mx-auto">
         <canvas id="weather" class="absolute top-0 left-0 -z-10"></canvas>
@@ -182,71 +163,74 @@
                         </div>
                         <div class="side-card card">
                             <h4 class="text-center">weather @ paris</h4>
-                            <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2" />
-                            <!--
-                                TODO: use pixel art icons instead of just text
-                                display these informations :
-                                0. condition (as text)
-                                1. sunrise
-                                2. current time
-                                3. sunset
-                                4. (later) moon phase
-                                5. wind speed
-                                6. temperature
-                            -->
-                            <div class="flex gap-x-2 justify-center">
+                            <div class="flex gap-x-2 mb-2 justify-around">
+                                <div id="w-sunrise">
+                                    <img
+                                        class="inline-block pixel-icon"
+                                        style="filter: drop-shadow(0 0 0.8rem rgba(246, 215, 62, 0.8));"
+                                        src="assets/sun.png"
+                                    />
+                                    <span class="value">00:00</span>
+                                </div>
+                                •
                                 <div id="w-sunset">
                                     <img
-                                        class="inline-block align-middle pixel-icon"
+                                        class="inline-block pixel-icon"
                                         style="filter: drop-shadow(0 0 0.8rem rgba(255, 255, 255, 0.5));"
                                         src="assets/moon.png"
                                     />
                                     <span class="value inline-block">00:00</span>
                                 </div>
                                 •
-                                <div id="w-sunrise">
-                                    <img
-                                        class="inline-block align-middle pixel-icon"
-                                        style="filter: drop-shadow(0 0 0.8rem rgba(246, 215, 62, 0.8));"
-                                        src="assets/sun.png"
-                                    />
-                                    <span class="value">00:00</span>
+                                <div class="flex justify-center">
+                                    <div id="w-current-time">
+                                        <img
+                                            class="inline-block align-middle pixel-icon"
+                                            src="assets/placeholder.png"
+                                        />
+                                        <span class="value inline-block">00:00</span>
+                                    </div>
                                 </div>
-                                <br>
                             </div>
-                            <div id="w-cloudiness">
-                                <img
-                                    class="inline-block align-middle pixel-icon"
-                                    src="assets/cloud_icon.png"
-                                />
-                                <span class="value">10%</span>
+                            <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2" />
+                            <!--
+                                TODO: use pixel art icons instead of just text
+                                display these informations :
+                                4. (later) moon phase
+                            -->
+                            <div class="text-center">
+                                <span id="w-current-cond" title="current weather condition"></span>
                             </div>
-                            <!-- <span id="w-current-cond">
-                                condition: <span class="value">clear sky</span>
-                            </span>
-                            <br>
-                            <span id="w-current-temperature" title="absolute temperature">
-                                temperature: <span class="value" title="feels like">25.17°C (25.03°C)</span>
-                            </span>
-                            <br>
-                            <span id="w-current-wind-speed">
-                                wind speed: <span class="value">0m/s</span>
-                            </span>
-                            <br>
-                            <span id="w-sunrise">
-                                sunrise: <span class="value">00:00</span>
-                            </span>
-                            <br>
-                            <span id="w-current-time">
-                                current time: <span class="value">00:00</span>
-                            </span>
-                            <br>
-                            <span id="w-sunset">
-                                sunset: <span class="value">00:00</span>
-                            </span>
-                            <br> -->
-                            <!-- <button onclick="stopRain()">Stop Rain</button>
-                            <button onclick="startRain()">Start Rain</button> -->
+                            <div class="grid grid-cols-2 gap-1 place-items-center">
+                                <div id="w-cloudiness" title="cloudiness (%)">
+                                    <img
+                                        class="inline-block pixel-icon"
+                                        src="assets/cloud_icon.png"
+                                    />
+                                    <span class="value"></span>
+                                </div>
+                                <div id="w-humidity" title="humidity (%)">
+                                    <img
+                                        class="inline-block pixel-icon"
+                                        src="assets/placeholder.png"
+                                    />
+                                    <span class="value"></span>
+                                </div>
+                                <div id="w-temperature" title="felt temperature (celsius)">
+                                    <img
+                                        class="inline-block pixel-icon"
+                                        src="assets/placeholder.png"
+                                    />
+                                    <span class="value"></span>
+                                </div>
+                                <div id="w-wind-speed" title="wind speed (m/s)">
+                                    <img
+                                        class="inline-block pixel-icon"
+                                        src="assets/placeholder.png"
+                                    />
+                                    <span class="value"></span>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>
