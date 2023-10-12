@@ -1,5 +1,13 @@
 import { APacket } from "./APacket";
 
+let localTimeInterval: any | undefined = undefined;
+const formatter: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, {
+    timeZone: "Europe/Paris",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+});
+
 export class WeatherPacket extends APacket {
     constructor(data: DataView) {
         super(data);
@@ -22,13 +30,13 @@ export class WeatherPacket extends APacket {
         // Byte 9 = humidity (fractional part)
         window.s_Weather.humidity += data.getUint8(this.offset++) / 100;
         // Byte 10-14 = timeToSunrise (unix time)
-        window.s_Weather.timeToSunrise = data.getUint32(this.offset);
+        window.s_Weather.timeToSunrise = data.getUint32(this.offset) * 1000;
         this.offset += 4;
         // Byte 15-19 = timeToSunset (unix time)
-        window.s_Weather.timeToSunset = data.getUint32(this.offset);
+        window.s_Weather.timeToSunset = data.getUint32(this.offset) * 1000;
         this.offset += 4;
         // Byte 20-24 = currentTime (unix time)
-        window.s_Weather.currentTime = data.getUint32(this.offset);
+        window.s_Weather.currentTime = data.getUint32(this.offset) * 1000;
         this.offset += 4;
         // Byte 25 = currentCondition (string length)
         let currentConditionLength: number = data.getUint8(this.offset++);
@@ -45,10 +53,36 @@ export class WeatherPacket extends APacket {
         }
     }
 
-    update() {}
+    timeFormatting(time: number): string {
+        // hh:mm
+        let hours: string = Math.floor(time / 3600).toString();
+        let minutes: string = Math.floor((time % 3600) / 60).toString();
+        return hours.padStart(2, "0") + ":" + minutes.padStart(2, "0");
+    }
+
+    updateLocalTime() {
+        // Render the time using Intl.DateTimeFormat
+        (document.querySelector("#w-current-time > span.value") as HTMLElement).innerText = formatter.format(new Date());
+    }
+
+    update() {
+        // Update Sunrise/Sunset
+        const sunrise = new Date(window.s_Weather.timeToSunrise);
+        const sunset = new Date(window.s_Weather.timeToSunset);
+        (document.querySelector("#w-sunset > span.value") as HTMLElement).innerText = this.timeFormatting(sunset.getHours() * 3600 + sunset.getMinutes() * 60);
+        (document.querySelector("#w-sunrise > span.value") as HTMLElement).innerText = this.timeFormatting(sunrise.getHours() * 3600 + sunrise.getMinutes() * 60);
+        this.updateLocalTime();
+
+        // Set interval to update local time
+        if (localTimeInterval !== undefined) {
+            clearInterval(localTimeInterval);
+        }
+        localTimeInterval = setInterval(this.updateLocalTime, 1000);
+    }
 
     render() {}
 
     renderOrUpdate() {
+        this.update();
     }
 }
