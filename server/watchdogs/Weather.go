@@ -16,7 +16,6 @@ import (
 )
 
 const (
-	MAX_WIND_SPEED         = 30 // m/s (108 km/h)
 	WEATHER_CACHE_DURATION = 30 * time.Minute
 )
 
@@ -174,10 +173,8 @@ func serializeWeatherPacket(buffer *bytes.Buffer) error {
 	}
 	// Normalize the wind speed
 	windSpeed := uint8(data.Wind.Speed)
-	if windSpeed > MAX_WIND_SPEED {
+	if data.Wind.Speed > 255 {
 		windSpeed = 255
-	} else {
-		windSpeed = uint8(windSpeed / MAX_WIND_SPEED * 255)
 	}
 	buffer.WriteByte(windSpeed)
 
