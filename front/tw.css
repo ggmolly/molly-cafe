@@ -267,3 +267,7 @@ canvas {
     image-rendering: -webkit-optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
 }
+
+.pixel-icon {
+    image-rendering: pixelated;
+}

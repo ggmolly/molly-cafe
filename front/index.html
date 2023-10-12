@@ -182,6 +182,7 @@
                         </div>
                         <div class="side-card card">
                             <h4 class="text-center">weather @ paris</h4>
+                            <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2" />
                             <!--
                                 TODO: use pixel art icons instead of just text
                                 display these informations :
@@ -193,7 +194,34 @@
                                 5. wind speed
                                 6. temperature
                             -->
-                            <span id="w-current-cond">
+                            <div class="flex gap-x-2 justify-center">
+                                <div id="w-sunset">
+                                    <img
+                                        class="inline-block align-middle pixel-icon"
+                                        style="filter: drop-shadow(0 0 0.8rem rgba(255, 255, 255, 0.5));"
+                                        src="assets/moon.png"
+                                    />
+                                    <span class="value inline-block">00:00</span>
+                                </div>
+                                •
+                                <div id="w-sunrise">
+                                    <img
+                                        class="inline-block align-middle pixel-icon"
+                                        style="filter: drop-shadow(0 0 0.8rem rgba(246, 215, 62, 0.8));"
+                                        src="assets/sun.png"
+                                    />
+                                    <span class="value">00:00</span>
+                                </div>
+                                <br>
+                            </div>
+                            <div id="w-cloudiness">
+                                <img
+                                    class="inline-block align-middle pixel-icon"
+                                    src="assets/cloud_icon.png"
+                                />
+                                <span class="value">10%</span>
+                            </div>
+                            <!-- <span id="w-current-cond">
                                 condition: <span class="value">clear sky</span>
                             </span>
                             <br>
@@ -216,7 +244,7 @@
                             <span id="w-sunset">
                                 sunset: <span class="value">00:00</span>
                             </span>
-                            <br>
+                            <br> -->
                             <!-- <button onclick="stopRain()">Stop Rain</button>
                             <button onclick="startRain()">Start Rain</button> -->
                         </div>
