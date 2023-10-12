@@ -51,6 +51,7 @@ class Raindrop extends AMovable {
 }
 
 export async function rainInit(ctx: CanvasRenderingContext2D): Promise<Array<ADrawable>> {
+    window.s_Weather.onRainIntensityChange = onRainIntensityChange;
     let raindrops: Array<Raindrop> = new Array<Raindrop>();
     return loadAssetsType(AssetType.RAINDROP).then(() => {
         let raindropSprite = getAssets(AssetType.RAINDROP);
