@@ -41,7 +41,7 @@ const (
 func getStrawberryPacket() *socket.Packet {
 	packet, ok := socket.PacketMap.GetPacketByName("strawberry")
 	if !ok {
-		packet := socket.NewPacket(
+		packet = socket.NewPacket(
 			socket.T_STRAWBERRY,
 			socket.C_STRAWBERRY,
 			socket.DT_SPECIAL,
