@@ -73,6 +73,9 @@ const (
 	C_LEITNER        = 0x00
 	C_LEITNER_STREAK = 0x01
 
+	// Weather
+	T_WEATHER = 0x0A
+
 	ERR_DATA_TYPE_MISMATCH = "dataType doesn't match the passed value"
 )
 

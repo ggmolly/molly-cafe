@@ -8,6 +8,7 @@ import { SleepTrackingPacket } from "../packets/SleepTrackingPacket";
 import { StrawberryPacket } from "../packets/StrawberryPacket";
 import { StrawberrySeekPacket } from "../packets/StrawberrySeekPacket";
 import { StrawberryStatePacket } from "../packets/StrawberryStatePacket";
+import { WeatherPacket } from "../packets/WeatherPacket";
 import { AAction } from "./actions/AAction";
 import { MouseMoveAction } from "./actions/MouseMoveAction";
 import { SubscribeActionTypes } from "./actions/types";
@@ -24,6 +25,7 @@ const packetTypes: Record<number, any> = {
     0x07: CursorByePacket,
     0x08: SleepTrackingPacket,
     0x09: LeitnerUpdatePacket,
+    0x0A: WeatherPacket,
 
     // Special case for mouse actions
     0x06: MouseActionPacket,
