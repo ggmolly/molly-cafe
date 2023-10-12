@@ -270,4 +270,5 @@ canvas {
 
 .pixel-icon {
     image-rendering: pixelated;
+    vertical-align: middle;
 }
