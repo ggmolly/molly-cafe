@@ -78,6 +78,21 @@ export class WeatherPacket extends APacket {
             clearInterval(localTimeInterval);
         }
         localTimeInterval = setInterval(this.updateLocalTime, 1000);
+
+        // Update cloudiness
+        (document.querySelector("#w-cloudiness > span.value") as HTMLElement).innerText = window.s_Weather.cloudiness.toString() + "%";
+
+        // Update temperature
+        (document.querySelector("#w-temperature > span.value") as HTMLElement).innerText = window.s_Weather.feelsLike.toString() + "°C";
+
+        // Update humidity
+        (document.querySelector("#w-humidity > span.value") as HTMLElement).innerText = window.s_Weather.humidity.toString() + "%";
+
+        // Update current condition
+        (document.querySelector("#w-current-cond") as HTMLElement).innerText = window.s_Weather.currentCondition;
+
+        // Update wind speed (m/s)
+        (document.querySelector("#w-wind-speed > span.value") as HTMLElement).innerText = window.s_Weather.windSpeed.toString() + "m/s";
     }
 
     render() {}
