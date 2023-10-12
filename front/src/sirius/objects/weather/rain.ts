@@ -76,12 +76,18 @@ export function onRainIntensityChange(newIntensity: number) {
     let raindrops = window.s_Objects.filter((obj) => obj.constructor.name === 'Raindrop');
     // Show only newIntensity / 240
     let shownDrops: number = 0;
-    for (const raindrop of raindrops) {
+    for (let i = 0; i < raindrops.length; i++) {
+        const raindrop = raindrops[i] as Raindrop;
         if ((shownDrops / raindrops.length) < newIntensity / 240) {
-            raindrop.enable();
+            setTimeout(() => {
+                raindrop.resetPosition();
+                raindrop.enable();
+            }, Math.log2(i) * 1000);
             shownDrops++;
         } else {
-            raindrop.disable();
+            setTimeout(() => {
+                raindrop.disable();
+            }, Math.log2(i) * 1000);
         }
     }
 }

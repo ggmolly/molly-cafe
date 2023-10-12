@@ -99,13 +99,17 @@ export async function cloudInit(ctx: CanvasRenderingContext2D): Promise<Array<AD
 export function onCloudinessChange(newCloudiness: number) {
     let clouds = window.s_Objects.filter((obj) => obj.constructor.name === 'Cloud');
     let shownClouds: number = 0;
-    // Show newCloudiness % of clouds
-    for (const cloud of clouds) {
+    for (let i = 0; i < clouds.length; i++) {
+        const cloud = clouds[i] as Cloud;
         if ((shownClouds / clouds.length * 100) < newCloudiness) {
-            cloud.enable();
+            setTimeout(() => {
+                cloud.enable();
+            }, Math.log2(i) * 1000);
             shownClouds++;
         } else {
-            cloud.disable();
+            setTimeout(() => {
+                cloud.disable();
+            }, Math.log2(i) * 1000);
         }
     }
 }
