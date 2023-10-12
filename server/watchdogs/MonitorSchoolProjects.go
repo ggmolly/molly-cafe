@@ -23,7 +23,7 @@ type SchoolProject struct {
 }
 
 // Create / update the packet in the packet map and sends it to the clients
-func updateProject(packetMap *map[string]*socket.Packet, project SchoolProject, projectPath string) {
+func updateProject(packetMap *socket.T_PacketMap, project SchoolProject, projectPath string) {
 	packet, ok := (*packetMap)[projectPath]
 	if !ok {
 		packet = socket.NewPacket(socket.T_SCHOOL_PROJECTS, socket.C_SCHOOL, socket.DT_SPECIAL, project.Name)
@@ -83,7 +83,7 @@ func readProject(path string) (SchoolProject, error) {
 	return project, nil
 }
 
-func MonitorSchoolProjects(packetMap *map[string]*socket.Packet, rootPath string) {
+func MonitorSchoolProjects(packetMap *socket.T_PacketMap, rootPath string) {
 	// Find all JSON files in the projects folder and add them to the packet map
 	files, err := filepath.Glob(filepath.Join(rootPath, "*.json"))
 	if err != nil {

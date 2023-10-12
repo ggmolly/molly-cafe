@@ -40,7 +40,7 @@ func getTitle(path string) (string, error) {
 	return string(matches[1]), nil
 }
 
-func updatePost(packetMap *map[string]*socket.Packet, path, title string) {
+func updatePost(packetMap *socket.T_PacketMap, path, title string) {
 	packet, ok := (*packetMap)[path]
 	if !ok {
 		packet = socket.NewPacket(socket.T_PISTACHE, socket.C_PISTACHE, socket.DT_SPECIAL, path)
@@ -72,7 +72,7 @@ func updatePost(packetMap *map[string]*socket.Packet, path, title string) {
 	socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 }
 
-func MonitorPistachePosts(packetMap *map[string]*socket.Packet, rootPath string) {
+func MonitorPistachePosts(packetMap *socket.T_PacketMap, rootPath string) {
 	files, err := filepath.Glob(filepath.Join(rootPath, "*.html"))
 	if err != nil {
 		return

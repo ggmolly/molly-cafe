@@ -39,15 +39,15 @@ const (
 )
 
 func getStrawberryPacket() *socket.Packet {
-	packet, ok := socket.PacketMap["strawberry"]
+	packet, ok := socket.PacketMap.GetPacketByName("strawberry")
 	if !ok {
-		socket.PacketMap["strawberry"] = socket.NewPacket(
+		packet := socket.NewPacket(
 			socket.T_STRAWBERRY,
 			socket.C_STRAWBERRY,
 			socket.DT_SPECIAL,
 			"",
 		)
-		packet = socket.PacketMap["strawberry"]
+		socket.PacketMap.AddPacket("strawberry", packet)
 	}
 	return packet
 }
@@ -108,15 +108,15 @@ func publishNewSong(dto dtoUpdate) {
 }
 
 func publishState(dto dtoState) {
-	packet, ok := socket.PacketMap["strawberryState"]
+	packet, ok := socket.PacketMap.GetPacketByName("strawberryState")
 	if !ok {
-		socket.PacketMap["strawberryState"] = socket.NewPacket(
+		packet = socket.NewPacket(
 			socket.T_STRAWBERRY_STATE,
 			socket.C_STRAWBERRY,
 			socket.DT_SPECIAL,
 			"",
 		)
-		packet = socket.PacketMap["strawberryState"]
+		socket.PacketMap.AddPacket("strawberryState", packet)
 	}
 	packet.Data = []byte{0x00}
 	if dto.Playing {

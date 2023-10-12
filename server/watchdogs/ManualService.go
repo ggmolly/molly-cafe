@@ -19,7 +19,7 @@ func setServiceState(serviceName string, packet *socket.Packet) {
 	}
 }
 
-func ManualServices(packetMaps *map[string]*socket.Packet) {
+func ManualServices(packetMaps *socket.T_PacketMap) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		panic(err)
@@ -27,7 +27,7 @@ func ManualServices(packetMaps *map[string]*socket.Packet) {
 	defer watcher.Close()
 	for _, service := range configuration.LoadedConfiguration.MonitoredServices {
 		serviceSocket := socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, service)
-		(*packetMaps)[service] = serviceSocket
+		packetMaps.AddPacket(service, serviceSocket)
 		// Since we're iterating over files, there cannot be duplicates, `watcher.Add` cannot fail, so we can ignore the error
 		watcher.Add("/run/systemd/units")
 		// Check if service's file exists
@@ -41,17 +41,17 @@ func ManualServices(packetMaps *map[string]*socket.Packet) {
 				for serviceName, added := range changes {
 					if added {
 						serviceSocket := socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, serviceName)
-						(*packetMaps)[serviceName] = serviceSocket
+						packetMaps.AddPacket(serviceName, serviceSocket)
 						watcher.Add("/run/systemd/units")
 						setServiceState(serviceName, serviceSocket)
 						socket.ConnectedClients.Broadcast(serviceSocket.GetRawBytes())
 					} else {
-						packet, ok := (*packetMaps)[serviceName]
+						packet, ok := packetMaps.GetPacketByName(serviceName)
 						if !ok {
 							continue
 						}
 						packet.RemoveDOM()
-						delete(*packetMaps, serviceName)
+						packetMaps.RemovePacket(serviceName)
 					}
 				}
 			}
@@ -69,18 +69,16 @@ func ManualServices(packetMaps *map[string]*socket.Packet) {
 			}
 			serviceName := event.Name[30 : len(event.Name)-8]
 			// Check if service is in the map
-			_, ok = (*packetMaps)[serviceName]
+			packet, ok := (*packetMaps).GetPacketByName(serviceName)
 			if !ok {
 				continue
 			}
 			if event.Op.Has(fsnotify.Create) {
-				(*packetMaps)[serviceName].SetState(socket.S_OK)
+				packet.SetState(socket.S_OK)
 				// Broadcast to clients
-				packet := (*packetMaps)[serviceName]
 				socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 			} else if event.Op.Has(fsnotify.Remove) {
-				(*packetMaps)[serviceName].SetState(socket.S_DEAD)
-				packet := (*packetMaps)[serviceName]
+				packet.SetState(socket.S_DEAD)
 				socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 			}
 		}

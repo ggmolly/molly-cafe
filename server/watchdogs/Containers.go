@@ -11,19 +11,19 @@ import (
 	"github.com/docker/docker/client"
 )
 
-func getDockerPacket(packetMaps *map[string]*socket.Packet, containerName string) *socket.Packet {
+func getDockerPacket(packetMaps *socket.T_PacketMap, containerName string) *socket.Packet {
 	containerName = strings.TrimPrefix(containerName, "/")
-	packet, ok := (*packetMaps)[containerName]
+	packet, ok := packetMaps.GetPacketByName(containerName)
 	// If the packet does not exist, create it
 	if !ok {
-		(*packetMaps)[containerName] = socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, containerName)
-		return (*packetMaps)[containerName]
+		packetMaps.AddPacket(containerName, socket.NewMonitoringPacket(socket.C_SERVICE, socket.DT_UINT8, containerName))
+		return packetMaps.GetPacketByNameUnsafe(containerName)
 	} else {
 		return packet
 	}
 }
 
-func MonitorContainers(packetMaps *map[string]*socket.Packet) {
+func MonitorContainers(packetMaps *socket.T_PacketMap) {
 	client, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
 		panic(err)

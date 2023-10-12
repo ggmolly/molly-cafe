@@ -48,7 +48,7 @@ var (
 )
 
 func updateStreakPacket(newStreak uint32) {
-	packet, ok := socket.PacketMap["L_STREAK"]
+	packet, ok := socket.PacketMap.GetPacketByName("L_STREAK")
 	if !ok {
 		packet = socket.NewPacket(
 			socket.T_LEITNER,
@@ -57,7 +57,7 @@ func updateStreakPacket(newStreak uint32) {
 			"",
 		)
 		packet.Data = make([]byte, 4)
-		socket.PacketMap["L_STREAK"] = packet
+		socket.PacketMap.AddPacket("L_STREAK", packet)
 	}
 	// Update the packet
 	packet.Data[0] = byte(newStreak >> 24)
@@ -70,7 +70,7 @@ func updateStreakPacket(newStreak uint32) {
 // Update / set packet, and broadcast to all clients
 func updateLeitnerPacket(topic string) {
 	innerName := "L_" + topic
-	packet, ok := socket.PacketMap[innerName]
+	packet, ok := socket.PacketMap.GetPacketByName(innerName)
 	if !ok {
 		packet = socket.NewPacket(
 			socket.T_LEITNER,
@@ -79,7 +79,7 @@ func updateLeitnerPacket(topic string) {
 			innerName, // DOM element id
 		)
 		packet.Data = make([]byte, 8)
-		socket.PacketMap[innerName] = packet
+		socket.PacketMap.AddPacket(innerName, packet)
 	}
 	// Update the packet
 	completed := config.Topics[topic].CompletedCards

@@ -121,11 +121,11 @@ func computeRainIntensity(data OWM_Data) uint8 {
 	return intensity * score
 }
 
-func getWeatherPacket(packetMaps *map[string]*socket.Packet) *socket.Packet {
-	packet, ok := (*packetMaps)["weather"]
+func getWeatherPacket(packetMaps *socket.T_PacketMap) *socket.Packet {
+	packet, ok := packetMaps.GetPacketByName("weather")
 	if !ok {
 		packet = socket.NewUntrackedPacket(socket.T_WEATHER, 0x00, socket.DT_SPECIAL, "")
-		(*packetMaps)["weather"] = packet
+		packetMaps.AddPacket("weather", packet)
 	}
 	return packet
 }
@@ -223,7 +223,7 @@ func serializeWeatherPacket(buffer *bytes.Buffer) error {
 	return nil
 }
 
-func MonitorWeather(packetMaps *map[string]*socket.Packet) {
+func MonitorWeather(packetMaps *socket.T_PacketMap) {
 	// Get the packet from the map, or create it if it doesn't exist
 	for {
 		packet := getWeatherPacket(packetMaps)

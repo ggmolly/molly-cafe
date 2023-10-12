@@ -30,12 +30,12 @@ func (s *Sensor) Read() float32 {
 	return s.Value
 }
 
-func getCPUPacket(packetMaps *map[string]*socket.Packet, label string) *socket.Packet {
+func getCPUPacket(packetMaps *socket.T_PacketMap, label string) *socket.Packet {
 	label = strings.ToLower(label)
-	packet, ok := (*packetMaps)[label]
+	packet, ok := packetMaps.GetPacketByName(label)
 	if !ok {
 		packet = socket.NewMonitoringPacket(socket.C_MISC, socket.DT_TEMPERATURE, label)
-		(*packetMaps)[label] = packet
+		packetMaps.AddPacket(label, packet)
 		return packet
 	}
 	return packet
@@ -98,7 +98,7 @@ func findSensors(sensorDir string) []Sensor {
 	return sensors
 }
 
-func MonitorCPUTemp(packetMaps *map[string]*socket.Packet) {
+func MonitorCPUTemp(packetMaps *socket.T_PacketMap) {
 	sensorDir, found := getSensorDir()
 	if !found {
 		log.Println("/!\\ No CPU temperature sensor found")

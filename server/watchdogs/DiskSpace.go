@@ -21,12 +21,12 @@ func getTranslatedName(path string) string {
 	return baseName
 }
 
-func getDiskPacket(packetMaps *map[string]*socket.Packet, path string) *socket.Packet {
+func getDiskPacket(packetMaps *socket.T_PacketMap, path string) *socket.Packet {
 	baseName := strings.ToLower(getTranslatedName(path))
-	packet, ok := (*packetMaps)[path]
+	packet, ok := packetMaps.GetPacketByName(baseName)
 	if !ok {
 		packet = socket.NewMonitoringPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, strings.ToLower(getTranslatedName(baseName)))
-		(*packetMaps)[path] = packet
+		packetMaps.AddPacket(baseName, packet)
 	}
 	if packet.Name != baseName {
 		packet.Name = baseName
@@ -35,7 +35,7 @@ func getDiskPacket(packetMaps *map[string]*socket.Packet, path string) *socket.P
 	return packet
 }
 
-func MonitorDiskSpace(packetMaps *map[string]*socket.Packet) {
+func MonitorDiskSpace(packetMaps *socket.T_PacketMap) {
 	mountPoints := []string{}
 	mounts, err := os.OpenFile("/proc/mounts", os.O_RDONLY, 0)
 	if err != nil {
