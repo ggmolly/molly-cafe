@@ -31,7 +31,8 @@ window.s_Weather = {
     timeToSunset: 0,
     currentTime: 0,
     currentCondition: "",
-    onCloudinessChange: () => { }
+    onCloudinessChange: () => { },
+    onRainIntensityChange: () => { },
 }
 
 // Set sirius_debug localStorage

@@ -37,6 +37,9 @@ export class WeatherPacket extends APacket {
         if (window.s_Weather.onCloudinessChange !== undefined) {
             window.s_Weather.onCloudinessChange(window.s_Weather.cloudiness);
         }
+        if (window.s_Weather.onRainIntensityChange !== undefined) {
+            window.s_Weather.onRainIntensityChange(window.s_Weather.rainIntensity);
+        }
     }
 
     update() {}

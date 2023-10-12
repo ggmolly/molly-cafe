@@ -51,4 +51,9 @@ export interface Weather {
      * Callback for cloudiness change
      */
     onCloudinessChange: (newCloudiness: number) => void | undefined;
+
+    /**
+     * Callback for rain intensity change
+     */
+    onRainIntensityChange: (newRainIntensity: number) => void | undefined;
 }
