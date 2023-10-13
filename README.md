@@ -105,6 +105,8 @@ __NOTE__: to disable it, just set the `sirius_debug` local storage value to `fal
 
 Sirius is a **very** basic object-oriented 2D rendering engine. It contains only the bare minimum to be able to render a 2D scene, with very basic physics, as always, I have a lot of ideas to improve it for future ideas.
 
+You can see the entire source code of the engine [here](front/src/sirius/)
+
 #### Features
 
 - [x] Static 2D rendering
