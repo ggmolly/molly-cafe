@@ -32,6 +32,7 @@ If you're interested in some specific part of the code, here's a simple table of
 
 - [Netcode](#netcode)
 - [Monitoring](#monitoring)
+- [2D Rendering](#2d-rendering)
 
 ## Netcode <a name="netcode"></a>
 
@@ -39,7 +40,8 @@ The netcode is the part of the code that handles (for the moment) the websocket 
 
 - [clients.go](server/socket/clients.go) : Handles connections and handles broadcasting / mutexes
 - [proto.go](server/socket/proto.go) : Creation, modification of custom packets
-- [main.go:85](server/main.go#L85) : Handling of HTTP -> Websocket upgrade
+- [packets.go](server/socket/packets.go) : Hashmap of packets, used by watchdogs to quickly edit packets and reflect the changes to the clients
+- [main.go](server/main.go) : Handling of HTTP -> Websocket upgrade, along with other private APIs and static file serving
 
 ## Monitoring <a name="monitoring"></a>
 
@@ -50,6 +52,13 @@ The monitoring part of the code is where the program is gathering data from othe
 The `services` part of the code, is where we gather the state of specific services running through `systemd`, and where we gather the state of `docker` containers.
 
 This part of the code is completely done using polling, so I made the choice of also making it real-time, meaning that any change to a `docker` container or a `systemd` service will be broadcasted instantly.
+
+### Watchdogs
+
+Currently each `watchdog` is a goroutine, and each `watchdog` is started in the `init` function.
+
+A `watchdog` is a goroutine that will poll a specific value, and if the value is different from the previous one, it will update the corresponding packet, and broadcast it to the clients, and then sleep for a specific amount of time.
+
 
 | File | Description | Remarks |
 | :--- | :--- | ---: |
@@ -64,6 +73,10 @@ This part of the code is completely done using polling, so I made the choice of 
 | [MemUsage.go](server/watchdogs/MemUsage.go) | Watches the amount of memory used | - |
 | [OpenFiles.go](server/watchdogs/OpenFiles.go) | Watches the amount of opened fds | - |
 | [TcpUdp.go](server/watchdogs/TcpUdp.go) | Watches the amount of opened TCP / UDP sockets | - |
+| [RunningProcesses.go](server/watchdogs/RunningProcesses.go) | Watches the amount of running processes | - |
+| [MonitorSchoolProjects.go](server/watchdogs/MonitorSchoolProjects.go) | Polls a directory containing school projects to dynamically update a table in the front-end | - |
+| [PistachePosts.go](server/watchdogs/PistachePosts.go) | Polls a directory containing posts to dynamically update a list of blog-post in the front-end | - |
+| [Weather.go](server/watchdogs/Weather.go) | Checks the weather of any configured city every 5 minutes | - |
 
 #### Implementation notes
 
