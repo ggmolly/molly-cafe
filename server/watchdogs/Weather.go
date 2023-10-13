@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	WEATHER_CACHE_DURATION = 30 * time.Minute
+	WEATHER_CACHE_DURATION = 5 * time.Minute
 )
 
 type OWM_Data struct {
