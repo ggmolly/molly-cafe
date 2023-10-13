@@ -85,7 +85,3 @@ They're designed to be as simple, efficient and modular as possible (for my use 
 Docker containers states are watched through [docker events](https://docs.docker.com/engine/api/v1.43/#tag/System/operation/SystemEvents).
 
 `systemd` services states are watched through a probably overthought method using `inotify` on the `/run/systemd/units` directory.
-
-#### Flaws
-
-- Handling of errors in the code is poorly done
