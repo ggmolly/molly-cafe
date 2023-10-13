@@ -49,10 +49,10 @@ class Cloud extends AMovable {
         // idle frames is a random number between 10 and 80 (rounded)
         // it represents the number of frames the cloud will stay idle after bouncing
         this._idleFrames = Math.round(Math.random() * 70) + 10;
-        if ((constructedClouds / N_CLOUDS) < window.s_Weather.cloudiness) {
-            this.disable();
-        } else {
+        if ((constructedClouds / N_CLOUDS * 100) < window.s_Weather.cloudiness) {
             this.enable();
+        } else {
+            this.disable();
         }
         constructedClouds++;
     }
@@ -61,7 +61,7 @@ class Cloud extends AMovable {
         if (this.pos.x > this.context.canvas.width) {
             this.pos.x = -this.sprite.width;
         }
-        this.enabled = !behindTable({ x: this.pos.x, y: this.pos.y, width: this.sprite.width, height: this.sprite.height }) || !this.enabled;
+        this.enabled = !behindTable({ x: this.pos.x, y: this.pos.y, width: this.sprite.width, height: this.sprite.height }) && this.enabled;
         // Update velocity
         this.velocity.x = cachedXVelocity;
         if (this._consecutiveSteps == this._bounciness) {
