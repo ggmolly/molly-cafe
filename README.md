@@ -65,7 +65,7 @@ A `watchdog` is a goroutine that will poll a specific value, and if the value is
 | [Containers.go](server/watchdogs/Containers.go) | Watches every `docker` containers | - |
 | [CPUTemp.go](server/watchdogs/CPUTemp.go) | Watches the CPU temperature (compatible with `k10temp` / `coretemp`) | - |
 | [DirtyMem.go](server/watchdogs/DirtyMem.go) | Watches the amount of dirty memory | - |
-| [DiskSpace.go](server/watchdogs/DiskSpace.go) | Watches the amount of free disk space | Use a translation file instead of hardcoding them |
+| [DiskSpace.go](server/watchdogs/DiskSpace.go) | Watches the amount of free disk space | - |
 | [IdleUptime.go](server/watchdogs/IdleUptime.go) | Watches the amount of time the system has been idle | - |
 | [InternetSpeed.go](server/watchdogs/InternetSpeed.go) | Downloads a file every hour and measure download speed | Probably cycle through multiple servers to be a good netizen |
 | [LoggedUsers.go](server/watchdogs/LoggedUsers.go) | Watches the amount of logged users | Disabled for now, because I don't want to fork `who`, and must parse `/var/run/wtmp` instead |
