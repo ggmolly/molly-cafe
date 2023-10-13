@@ -80,11 +80,7 @@ A `watchdog` is a goroutine that will poll a specific value, and if the value is
 
 #### Implementation notes
 
-Every `watchdog` is a goroutine, and every `watchdog` is started in the `init` function.
-
 They're designed to be as simple, efficient and modular as possible (for my use case).
-
-For efficiency sake, I avoid as much as possible to use any forks / execs. But there's still room for improvement! (just too lazy to do it right now, and it works pretty well for now.)
 
 Docker containers states are watched through [docker events](https://docs.docker.com/engine/api/v1.43/#tag/System/operation/SystemEvents).
 
