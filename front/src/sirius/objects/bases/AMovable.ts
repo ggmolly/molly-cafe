@@ -16,9 +16,10 @@ export abstract class AMovable extends ADrawable {
         sprite: HTMLImageElement,
         context: CanvasRenderingContext2D,
         pos: Point,
+        type: string = "AMovable",
         initialVelocity: Velocity,
     ) {
-        super(sprite, context, pos);
+        super(sprite, context, pos, type);
         this.velocity = initialVelocity;
     }
 

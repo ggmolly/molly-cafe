@@ -13,6 +13,7 @@ let constructedClouds = 0;
 
 // We're caching the X velocity to not recalculate it every tick
 let cachedXVelocity: number = 0.0;
+let firstTime: boolean = true;
 
 function behindTable(imageRect: Rect): boolean {
     if (window.tableRect == undefined) {
@@ -40,7 +41,7 @@ class Cloud extends AMovable {
         initialVelocity: Velocity
     ) {
         let pos = { x: Math.random() * context.canvas.width, y: Math.random() * maxCloudY };
-        super(sprite, context, pos, initialVelocity);
+        super(sprite, context, pos, "Cloud", initialVelocity);
         this._consecutiveSteps = 0; // number of consecutive steps in the same direction (used for bouncing)
         this._lastDirection = Math.random() > 0.5 ? 1 : -1; // random initial direction
         // bounciness is a random number between 100 and 200 (rounded)
@@ -97,21 +98,22 @@ export async function cloudInit(ctx: CanvasRenderingContext2D): Promise<Array<AD
  * It will be called with the new value of cloudiness, allowing a smooth transition
  */
 export function onCloudinessChange(newCloudiness: number) {
-    let clouds = window.s_Objects.filter((obj) => obj.constructor.name === 'Cloud');
+    let clouds = window.s_Objects.filter((obj) => obj.type === 'Cloud');
     let shownClouds: number = 0;
     for (let i = 0; i < clouds.length; i++) {
         const cloud = clouds[i] as Cloud;
         if ((shownClouds / clouds.length * 100) < newCloudiness) {
             setTimeout(() => {
                 cloud.enable();
-            }, Math.log2(i) * 1000);
+            }, Math.log2(i) * 1000 * (firstTime ? 0 : 1));
             shownClouds++;
         } else {
             setTimeout(() => {
                 cloud.disable();
-            }, Math.log2(i) * 1000);
+            }, Math.log2(i) * 1000 * (firstTime ? 0 : 1));
         }
     }
+    firstTime = false;
 }
 
 /**

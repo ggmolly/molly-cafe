@@ -14,6 +14,7 @@ import { Point } from "../../interfaces/point.interface";
 export abstract class ADrawable {
     protected _sprite: HTMLImageElement;
     protected _context: CanvasRenderingContext2D;
+    private _type: string = "ADrawable";
     public pos: Point;
     public enabled: boolean = true;
     public alpha: number = 1;
@@ -28,10 +29,12 @@ export abstract class ADrawable {
         sprite: HTMLImageElement,
         context: CanvasRenderingContext2D,
         pos: Point,
-        alpha: number = 1
+        type: string,
+        alpha: number = 1,
     ) {
         this._sprite = sprite;
         this._context = context;
+        this._type = type;
         this.pos = pos;
         console.assert(alpha >= 0 && alpha <= 1, "[sirius] Alpha must be between 0 and 1");
         this.alpha = alpha;
@@ -115,5 +118,12 @@ export abstract class ADrawable {
     **/
     public get context(): CanvasRenderingContext2D {
         return this._context;
+    }
+
+    /**
+     * Returns the object's type
+     */
+    public get type(): string {
+        return this._type;
     }
 }

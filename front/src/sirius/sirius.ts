@@ -49,13 +49,13 @@ export class Sirius {
     /**
      * Calls all the init functions and flattens the resulting arrays into a single array (window.s_Objects)
      */
-    private _init() {
-        this._init_functions.forEach(f => {
-            f(this._ctx).then((objects: Array<ADrawable>) => {
-                window.s_Objects = window.s_Objects.concat(objects);
-                console.debug("[sirius] Initialized " + objects.length + " objects");
-            });
-        });
+    private async _init(): Promise<void> {
+        for (let i = 0; i < this._init_functions.length; i++) {
+            let f = this._init_functions[i];
+            window.s_Objects = window.s_Objects.concat(await f(this._ctx));
+            console.debug(`[sirius] Initialized ${window.s_Objects.length} objects`);
+            console.log(`[sirius] ${i + 1}/${this._init_functions.length} init functions called`);
+        }
     }
 
     private _updateDebug(frameTime: number) {
@@ -65,7 +65,7 @@ export class Sirius {
             !this._debugFrameRate ||
             !this._debugLoadedObjects ||
             !this._debugAvgFrameTime ||
-            !this._debugAvgFrameRate || 
+            !this._debugAvgFrameRate ||
             !this._debugRenderedObjects
         ) { return; }
         if (frameCount % 30 != 0) { return; }
