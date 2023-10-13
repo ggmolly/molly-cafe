@@ -85,3 +85,41 @@ They're designed to be as simple, efficient and modular as possible (for my use 
 Docker containers states are watched through [docker events](https://docs.docker.com/engine/api/v1.43/#tag/System/operation/SystemEvents).
 
 `systemd` services states are watched through a probably overthought method using `inotify` on the `/run/systemd/units` directory.
+
+## 2D Rendering <a name="2d-rendering"></a>
+
+The 2D rendering part of the code is done using just a HTML5 canvas, and a handmade 2D rendering engine called Sirius.
+
+You can display its debugging side-card on the front-end by changing the `sirius_debug` local storage value to `true` through the browser's devtools, and then reloading the page.
+
+Or you can run this JavaScript code in the console :
+
+```js
+localStorage.setItem("sirius_debug", "true");
+window.location.reload();
+```
+
+__NOTE__: to disable it, just set the `sirius_debug` local storage value to `false` and reload the page.
+
+### Sirius
+
+Sirius is a **very** basic object-oriented 2D rendering engine. It contains only the bare minimum to be able to render a 2D scene, with very basic physics, as always, I have a lot of ideas to improve it for future ideas.
+
+#### Features
+
+- [x] Static 2D rendering
+- [x] Moving 2D rendering (basic physics)
+- [ ] Particles
+- [ ] Hover events, click events, etc...
+- [ ] Animations
+- [ ] Advanced physics
+
+#### ADrawable
+
+You can create a drawable object by creating extending the `ADrawable` class, and implementing the `tick` method.
+
+The `tick` method is called every frame whether the object is enabled or not.
+
+#### AMovable
+
+An `AMovable` is an `ADrawable` that can move, it has a `velocity`, every frame, the `velocity` is added to the `position` of the object.
