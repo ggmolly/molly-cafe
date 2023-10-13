@@ -69,7 +69,7 @@ A `watchdog` is a goroutine that will poll a specific value, and if the value is
 | [IdleUptime.go](server/watchdogs/IdleUptime.go) | Watches the amount of time the system has been idle | - |
 | [InternetSpeed.go](server/watchdogs/InternetSpeed.go) | Downloads a file every hour and measure download speed | Probably cycle through multiple servers to be a good netizen |
 | [LoggedUsers.go](server/watchdogs/LoggedUsers.go) | Watches the amount of logged users | Disabled for now, because I don't want to fork `who`, and must parse `/var/run/wtmp` instead |
-| [ManualService.go](server/watchdogs/ManualService.go) | Watches the state of a `systemd` service | Use an external file to store the services to watch instead of hardcoding them |
+| [ManualService.go](server/watchdogs/ManualService.go) | Watches the state of a `systemd` service | - |
 | [MemUsage.go](server/watchdogs/MemUsage.go) | Watches the amount of memory used | - |
 | [OpenFiles.go](server/watchdogs/OpenFiles.go) | Watches the amount of opened fds | - |
 | [TcpUdp.go](server/watchdogs/TcpUdp.go) | Watches the amount of opened TCP / UDP sockets | - |
