@@ -61,7 +61,7 @@ A `watchdog` is a goroutine that will poll a specific value, and if the value is
 
 
 | File | Description | Remarks |
-| :--- | :--- | ---: |
+| :--- | :--- | --- |
 | [Containers.go](server/watchdogs/Containers.go) | Watches every `docker` containers | - |
 | [CPUTemp.go](server/watchdogs/CPUTemp.go) | Watches the CPU temperature (compatible with `k10temp` / `coretemp`) | - |
 | [DirtyMem.go](server/watchdogs/DirtyMem.go) | Watches the amount of dirty memory | - |
@@ -71,11 +71,11 @@ A `watchdog` is a goroutine that will poll a specific value, and if the value is
 | [LoggedUsers.go](server/watchdogs/LoggedUsers.go) | Watches the amount of logged users | Disabled for now, because I don't want to fork `who`, and must parse `/var/run/wtmp` instead |
 | [ManualService.go](server/watchdogs/ManualService.go) | Watches the state of a `systemd` service | - |
 | [MemUsage.go](server/watchdogs/MemUsage.go) | Watches the amount of memory used | - |
-| [OpenFiles.go](server/watchdogs/OpenFiles.go) | Watches the amount of opened fds | - |
-| [TcpUdp.go](server/watchdogs/TcpUdp.go) | Watches the amount of opened TCP / UDP sockets | - |
-| [RunningProcesses.go](server/watchdogs/RunningProcesses.go) | Watches the amount of running processes | - |
 | [MonitorSchoolProjects.go](server/watchdogs/MonitorSchoolProjects.go) | Polls a directory containing school projects to dynamically update a table in the front-end | - |
+| [OpenFiles.go](server/watchdogs/OpenFiles.go) | Watches the amount of opened fds | - |
 | [PistachePosts.go](server/watchdogs/PistachePosts.go) | Polls a directory containing posts to dynamically update a list of blog-post in the front-end | - |
+| [RunningProcesses.go](server/watchdogs/RunningProcesses.go) | Watches the amount of running processes | - |
+| [TcpUdp.go](server/watchdogs/TcpUdp.go) | Watches the amount of opened TCP / UDP sockets | - |
 | [Weather.go](server/watchdogs/Weather.go) | Checks the weather of any configured city every 5 minutes | - |
 
 #### Implementation notes
