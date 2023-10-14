@@ -146,3 +146,5 @@ Thanks to [Miko](https://x.com/Miko_Shiy) for most of the graphics !
 | placeholder.png | Placeholder | Molly |
 | raindrop_0.png | Raindrop | Molly |
 | sun.png | Sun icon for sunrise time | Miko |
+| clock.png | Clock icon to display current time | Miko |
+| thermometer.png | Thermometer icon to display felt temperature | Miko |
