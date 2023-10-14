@@ -132,7 +132,8 @@ dist
 # will be compiled to js from ts
 front/main.js
 front/swindle.js
-front/assets/
+front/assets/old
+front/assets/*.py
 front/main.css
 
 # fonts assets
