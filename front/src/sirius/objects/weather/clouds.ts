@@ -15,20 +15,6 @@ let constructedClouds = 0;
 let cachedXVelocity: number = 0.0;
 let firstTime: boolean = true;
 
-function behindTable(imageRect: Rect): boolean {
-    if (window.tableRect == undefined) {
-        return false;
-    }
-    if (
-        imageRect.x > window.tableRect.x && // left side
-        imageRect.x < window.tableRect.x + window.tableRect.width - imageRect.width && // right side
-        imageRect.y > window.tableRect.y // top side
-    ) {
-        return true;
-    }
-    return false;
-}
-
 class Cloud extends AMovable {
     private _consecutiveSteps: number;
     private _lastDirection: number;
@@ -62,7 +48,6 @@ class Cloud extends AMovable {
         if (this.pos.x > this.context.canvas.width) {
             this.pos.x = -this.sprite.width;
         }
-        this.enabled = !behindTable({ x: this.pos.x, y: this.pos.y, width: this.sprite.width, height: this.sprite.height }) && this.enabled;
         // Update velocity
         this.velocity.x = cachedXVelocity;
         if (this._consecutiveSteps == this._bounciness) {
