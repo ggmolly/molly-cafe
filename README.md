@@ -125,3 +125,24 @@ The `tick` method is called every frame whether the object is enabled or not.
 #### AMovable
 
 An `AMovable` is an `ADrawable` that can move, it has a `velocity`, every frame, the `velocity` is added to the `position` of the object.
+
+
+# Credits
+
+Thanks to [Miko](https://x.com/Miko_Shiy) for most of the graphics !
+
+## Assets
+
+| File | Usage | Author |
+| :--- | :--- | --- |
+| cloud_0.png | Cloud variant 0 | Miko |
+| cloud_1.png | Cloud variant 1 | Miko |
+| cloud_2.png | Cloud variant 2 | Miko |
+| cloud_3.png | Cloud variant 3 | Miko |
+| cloud_4.png | Cloud variant 4 | Miko |
+| cloud_icon.png | Cloudiness icon | Miko |
+| cursor.png | Other user's cursors | ? |
+| moon.png | Moon icon for sunset time | Miko |
+| placeholder.png | Placeholder | Molly |
+| raindrop_0.png | Raindrop | Molly |
+| sun.png | Sun icon for sunrise time | Miko |
