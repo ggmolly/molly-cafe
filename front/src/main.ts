@@ -1,3 +1,4 @@
+import { residualRaindropInit } from "./sirius/objects/weather/afterrain";
 import { cloudInit } from "./sirius/objects/weather/clouds";
 import { rainInit } from "./sirius/objects/weather/rain";
 import { Sirius } from "./sirius/sirius";
@@ -72,6 +73,7 @@ document.addEventListener("readystatechange", (event: Event) => {
     let sirius = new Sirius([
         cloudInit,
         rainInit,
+        residualRaindropInit,
     ], ctx).run();
 });
 
