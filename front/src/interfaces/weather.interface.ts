@@ -45,6 +45,11 @@ export interface Weather {
      */
     currentCondition: string;
 
+    /**
+     * Last time it rained in unix time
+     */
+    lastRainTime: number;
+
     // Callback functions
 
     /**

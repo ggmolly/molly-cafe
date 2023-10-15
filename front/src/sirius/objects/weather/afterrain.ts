@@ -35,10 +35,17 @@ class ResidualRaindrop extends AMovable {
         pos = checkPosition(pos, rect);
         super(sprite, context, pos, "ResidualRaindrop", initialVelocity);
         this._parentDom = parentCard;
-        this.enable();
+        this.enabled = this.conditionsMet();
     }
 
     tick() {
+        if (this.conditionsMet() && !this.enabled) {
+            this.resetPosition();
+            this.enable();
+        } else if (!this.conditionsMet() && this.enabled) {
+            this.enabled = false;
+        }
+        if (!this.enabled) return;
         if (this.pos.y > this.context.canvas.height) {
             this.resetPosition();
         } else {
@@ -69,6 +76,15 @@ class ResidualRaindrop extends AMovable {
 
     public disable(): void {
         this._waitingForDiabling = true;
+    }
+
+    conditionsMet(): boolean {
+        // Return true if it is raining or it rained in the last hour
+        return window.s_Weather.currentTime !== 0 &&
+            (
+                window.s_Weather.rainIntensity > 0 ||
+                window.s_Weather.lastRainTime + 3600 * 1000 > window.s_Weather.currentTime
+            );
     }
 }
 

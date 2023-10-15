@@ -32,6 +32,7 @@ window.s_Weather = {
     timeToSunset: 0,
     currentTime: 0,
     currentCondition: "",
+    lastRainTime: 0,
     onCloudinessChange: () => { },
     onRainIntensityChange: () => { },
     onWindSpeedChange: () => { },
