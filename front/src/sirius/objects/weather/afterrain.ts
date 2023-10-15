@@ -18,6 +18,7 @@ function checkPosition(pos: Point, rect: DOMRect): Point {
 
 class ResidualRaindrop extends AMovable {
     private _parentDom: HTMLElement;
+    private _waitingForDiabling: boolean = false;
     constructor(
         sprite: HTMLImageElement,
         context: CanvasRenderingContext2D,
@@ -51,6 +52,11 @@ class ResidualRaindrop extends AMovable {
     }
 
     resetPosition() {
+        if (this._waitingForDiabling) {
+            this.enabled = false;
+            this._waitingForDiabling = false;
+            return;
+        }
         // Pick another parent card
         let cards: Array<HTMLElement> = Array.from(document.querySelectorAll("div.card:last-child,div.side-card:last-child"));
         this._parentDom = cards[Math.floor(Math.random() * cards.length)];
@@ -59,6 +65,10 @@ class ResidualRaindrop extends AMovable {
         this.pos.x = rect.x + Math.random() * rect.width;
         this.pos.y = rect.y + rect.height - this.sprite.height + 1;
         this.pos = checkPosition(this.pos, rect);
+    }
+
+    public disable(): void {
+        this._waitingForDiabling = true;
     }
 }
 
