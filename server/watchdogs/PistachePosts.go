@@ -41,7 +41,7 @@ func getTitle(path string) (string, error) {
 }
 
 func updatePost(packetMap *socket.T_PacketMap, path, title string) {
-	packet, ok := (*packetMap)[path]
+	packet, ok := packetMap.GetPacketByName(path)
 	if !ok {
 		packet = socket.NewPacket(socket.T_PISTACHE, socket.C_PISTACHE, socket.DT_SPECIAL, path)
 	}
@@ -68,7 +68,7 @@ func updatePost(packetMap *socket.T_PacketMap, path, title string) {
 	buffer.WriteByte(byte(timestamp))
 	packet.Data = buffer.Bytes()
 	packet.Name = title
-	(*packetMap)[path] = packet
+	packetMap.AddPacket(path, packet)
 	socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 }
 
@@ -108,7 +108,7 @@ func MonitorPistachePosts(packetMap *socket.T_PacketMap, rootPath string) {
 				}
 			}
 			if event.Op.Has(fsnotify.Remove) || event.Op.Has(fsnotify.Rename) {
-				if packet, ok := (*packetMap)[event.Name]; ok {
+				if packet, ok := packetMap.GetPacketByName(event.Name); ok {
 					packet.RemoveDOM()
 					delete(*packetMap, event.Name)
 				}

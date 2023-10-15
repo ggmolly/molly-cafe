@@ -24,7 +24,7 @@ type SchoolProject struct {
 
 // Create / update the packet in the packet map and sends it to the clients
 func updateProject(packetMap *socket.T_PacketMap, project SchoolProject, projectPath string) {
-	packet, ok := (*packetMap)[projectPath]
+	packet, ok := packetMap.GetPacketByName(projectPath)
 	if !ok {
 		packet = socket.NewPacket(socket.T_SCHOOL_PROJECTS, socket.C_SCHOOL, socket.DT_SPECIAL, project.Name)
 	}
@@ -57,7 +57,7 @@ func updateProject(packetMap *socket.T_PacketMap, project SchoolProject, project
 
 	packet.Data = buffer.Bytes()
 	packet.Name = project.Name
-	(*packetMap)[projectPath] = packet
+	packetMap.AddPacket(projectPath, packet)
 
 	socket.ConnectedClients.Broadcast(packet.GetRawBytes())
 }
@@ -119,7 +119,7 @@ func MonitorSchoolProjects(packetMap *socket.T_PacketMap, rootPath string) {
 				}
 			}
 			if event.Op.Has(fsnotify.Remove) || event.Op.Has(fsnotify.Rename) {
-				if packet, ok := (*packetMap)[event.Name]; ok {
+				if packet, ok := packetMap.GetPacketByName(event.Name); ok {
 					packet.RemoveDOM()
 					delete(*packetMap, event.Name)
 				}
