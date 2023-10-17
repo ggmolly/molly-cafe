@@ -16,6 +16,11 @@ function checkPosition(pos: Point, rect: DOMRect): Point {
     return pos;
 }
 
+function randomCard(): HTMLElement {
+    let cards: Array<HTMLElement> = Array.from(document.querySelectorAll("div.card:last-child,div.side-card:last-child"));
+    return cards[Math.floor(Math.random() * cards.length)];
+}
+
 class ResidualRaindrop extends AMovable {
     private _parentDom: HTMLElement;
     private _waitingForDiabling: boolean = false;
@@ -24,12 +29,11 @@ class ResidualRaindrop extends AMovable {
         context: CanvasRenderingContext2D,
         initialVelocity: Velocity,
     ) {
-        let cards: Array<HTMLElement> = Array.from(document.querySelectorAll("div.card:last-child,div.side-card:last-child"));
-        let parentCard: HTMLElement = cards[Math.floor(Math.random() * cards.length)];
+        let parentCard: HTMLElement = randomCard();
         // Get rect of parent card
         let rect: DOMRect = parentCard.getBoundingClientRect();
         let pos = {
-            x: rect.x + Math.random() * rect.width,
+            x: rect.x + rect.width,
             y: rect.y + rect.height - sprite.height + 1 + Math.random() * 2 + 0.5,
         };
         pos = checkPosition(pos, rect);
@@ -47,14 +51,13 @@ class ResidualRaindrop extends AMovable {
         }
         if (!this.enabled) return;
         if (this.pos.y > this.context.canvas.height) {
-            this.resetPosition();
+            return this.resetPosition();
+        }
+        let rect: DOMRect = this._parentDom.getBoundingClientRect();
+        if (this.pos.y > (rect.y + rect.height + this.sprite.height / 2.5 - this.sprite.height)) {
+            this.velocity.y = Math.random() * 2.5 + 0.5;
         } else {
-            let rect: DOMRect = this._parentDom.getBoundingClientRect();
-            if (this.pos.y > (rect.y + rect.height + this.sprite.height / 2.5 - this.sprite.height)) {
-                this.velocity.y = Math.random() * 2.5 + 0.5;
-            } else {
-                this.velocity.y = Math.random() * 0.003 + 0.002;
-            }
+            this.velocity.y = Math.random() * 0.003 + 0.002;
         }
     }
 
@@ -65,8 +68,7 @@ class ResidualRaindrop extends AMovable {
             return;
         }
         // Pick another parent card
-        let cards: Array<HTMLElement> = Array.from(document.querySelectorAll("div.card:last-child,div.side-card:last-child"));
-        this._parentDom = cards[Math.floor(Math.random() * cards.length)];
+        this._parentDom = randomCard();
         // Randomize position
         let rect: DOMRect = this._parentDom.getBoundingClientRect();
         this.pos.x = rect.x + Math.random() * rect.width;
