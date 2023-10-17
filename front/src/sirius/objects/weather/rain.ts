@@ -100,4 +100,7 @@ export function onRainIntensityChange(newIntensity: number) {
             }, Math.log2(i) * 1000);
         }
     }
+    if (newIntensity === 0) {
+        // TODO: update window.s_Weather.lastRainTime
+    }
 }
