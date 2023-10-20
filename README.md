@@ -1,6 +1,34 @@
 # Molly's Cafe 🍵
 
-This repo contains the source code for [Molly's Cafe](https://mana.rip/) which, for now is just a status webpage, but I hope I'll be able to realize my goal of making it a neocity !
+This repo contains the source code for [Molly's Cafe](https://mana.rip/), a work in progress neocity / portfolio !
+
+Here's a list of all the features that are currently implemented :
+
+- [x] Real-time monitoring of the server
+    - Docker containers
+    - Systemd services
+    - CPU temperature
+    - TCP / UDP connections
+    - Dirty memory
+    - Opened file descriptors
+    - Running processes
+    - Idle Uptime
+    - Free disk space
+- [x] List of my school projects (with live updates)
+- [x] Pistache (my blogging engine) posts (with live updates)
+- [x] Real-time Paris weather with dynamic background (clouds, rain, ...) and the following informations :
+    - Sunrise
+    - Sunset
+    - Local time
+    - Cloudiness
+    - Felt temperature
+    - Humidity
+    - Wind speed
+- [x] Cursor of other users (opt-out through a small checkbox)
+- [x] Currently listening on [Strawberry Player](https://www.strawberrymusicplayer.org/)
+- [x] Number of users currently connected
+- [x] Live progress of a [Leitner System](https://en.wikipedia.org/wiki/Leitner_system)
+- [x] Sleep tracking (through Apple's [Shortcuts app](https://apps.apple.com/us/app/shortcuts/id915249334))
 
 # Note
 
