@@ -41,16 +41,6 @@ The Go code can only be compiled on Linux (maybe MacOS ?) due to :
 2. The usage of a lot of `/proc` / `/sys` file parsing
 3. Relying on `systemd` for service management
 
-## Code quality
-
-Some parts of the code are not very well written, mostly because I was sometime lazy / in a hurry.
-
-This section will be removed once I've cleaned up the code.
-
-## Lack of documentation / comments
-
-Coming really soon, I promise !
-
 ## Looking for bugs ?
 
 Go ahead, break everything you can (well not too much), I'll be happy to fix it and learn more!
