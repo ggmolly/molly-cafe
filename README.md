@@ -13,6 +13,7 @@ Here's a list of all the features that are currently implemented :
     - Opened file descriptors
     - Running processes
     - Idle Uptime
+    - RAM usage
     - Free disk space
 - [x] List of my school projects (with live updates)
 - [x] Pistache (my blogging engine) posts (with live updates)
