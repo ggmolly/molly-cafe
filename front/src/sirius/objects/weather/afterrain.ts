@@ -5,13 +5,13 @@ import { AssetType } from "../../types";
 import { ADrawable } from "../bases/ADrawable";
 import { AMovable } from "../bases/AMovable";
 
-const N_RAINDROPS = 6;
+const N_RAINDROPS = 8;
 
 function checkPosition(pos: Point, rect: DOMRect): Point {
     if (pos.x + window.scrollX - rect.width < 10) { // If the raindrop is too close to the left edge
-        pos.x -= Math.random() * 10 + 10;
-    } else if (pos.x + window.scrollX + rect.width > rect.width - 10) { // If the raindrop is too close to the right edge
-        pos.x += Math.random() * 10 + 10;
+        pos.x += rect.width - 5;
+    } else if (pos.x + window.scrollX + rect.width > window.innerWidth - 10) { // If the raindrop is too close to the right edge
+        pos.x -= rect.width + 5;
     }
     return pos;
 }
@@ -47,7 +47,7 @@ class ResidualRaindrop extends AMovable {
             this.resetPosition();
             this.enable();
         } else if (!this.conditionsMet() && this.enabled) {
-            this.enabled = false;
+            this.disable();
         }
         if (!this.enabled) return;
         if (this.pos.y > this.context.canvas.height) {
@@ -85,7 +85,7 @@ class ResidualRaindrop extends AMovable {
         return window.s_Weather.currentTime !== 0 &&
             (
                 window.s_Weather.rainIntensity > 0 ||
-                window.s_Weather.lastRainTime + 3600 * 1000 > window.s_Weather.currentTime
+                (window.s_Weather.lastRainTime < 1800 && window.s_Weather.lastRainTime > 0)
             );
     }
 }
