@@ -275,5 +275,8 @@ func init() {
 		log.Println("Failed to decode weather cache:", err)
 		return
 	}
+	if computeRainIntensity(cachedWeatherData.Data) > 0 {
+		lastRainedAt = cachedWeatherData.LastUpdate
+	}
 	log.Println("Weather cache loaded! Cached at:", cachedWeatherData.LastUpdate)
 }
