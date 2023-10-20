@@ -36,6 +36,11 @@ window.s_Weather = {
     onCloudinessChange: () => { },
     onRainIntensityChange: () => { },
     onWindSpeedChange: () => { },
+    lastRainTimeUpdate: setInterval(() => {
+        if (window.s_Weather.lastRainTime < 0) return;
+        if (window.s_Weather.rainIntensity > 0) return;
+        window.s_Weather.lastRainTime++;
+    }, 1000),
 }
 
 // Set sirius_debug localStorage

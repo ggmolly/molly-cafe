@@ -46,11 +46,18 @@ export interface Weather {
     currentCondition: string;
 
     /**
-     * Last time it rained in unix time
+     * Last time it rained in seconds
      */
     lastRainTime: number;
 
-    // Callback functions
+    // --- Intervals ---
+
+    /**
+     * Interval for incrementing 
+     */
+    lastRainTimeUpdate: number | undefined;
+
+    // --- Callback functions ---
 
     /**
      * Callback for cloudiness change
