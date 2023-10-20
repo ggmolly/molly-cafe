@@ -8,10 +8,10 @@ import { AMovable } from "../bases/AMovable";
 const N_RAINDROPS = 6;
 
 function checkPosition(pos: Point, rect: DOMRect): Point {
-    if (pos.x - rect.width < 10) { // If the raindrop is too close to the left edge
-        pos.x += Math.random() * 10;
-    } else if (pos.x + rect.width > rect.width - 10) { // If the raindrop is too close to the right edge
-        pos.x -= Math.random() * 10;
+    if (pos.x + window.scrollX - rect.width < 10) { // If the raindrop is too close to the left edge
+        pos.x -= Math.random() * 10 + 10;
+    } else if (pos.x + window.scrollX + rect.width > rect.width - 10) { // If the raindrop is too close to the right edge
+        pos.x += Math.random() * 10 + 10;
     }
     return pos;
 }
@@ -33,8 +33,8 @@ class ResidualRaindrop extends AMovable {
         // Get rect of parent card
         let rect: DOMRect = parentCard.getBoundingClientRect();
         let pos = {
-            x: rect.x + rect.width,
-            y: rect.y + rect.height - sprite.height + 1 + Math.random() * 2 + 0.5,
+            x: rect.x + window.scrollX + rect.width * Math.random(),
+            y: rect.y + window.scrollY + rect.height - sprite.height,
         };
         pos = checkPosition(pos, rect);
         super(sprite, context, pos, "ResidualRaindrop", initialVelocity);
@@ -54,10 +54,10 @@ class ResidualRaindrop extends AMovable {
             return this.resetPosition();
         }
         let rect: DOMRect = this._parentDom.getBoundingClientRect();
-        if (this.pos.y > (rect.y + rect.height + this.sprite.height / 2.5 - this.sprite.height)) {
+        if (this.pos.y > rect.y + window.scrollY + rect.height - this.sprite.height / (Math.random() * 2 + 2)) {
             this.velocity.y = Math.random() * 2.5 + 0.5;
         } else {
-            this.velocity.y = Math.random() * 0.003 + 0.002;
+            this.velocity.y = Math.random() * 0.014 + 0.003;
         }
     }
 
@@ -71,8 +71,8 @@ class ResidualRaindrop extends AMovable {
         this._parentDom = randomCard();
         // Randomize position
         let rect: DOMRect = this._parentDom.getBoundingClientRect();
-        this.pos.x = rect.x + Math.random() * rect.width;
-        this.pos.y = rect.y + rect.height - this.sprite.height + 1;
+        this.pos.x = rect.x + window.scrollX + rect.width * Math.random();
+        this.pos.y = rect.y + window.scrollY + rect.height - (this.sprite.height * 1.30);
         this.pos = checkPosition(this.pos, rect);
     }
 
