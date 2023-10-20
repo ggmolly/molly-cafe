@@ -23,11 +23,8 @@ class Raindrop extends AMovable {
         };
         super(sprite, context, pos, "Raindrop", initialVelocity);
         this._parentCloud = parentCloud;
-        if ((constructedRaindrops / N_RAINDROPS) < window.s_Weather.rainIntensity / 240) {
-            this.enable();
-        } else {
-            this.disable();
-        }
+        // Enable only if the raindrop is in the current rainIntensity
+        this.enabled = (constructedRaindrops / N_RAINDROPS) < window.s_Weather.rainIntensity / 240
         constructedRaindrops++;
     }
 
