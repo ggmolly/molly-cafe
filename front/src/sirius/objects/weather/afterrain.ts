@@ -9,9 +9,9 @@ const N_RAINDROPS = 8;
 
 function checkPosition(pos: Point, rect: DOMRect): Point {
     if (pos.x + window.scrollX - rect.width < 10) { // If the raindrop is too close to the left edge
-        pos.x += rect.width - 5;
-    } else if (pos.x + window.scrollX + rect.width > window.innerWidth - 10) { // If the raindrop is too close to the right edge
-        pos.x -= rect.width + 5;
+        pos.x += 15;
+    } else if (pos.x + window.scrollX + rect.width > 10) { // If the raindrop is too close to the right edge
+        pos.x -= 15;
     }
     return pos;
 }
