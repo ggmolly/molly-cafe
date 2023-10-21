@@ -14,7 +14,7 @@ class Raindrop extends AMovable {
         context: CanvasRenderingContext2D,
         initialVelocity: Velocity,
     ) {
-        let clouds = window.s_Objects.filter((obj: ADrawable) => obj.type === "Cloud");
+        let clouds = window.s_Objects['weather'].filter((obj: ADrawable) => obj.type === "Cloud");
         const parentCloud = clouds[Math.floor(Math.random() * clouds.length)];
         let pos = {
             x: parentCloud.position.x + Math.random() * parentCloud.sprite.width,
@@ -73,7 +73,7 @@ export async function rainInit(ctx: CanvasRenderingContext2D): Promise<Array<ADr
  * It will be called with the new value of rainIntensity, allowing a smooth transition
  */
 export function onRainIntensityChange(newIntensity: number) {
-    let raindrops = window.s_Objects.filter((obj) => obj.type === 'Raindrop');
+    let raindrops = window.s_Objects['weather'].filter((obj) => obj.type === 'Raindrop');
     // Show only newIntensity / 240
     let shownDrops: number = 0;
     for (let i = 0; i < raindrops.length; i++) {

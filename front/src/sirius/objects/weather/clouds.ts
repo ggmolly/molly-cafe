@@ -83,7 +83,7 @@ export async function cloudInit(ctx: CanvasRenderingContext2D): Promise<Array<AD
  * It will be called with the new value of cloudiness, allowing a smooth transition
  */
 export function onCloudinessChange(newCloudiness: number) {
-    let clouds = window.s_Objects.filter((obj) => obj.type === 'Cloud');
+    let clouds = window.s_Objects['weather'].filter((obj) => obj.type === 'Cloud');
     let shownClouds: number = 0;
     for (let i = 0; i < clouds.length; i++) {
         const cloud = clouds[i] as Cloud;
