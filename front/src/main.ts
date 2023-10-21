@@ -80,7 +80,7 @@ document.addEventListener("readystatechange", (event: Event) => {
         rainInit,
     ]).run();
 
-    new Sirius("sprites", [
+    new Sirius("apples", [
         treeInit,
         appleInit,
     ], true).run();
