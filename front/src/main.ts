@@ -1,3 +1,4 @@
+import { appleInit } from "./sirius/objects/apple_tree/apple";
 import { treeInit } from "./sirius/objects/apple_tree/tree";
 import { cloudInit } from "./sirius/objects/weather/clouds";
 import { rainInit } from "./sirius/objects/weather/rain";
@@ -81,6 +82,7 @@ document.addEventListener("readystatechange", (event: Event) => {
 
     new Sirius("sprites", [
         treeInit,
+        appleInit,
     ], true).run();
 });
 
