@@ -1,12 +1,11 @@
 import { getAssets, loadAssetsType } from "../../assets";
 import { Point } from "../../interfaces/point.interface";
 import { AssetType } from "../../types";
-import { AClickable } from "../bases/AClickable";
 import { ADrawable } from "../bases/ADrawable";
 
 const N_TREE: number = 1;
 
-class Tree extends AClickable {
+class Tree extends ADrawable {
     constructor(
         sprite: HTMLImageElement,
         context: CanvasRenderingContext2D,
@@ -16,15 +15,7 @@ class Tree extends AClickable {
         super(sprite, context, pos, "tree", alpha);
     }
 
-    public onClick(e: MouseEvent): void {
-        alert("You clicked on a tree!");
-    }
-
-    public tick(frameDelta: number): void {
-        // draw a rectangle around the tree
-        this._context.strokeStyle = "red";
-        this._context.strokeRect(this.pos.x, this.pos.y, this.sprite.width, this.sprite.height);
-    }
+    public tick(frameDelta: number): void { return; }
 }
 
 export async function treeInit(ctx: CanvasRenderingContext2D): Promise<Array<ADrawable>> {
