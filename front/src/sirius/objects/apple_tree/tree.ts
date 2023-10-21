@@ -13,6 +13,8 @@ class Tree extends ADrawable {
         alpha: number = 1,
     ) {
         super(sprite, context, pos, "tree", alpha);
+        context.canvas.height = sprite.height;
+        context.canvas.width = sprite.width;
     }
 
     public tick(frameDelta: number): void { return; }
