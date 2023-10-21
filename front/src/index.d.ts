@@ -10,6 +10,6 @@ declare global {
         progress: number;
         tableRect: Rect;
         s_Weather: Weather;
-        s_Objects: ADrawable[];
+        s_Objects: Record<string, ADrawable[]>;
     }
 }
