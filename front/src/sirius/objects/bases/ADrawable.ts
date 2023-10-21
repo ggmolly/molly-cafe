@@ -43,11 +43,14 @@ export abstract class ADrawable {
         this._clickable = clickable;
     }
 
+    public preProcess(): void { return; }
+
     /**
      * Draws the object on the canvas, isn't called if enabled is false
      */
     public draw() {
         this._context.globalAlpha = this.alpha;
+        this.preProcess();
         // bitwise hack to remove decimals
         this._context.drawImage(
             this.sprite,
@@ -57,6 +60,7 @@ export abstract class ADrawable {
             this.sprite.height
         );
         this._context.globalAlpha = 1;
+        this._context.filter = "none";
     }
 
     /**
