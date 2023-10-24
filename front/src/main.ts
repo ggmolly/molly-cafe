@@ -1,5 +1,6 @@
 import { appleInit } from "./sirius/objects/apple_tree/apple";
 import { treeInit } from "./sirius/objects/apple_tree/tree";
+import { sunInit } from "./sirius/objects/stars/sun";
 import { cloudInit } from "./sirius/objects/weather/clouds";
 import { rainInit } from "./sirius/objects/weather/rain";
 import { Sirius } from "./sirius/sirius";
@@ -76,6 +77,7 @@ document.addEventListener("readystatechange", (event: Event) => {
     window.s_Objects = {};
 
     new Sirius("weather", [
+        sunInit,
         cloudInit,
         rainInit,
     ]).run();
