@@ -67,25 +67,30 @@ document.addEventListener("readystatechange", (event: Event) => {
     }, 10);
 
     let socket: CafeSocket = new CafeSocket();
-    let canvas: HTMLCanvasElement = document.getElementById("weather")!! as HTMLCanvasElement;
-    let ctx: CanvasRenderingContext2D = canvas.getContext("2d")!!;
-
-    // Set the canvas size as the width of the page
-    canvas.width = document.body.scrollWidth;
-    canvas.height = document.body.scrollHeight * 2;
+    let contexts: Record<string, CanvasRenderingContext2D> = {};
+    for (let canva of Array.from(document.getElementsByTagName("canvas"))) {
+        contexts[canva.id] = canva.getContext("2d")!!;
+    }
+    // Resize the canvas#weather
+    let weather: HTMLCanvasElement = document.getElementById("weather")!! as HTMLCanvasElement;
+    weather.width = window.innerWidth;
+    weather.height = window.innerHeight;
 
     updateTableRectangle();
 
-    let sirius = new Sirius([
+    window.s_Objects = {};
+
+    new Sirius("weather", [
         cloudInit,
         rainInit,
         residualRaindropInit,
-    ], ctx).run();
+    ]).run();
 });
 
 // When the table is resized, resize the canvas
 window.addEventListener("resize", (event: Event) => {
-    let canvas: HTMLCanvasElement = document.getElementById("weather")!! as HTMLCanvasElement;
+    let canvas: HTMLCanvasElement = document.getElementById("sirius")!! as HTMLCanvasElement;
     canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     updateTableRectangle();
 });

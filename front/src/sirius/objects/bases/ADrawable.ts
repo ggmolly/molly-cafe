@@ -15,6 +15,7 @@ export abstract class ADrawable {
     protected _sprite: HTMLImageElement;
     protected _context: CanvasRenderingContext2D;
     private _type: string = "ADrawable";
+    private _clickable: boolean = false;
     public pos: Point;
     public enabled: boolean = true;
     public alpha: number = 1;
@@ -31,6 +32,7 @@ export abstract class ADrawable {
         pos: Point,
         type: string,
         alpha: number = 1,
+        clickable: boolean = false
     ) {
         this._sprite = sprite;
         this._context = context;
@@ -38,13 +40,17 @@ export abstract class ADrawable {
         this.pos = pos;
         console.assert(alpha >= 0 && alpha <= 1, "[sirius] Alpha must be between 0 and 1");
         this.alpha = alpha;
+        this._clickable = clickable;
     }
+
+    public preProcess(): void { return; }
 
     /**
      * Draws the object on the canvas, isn't called if enabled is false
      */
     public draw() {
         this._context.globalAlpha = this.alpha;
+        this.preProcess();
         // bitwise hack to remove decimals
         this._context.drawImage(
             this.sprite,
@@ -54,6 +60,7 @@ export abstract class ADrawable {
             this.sprite.height
         );
         this._context.globalAlpha = 1;
+        this._context.filter = "none";
     }
 
     /**
@@ -100,6 +107,18 @@ export abstract class ADrawable {
     }
 
     /**
+     * Checks if a passed point is inside the object
+     */
+    public isPointInside(point: Point): boolean {
+        return (
+            point.x >= this.pos.x &&
+            point.x <= this.pos.x + this.sprite.width &&
+            point.y >= this.pos.y &&
+            point.y <= this.pos.y + this.sprite.height
+        );
+    }
+
+    /**
      * Returns the object's position
      */
     public get position(): Point {
@@ -125,5 +144,12 @@ export abstract class ADrawable {
      */
     public get type(): string {
         return this._type;
+    }
+
+    /**
+     * Returns the object's clickable property
+     */
+    public get clickable(): boolean {
+        return this._clickable;
     }
 }

@@ -5,10 +5,14 @@ import { AssetType } from "./types";
 const typeCount: Record<AssetType, number> = {
     [AssetType.CLOUD]: 5,
     [AssetType.RAINDROP]: 1,
+    [AssetType.TREE]: 1,
+    [AssetType.APPLE]: 1,
 }
 let assetsMap: Record<AssetType, Array<HTMLImageElement>> = {
     [AssetType.CLOUD]: new Array<HTMLImageElement>(),
     [AssetType.RAINDROP]: new Array<HTMLImageElement>(),
+    [AssetType.TREE]: new Array<HTMLImageElement>(),
+    [AssetType.APPLE]: new Array<HTMLImageElement>(),
 }
 
 /**
