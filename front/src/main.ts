@@ -1,5 +1,3 @@
-import { appleInit } from "./sirius/objects/apple_tree/apple";
-import { treeInit } from "./sirius/objects/apple_tree/tree";
 import { cloudInit } from "./sirius/objects/weather/clouds";
 import { rainInit } from "./sirius/objects/weather/rain";
 import { Sirius } from "./sirius/sirius";
@@ -79,11 +77,6 @@ document.addEventListener("readystatechange", (event: Event) => {
         cloudInit,
         rainInit,
     ]).run();
-
-    new Sirius("apples", [
-        treeInit,
-        appleInit,
-    ], true).run();
 });
 
 // When the table is resized, resize the canvas
