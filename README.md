@@ -130,8 +130,8 @@ You can see the entire source code of the engine [here](front/src/sirius/)
 
 - [x] Static 2D rendering
 - [x] Moving 2D rendering (basic physics)
+- [x] Click events
 - [ ] Particles
-- [ ] Hover events, click events, etc...
 - [ ] Animations
 - [ ] Advanced physics
 
