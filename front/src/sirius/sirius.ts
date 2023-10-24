@@ -5,6 +5,7 @@ import { AClickable } from "./objects/bases/AClickable";
 const avgSampleSize: number = 100;
 let frameCount: number = 0;
 let frameTimes: Array<number> = [];
+let firstInit: boolean = true;
 
 /**
  * Main class for the rendering engine
@@ -21,6 +22,8 @@ export class Sirius {
     private _debugAvgFrameRate: HTMLSpanElement | null;
     private _debugRenderedObjects: HTMLSpanElement | null;
     private _debugEnabled: boolean = false;
+    // If this is the first initialization of the engine, we will allow it to run the debug code
+    private _first: boolean = false;
     /**
      * Initializes the rendering engine
      * @param functions Array of async functions that return a promise of an array of ADrawable objects
@@ -42,6 +45,10 @@ export class Sirius {
         if (!this._debugEnabled) {
             // remove the DOM element to not take up unnecessary space
             document.getElementById("sirius-debug")?.remove();
+        }
+        if (firstInit) {
+            this._first = true;
+            firstInit = false;
         }
         this._init();
     }
@@ -69,23 +76,22 @@ export class Sirius {
     }
 
     private _updateDebug(frameTime: number) {
-        return; // FIXME: Since we've implemented a multiple canvas system, this is broken (called n times instead of 1)
-        // if (
-        //     !this._debugEnabled ||
-        //     !this._debugFrameTime ||
-        //     !this._debugFrameRate ||
-        //     !this._debugLoadedObjects ||
-        //     !this._debugAvgFrameTime ||
-        //     !this._debugAvgFrameRate ||
-        //     !this._debugRenderedObjects
-        // ) { return; }
-        // if (frameCount % 30 != 0) { return; }
-        // this._debugFrameTime.innerText = "Frame time: " + frameTime.toFixed(2) + "ms";
-        // this._debugFrameRate.innerText = "Frame rate: " + (1000 / frameTime).toFixed(2) + "fps";
-        // this._debugLoadedObjects.innerText = "Loaded objects: " + window.s_Objects[this._canvas_id].length;
-        // this._debugAvgFrameTime.innerText = "Average frame time: " + this._getAverageFrameTime().toFixed(2) + "ms";
-        // this._debugAvgFrameRate.innerText = "Average frame rate: " + (1000 / this._getAverageFrameTime()).toFixed(2) + "fps";
-        // this._debugRenderedObjects.innerText = "Rendered objects: " + window.s_Objects[this._canvas_id].filter(o => o.enabled).length;
+        if (
+            !this._debugEnabled ||
+            !this._debugFrameTime ||
+            !this._debugFrameRate ||
+            !this._debugLoadedObjects ||
+            !this._debugAvgFrameTime ||
+            !this._debugAvgFrameRate ||
+            !this._debugRenderedObjects
+        ) { return; }
+        if (frameCount % 30 != 0) { return; }
+        this._debugFrameTime.innerText = "Frame time: " + frameTime.toFixed(2) + "ms";
+        this._debugFrameRate.innerText = "Frame rate: " + (1000 / frameTime).toFixed(2) + "fps";
+        this._debugLoadedObjects.innerText = "Loaded objects: " + window.s_Objects[this._canvas_id].length;
+        this._debugAvgFrameTime.innerText = "Average frame time: " + this._getAverageFrameTime().toFixed(2) + "ms";
+        this._debugAvgFrameRate.innerText = "Average frame rate: " + (1000 / this._getAverageFrameTime()).toFixed(2) + "fps";
+        this._debugRenderedObjects.innerText = "Rendered objects: " + window.s_Objects[this._canvas_id].filter(o => o.enabled).length;
     }
 
     private _dispatchClickEvent(e: MouseEvent) {
@@ -112,7 +118,9 @@ export class Sirius {
                 window.s_Objects[key].forEach(o => o._tick(frameDelta));
             }
             frameCount = requestAnimationFrame(tick);
-            this._updateDebug(frameDelta);
+            if (this._first) {
+                this._updateDebug(frameDelta);
+            }
             if (frameTimes.length >= avgSampleSize) {
                 frameTimes.shift();
             }

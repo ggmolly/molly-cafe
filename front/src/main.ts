@@ -1,3 +1,4 @@
+import { residualRaindropInit } from "./sirius/objects/weather/afterrain";
 import { appleInit } from "./sirius/objects/apple_tree/apple";
 import { treeInit } from "./sirius/objects/apple_tree/tree";
 import { sunInit } from "./sirius/objects/stars/sun";
@@ -34,9 +35,15 @@ window.s_Weather = {
     timeToSunset: 0,
     currentTime: 0,
     currentCondition: "",
+    lastRainTime: 0,
     onCloudinessChange: () => { },
     onRainIntensityChange: () => { },
     onWindSpeedChange: () => { },
+    lastRainTimeUpdate: setInterval(() => {
+        if (window.s_Weather.lastRainTime < 0) return;
+        if (window.s_Weather.rainIntensity > 0) return;
+        window.s_Weather.lastRainTime++;
+    }, 1000),
 }
 
 // Set sirius_debug localStorage
@@ -80,12 +87,8 @@ document.addEventListener("readystatechange", (event: Event) => {
         sunInit,
         cloudInit,
         rainInit,
+        residualRaindropInit,
     ]).run();
-
-    new Sirius("apples", [
-        treeInit,
-        appleInit,
-    ], true).run();
 });
 
 // When the table is resized, resize the canvas

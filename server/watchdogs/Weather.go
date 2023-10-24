@@ -68,6 +68,7 @@ type WeatherCache struct {
 
 var (
 	cachedWeatherData WeatherCache
+	lastRainedAt      time.Time
 	requestURL        string
 )
 
@@ -215,6 +216,22 @@ func serializeWeatherPacket(buffer *bytes.Buffer) error {
 	buffer.WriteByte(uint8(data.Dt >> 8))
 	buffer.WriteByte(uint8(data.Dt))
 
+	// Serialize the last rain time (2 bytes)
+	var lastRainTime int16
+	// If it's been more than 30m, set to -1
+	if time.Since(lastRainedAt).Seconds() > 1800 {
+		lastRainTime = -1
+	} else {
+		lastRainTime = int16(time.Since(lastRainedAt).Seconds())
+	}
+	// If it's currently raining, set to 0 and update the last rain time
+	if rainIntensity > 0 {
+		lastRainTime = 0
+		lastRainedAt = time.Now()
+	}
+	buffer.WriteByte(uint8(lastRainTime >> 8))
+	buffer.WriteByte(uint8(lastRainTime))
+
 	// Serialize the length of the weather condition (1 byte)
 	buffer.WriteByte(uint8(len(data.Weather[0].Description)))
 
@@ -257,6 +274,9 @@ func init() {
 	if err != nil {
 		log.Println("Failed to decode weather cache:", err)
 		return
+	}
+	if computeRainIntensity(cachedWeatherData.Data) > 0 {
+		lastRainedAt = cachedWeatherData.LastUpdate
 	}
 	log.Println("Weather cache loaded! Cached at:", cachedWeatherData.LastUpdate)
 }

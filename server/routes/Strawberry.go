@@ -57,6 +57,7 @@ func updateTime(newTime uint32) {
 	length := len(packet.Data)
 	if length < 4 {
 		packet.Data = make([]byte, 4)
+		length = 4
 	}
 	packet.Data[length-4] = byte(CurrentTime >> 24)
 	packet.Data[length-3] = byte(CurrentTime >> 16)

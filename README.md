@@ -1,6 +1,35 @@
 # Molly's Cafe 🍵
 
-This repo contains the source code for [Molly's Cafe](https://mana.rip/) which, for now is just a status webpage, but I hope I'll be able to realize my goal of making it a neocity !
+This repo contains the source code for [Molly's Cafe](https://mana.rip/), a work in progress neocity / portfolio !
+
+Here's a list of all the features that are currently implemented :
+
+- [x] Real-time monitoring of the server
+    - Docker containers
+    - Systemd services
+    - CPU temperature
+    - TCP / UDP connections
+    - Dirty memory
+    - Opened file descriptors
+    - Running processes
+    - Idle Uptime
+    - RAM usage
+    - Free disk space
+- [x] List of my school projects (with live updates)
+- [x] Pistache (my blogging engine) posts (with live updates)
+- [x] Real-time Paris weather with dynamic background (clouds, rain, ...) and the following informations :
+    - Sunrise
+    - Sunset
+    - Local time
+    - Cloudiness
+    - Felt temperature
+    - Humidity
+    - Wind speed
+- [x] Cursor of other users (opt-out through a small checkbox)
+- [x] Currently listening on [Strawberry Player](https://www.strawberrymusicplayer.org/)
+- [x] Number of users currently connected
+- [x] Live progress of a [Leitner System](https://en.wikipedia.org/wiki/Leitner_system)
+- [x] Sleep tracking (through Apple's [Shortcuts app](https://apps.apple.com/us/app/shortcuts/id915249334))
 
 # Note
 
@@ -11,16 +40,6 @@ The Go code can only be compiled on Linux (maybe MacOS ?) due to :
 1. The usage of Go's `syscall` package
 2. The usage of a lot of `/proc` / `/sys` file parsing
 3. Relying on `systemd` for service management
-
-## Code quality
-
-Some parts of the code are not very well written, mostly because I was sometime lazy / in a hurry.
-
-This section will be removed once I've cleaned up the code.
-
-## Lack of documentation / comments
-
-Coming really soon, I promise !
 
 ## Looking for bugs ?
 
@@ -111,8 +130,8 @@ You can see the entire source code of the engine [here](front/src/sirius/)
 
 - [x] Static 2D rendering
 - [x] Moving 2D rendering (basic physics)
+- [x] Click events
 - [ ] Particles
-- [ ] Hover events, click events, etc...
 - [ ] Animations
 - [ ] Advanced physics
 

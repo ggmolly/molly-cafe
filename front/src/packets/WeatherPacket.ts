@@ -38,9 +38,12 @@ export class WeatherPacket extends APacket {
         // Byte 20-24 = currentTime (unix time)
         window.s_Weather.currentTime = data.getUint32(this.offset) * 1000;
         this.offset += 4;
-        // Byte 25 = currentCondition (string length)
+        // Byte 25-26 = lastRainTime (seconds)
+        window.s_Weather.lastRainTime = data.getInt16(this.offset);
+        this.offset += 2;
+        // Byte 27 = currentCondition (string length)
         let currentConditionLength: number = data.getUint8(this.offset++);
-        // Byte 26-... = currentCondition (string)
+        // Byte 28-... = currentCondition (string)
         window.s_Weather.currentCondition = new TextDecoder().decode(data.buffer.slice(this.offset, this.offset + currentConditionLength));
         if (window.s_Weather.onCloudinessChange !== undefined) {
             window.s_Weather.onCloudinessChange(window.s_Weather.cloudiness);

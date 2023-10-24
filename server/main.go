@@ -78,7 +78,7 @@ func init() {
 
 	// Internet Speed
 	socket.PacketMap["downSpeed"] = socket.NewMonitoringPacket(socket.C_MISC, socket.DT_UINT32, "down speed (Mbps)")
-	// go watchdogs.MonitorInternetSpeed(socket.PacketMap["downSpeed"])
+	go watchdogs.MonitorInternetSpeed(socket.PacketMap["downSpeed"])
 
 	// RAM usage
 	socket.PacketMap["ramUsage"] = socket.NewMonitoringPacket(socket.C_HARD_RESOURCE, socket.DT_LOAD_USAGE, "ram usage")

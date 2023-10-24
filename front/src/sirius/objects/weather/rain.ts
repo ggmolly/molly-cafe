@@ -9,6 +9,7 @@ let constructedRaindrops = 0;
 
 class Raindrop extends AMovable {
     private _parentCloud: ADrawable; // rain falls from clouds, did you know?
+    private _waitingForDiabling: boolean = false;
     constructor(
         sprite: HTMLImageElement,
         context: CanvasRenderingContext2D,
@@ -22,11 +23,8 @@ class Raindrop extends AMovable {
         };
         super(sprite, context, pos, "Raindrop", initialVelocity);
         this._parentCloud = parentCloud;
-        if ((constructedRaindrops / N_RAINDROPS) < window.s_Weather.rainIntensity / 240) {
-            this.enable();
-        } else {
-            this.disable();
-        }
+        // Enable only if the raindrop is in the current rainIntensity
+        this.enabled = (constructedRaindrops / N_RAINDROPS) < window.s_Weather.rainIntensity / 240
         constructedRaindrops++;
     }
 
@@ -45,8 +43,17 @@ class Raindrop extends AMovable {
     }
 
     resetPosition() {
+        if (this._waitingForDiabling) {
+            this.enabled = false;
+            this._waitingForDiabling = false;
+            return;
+        }
         this.pos.x = this._parentCloud.position.x + Math.random() * this._parentCloud.sprite.width;
         this.pos.y = this._parentCloud.position.y + this._parentCloud.sprite.height;
+    }
+
+    public disable(): void {
+        this._waitingForDiabling = true;
     }
 }
 
@@ -90,4 +97,5 @@ export function onRainIntensityChange(newIntensity: number) {
             }, Math.log2(i) * 1000);
         }
     }
+    window.s_Weather.rainIntensity = newIntensity;
 }
