@@ -7,12 +7,16 @@ const typeCount: Record<AssetType, number> = {
     [AssetType.RAINDROP]: 1,
     [AssetType.TREE]: 1,
     [AssetType.APPLE]: 1,
+    [AssetType.SUN]: 1,
+    [AssetType.MOON]: 1,
 }
 let assetsMap: Record<AssetType, Array<HTMLImageElement>> = {
     [AssetType.CLOUD]: new Array<HTMLImageElement>(),
     [AssetType.RAINDROP]: new Array<HTMLImageElement>(),
     [AssetType.TREE]: new Array<HTMLImageElement>(),
     [AssetType.APPLE]: new Array<HTMLImageElement>(),
+    [AssetType.SUN]: new Array<HTMLImageElement>(),
+    [AssetType.MOON]: new Array<HTMLImageElement>(),
 }
 
 /**

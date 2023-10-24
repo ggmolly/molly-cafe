@@ -3,4 +3,6 @@ export enum AssetType {
     RAINDROP = "raindrop",
     TREE = "tree",
     APPLE = "apple",
+    SUN = "sun",
+    MOON = "moon",
 }
