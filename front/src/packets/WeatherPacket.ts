@@ -66,6 +66,7 @@ export class WeatherPacket extends APacket {
     updateLocalTime() {
         // Render the time using Intl.DateTimeFormat
         (document.querySelector("#w-current-time > span.value") as HTMLElement).innerText = formatter.format(new Date());
+        window.s_Weather.currentTime += 1000;
     }
 
     update() {
