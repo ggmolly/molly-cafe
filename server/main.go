@@ -13,7 +13,6 @@ import (
 	"github.com/bettercallmolly/illustrious/watchdogs"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/joho/godotenv"
 )
 
@@ -116,10 +115,10 @@ func main() {
 		},
 	)
 
-	app.Use(cache.New(cache.Config{
-		Expiration:   1 * time.Hour,
-		CacheControl: true,
-	}))
+	// app.Use(cache.New(cache.Config{
+	// 	Expiration:   1 * time.Hour,
+	// 	CacheControl: true,
+	// }))
 
 	app.Use("/ws", middlewares.WebSocketUpgrade)
 
