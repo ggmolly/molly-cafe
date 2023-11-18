@@ -10,9 +10,11 @@ import (
 	"github.com/bettercallmolly/illustrious/middlewares"
 	"github.com/bettercallmolly/illustrious/routes"
 	"github.com/bettercallmolly/illustrious/socket"
+	"github.com/bettercallmolly/illustrious/templates"
 	"github.com/bettercallmolly/illustrious/watchdogs"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/template/html/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -25,6 +27,7 @@ var (
 	REFRESH_DELAY = 5 * time.Second
 	ProjectPath   string
 	PistacheRoot  = "./pistache"
+	TemplateRoot  = "./front"
 )
 
 func init() {
@@ -104,9 +107,24 @@ func init() {
 		log.Printf("Pistache root set to %s", PistacheRoot)
 		go watchdogs.MonitorPistachePosts(&socket.PacketMap, PistacheRoot)
 	}
+
+	if os.Getenv("MODE") == "dev" {
+		TemplateRoot = "../front/"
+	}
+	log.Println("Template root set to", TemplateRoot)
 }
 
 func main() {
+	engine := html.New("../front", ".html")
+
+	if os.Getenv("MODE") == "dev" {
+		engine.Reload(true)
+	}
+
+	engine.AddFunc("formatTimestamp", templates.FormatTimestamp)
+	engine.AddFunc("formatSeconds", templates.FormatSeconds)
+	engine.AddFunc("getSleepColor", templates.GetSleepColor)
+
 	app := fiber.New(
 		fiber.Config{
 			AppName:                 "molly's cafe",
@@ -115,6 +133,7 @@ func main() {
 			EnableTrustedProxyCheck: true,
 			ReadTimeout:             time.Second * 10,
 			WriteTimeout:            time.Second * 10,
+			Views:                   engine,
 		},
 	)
 
@@ -152,15 +171,8 @@ func main() {
 			time.Sleep(REFRESH_DELAY)
 		}
 	}()
-
-	// Serve static files in argv[1]
-	if (len(os.Args) < 2) || (os.Args[1] == "") {
-		panic("No directory specified")
-	}
-	if _, err := os.Stat(os.Args[1]); os.IsNotExist(err) {
-		panic("Directory does not exist")
-	}
-	app.Static("/", os.Args[1])
+	app.Get("/", templates.Index)
+	app.Static("/assets", filepath.Join(TemplateRoot, "assets"))
 	app.Static("/pistache", PistacheRoot)
 	app.Listen("0.0.0.0:50154")
 }
