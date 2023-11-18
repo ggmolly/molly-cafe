@@ -3,7 +3,6 @@ package watchdogs
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -61,7 +60,6 @@ func updatePost(packetMap *socket.T_PacketMap, path, title string) {
 	// uint16 -> href length
 	name := filepath.Base(path)
 	length := uint16(len(name))
-	log.Println(length, name)
 	buffer.WriteByte(byte(length >> 8))
 	buffer.WriteByte(byte(length))
 
