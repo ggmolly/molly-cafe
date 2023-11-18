@@ -109,9 +109,12 @@ func init() {
 func main() {
 	app := fiber.New(
 		fiber.Config{
+			AppName:                 "molly's cafe",
 			IdleTimeout:             2 * time.Second,
 			ProxyHeader:             "CF-Connecting-IP",
 			EnableTrustedProxyCheck: true,
+			ReadTimeout:             time.Second * 10,
+			WriteTimeout:            time.Second * 10,
 		},
 	)
 
