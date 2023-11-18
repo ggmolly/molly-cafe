@@ -1,10 +1,18 @@
 package templates
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/bettercallmolly/illustrious/leitner"
+	"github.com/bettercallmolly/illustrious/socket"
+	"github.com/bettercallmolly/illustrious/watchdogs"
 	"github.com/gofiber/fiber/v2"
+)
+
+const (
+	SleepGoal = 8 * 3600 // 8 hours
 )
 
 var (
@@ -14,6 +22,18 @@ var (
 func Index(c *fiber.Ctx) error {
 	hiraganas, _ := leitner.LeitnerData.GetTopic("hiraganas")
 	katakanas, _ := leitner.LeitnerData.GetTopic("katakanas")
+	packet, ok := socket.PacketMap.GetPacketByName("sleepTracking")
+	var timeSlept int
+	if ok {
+		// deserialize the packet
+		for i := 0; i < 4; i++ {
+			timeSlept |= int(packet.Data[i]) << (8 * (3 - i))
+		}
+	}
+	weatherCondition := ""
+	if len(watchdogs.CachedWeatherData.Data.Weather) > 0 {
+		weatherCondition = strings.ToLower(watchdogs.CachedWeatherData.Data.Weather[0].Main)
+	}
 	return c.Render("index", fiber.Map{
 		"age":                 uint8(time.Since(Birthday).Hours() / 24 / 365),
 		"learnedHiraganas":    hiraganas.CompletedCards,
@@ -23,5 +43,14 @@ func Index(c *fiber.Ctx) error {
 		"totalKatakanas":      katakanas.Total,
 		"percentageKatakanas": uint8(float32(katakanas.CompletedCards) / float32(katakanas.Total) * 100),
 		"learningStreak":      leitner.LeitnerData.GetStreak(),
+		"sunriseTime":         watchdogs.CachedWeatherData.Data.Sys.Sunrise,
+		"sunsetTime":          watchdogs.CachedWeatherData.Data.Sys.Sunset,
+		"currentTime":         time.Now().Unix(), // Server time is Europe/Paris
+		"weatherCondition":   weatherCondition,
+		"cloudiness":          watchdogs.CachedWeatherData.Data.Clouds.All,
+		"humidity":            watchdogs.CachedWeatherData.Data.Main.Humidity,
+		"feltTemperature":     fmt.Sprintf("%.2f", watchdogs.CachedWeatherData.Data.Main.FeelsLike),
+		"windSpeed":           fmt.Sprintf("%.2f", watchdogs.CachedWeatherData.Data.Wind.Speed),
+		"sleepTime":           timeSlept,
 	})
 }

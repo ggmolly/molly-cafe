@@ -18,7 +18,7 @@
     <meta name="msapplication-navbutton-color" content="#e879f9">
     <meta name="apple-mobile-web-app-status-bar-style" content="#e879f9">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='assets/main.css'>
     <script src='main.js'></script>
 </head>
 
@@ -35,10 +35,10 @@
                             <div>
                                 <div class="border border-fuchsia-500 float-left m-3">
                                     <img src="https://avatars.githubusercontent.com/u/20666343" width="96" height="96" alt="Molly's profile picture" class="border-b border-fuchsia-500"/>
-                                    <small id="sleep-tracking" class="text-center block" title="time slept / sleep goal">0h00 / 8h00</small>
+                                    <small id="sleep-tracking" class="text-center block {{getSleepColor .sleepTime}}" title="time slept / sleep goal">{{ formatSeconds .sleepTime}} / 8h00</small>
                                 </div>
                                 <p class="ml-2">
-                                    Hey! I'm <span class="fuchsia">Molly</span>, a 20 years old <a
+                                    Hey! I'm <span class="fuchsia">Molly</span>, a {{.age}} years old <a
                                         href="https://www.42network.org/">42 Paris</a> student. <br />
                                     I enjoy programming, and when I have free time or inspiration I enjoy adding
                                     useless but cool features on this website. <br />
@@ -140,7 +140,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="side-card card" id="sirius-debug">
+                        <div class="side-card card hidden" id="sirius-debug">
                             <h4 class="text-center">sirius debug</h4>
                             <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2" />
                             <span class="green" id="sirius-debug-ft"></span>
@@ -166,9 +166,9 @@
                         <div class="side-card card" id="nihongo-leitner">
                             <h4 class="text-center">日本語！</h4>
                             <hr class="border-fuchsia-500 shadow shadow-fuchsia-500 mb-2" />
-                            <h6 id="L_hiraganas">hiraganas : <span class="green">0/106</span> [<span class="fuchsia">0%</span>]</h6>
-                            <h6 id="L_katakanas">katakanas : <span class="green">0/103</span> [<span class="fuchsia">0%</span>]</h6>
-                            <h6>learning streak : <span id="L_streak" class="orange">0</span></h6>
+                            <h6 id="L_hiraganas">hiraganas : <span class="green">{{.learnedHiraganas}}/{{.totalHiraganas}}</span> [<span class="fuchsia">{{.percentageHiraganas}}%</span>]</h6>
+                            <h6 id="L_katakanas">katakanas : <span class="green">{{.learnedKatakanas}}/{{.totalKatakanas}}</span> [<span class="fuchsia">{{.percentageKatakanas}}%</span>]</h6>
+                            <h6>learning streak : <span id="L_streak" class="orange">{{.learningStreak}}</span></h6>
                         </div>
                         <div class="side-card card">
                             <h4 class="text-center">weather @ paris</h4>
@@ -179,7 +179,7 @@
                                         style="filter: drop-shadow(0 0 0.8rem rgba(246, 215, 62, 0.8));"
                                         src="assets/sun.png"
                                     />
-                                    <span class="value">00:00</span>
+                                    <span class="value">{{formatTimestamp .sunriseTime}}</span>
                                 </div>
                                 •
                                 <div id="w-sunset">
@@ -188,7 +188,7 @@
                                         style="filter: drop-shadow(0 0 0.8rem rgba(255, 255, 255, 0.5));"
                                         src="assets/moon.png"
                                     />
-                                    <span class="value inline-block">00:00</span>
+                                    <span class="value inline-block">{{formatTimestamp .sunsetTime}}</span>
                                 </div>
                                 •
                                 <div class="flex justify-center">
@@ -197,7 +197,7 @@
                                             class="inline-block align-middle pixel-icon"
                                             src="assets/clock.png"
                                         />
-                                        <span class="value inline-block">00:00</span>
+                                        <span class="value inline-block">{{formatTimestamp .currentTime}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +208,7 @@
                                 4. (later) moon phase
                             -->
                             <div class="text-center">
-                                <span id="w-current-cond" title="current weather condition"></span>
+                                <span id="w-current-cond" title="current weather condition">{{.weatherCondition}}</span>
                             </div>
                             <div class="grid grid-cols-2 gap-1 place-items-center">
                                 <div id="w-cloudiness" title="cloudiness (%)">
@@ -216,28 +216,28 @@
                                         class="inline-block pixel-icon"
                                         src="assets/cloud_icon.png"
                                     />
-                                    <span class="value"></span>
+                                    <span class="value">{{.cloudiness}}%</span>
                                 </div>
                                 <div id="w-humidity" title="humidity (%)">
                                     <img
                                         class="inline-block pixel-icon"
                                         src="assets/placeholder.png"
                                     />
-                                    <span class="value"></span>
+                                    <span class="value">{{.humidity}}%</span>
                                 </div>
                                 <div id="w-temperature" title="felt temperature (celsius)">
                                     <img
                                         class="inline-block pixel-icon"
                                         src="assets/thermometer.png"
                                     />
-                                    <span class="value"></span>
+                                    <span class="value">{{.feltTemperature}}°C</span>
                                 </div>
                                 <div id="w-wind-speed" title="wind speed (m/s)">
                                     <img
                                         class="inline-block pixel-icon"
                                         src="assets/placeholder.png"
                                     />
-                                    <span class="value"></span>
+                                    <span class="value">{{.windSpeed}}m/s</span>
                                 </div>
                             </div>
                         </div>

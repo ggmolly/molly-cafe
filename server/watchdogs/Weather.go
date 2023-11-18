@@ -52,8 +52,8 @@ type OWM_Data struct {
 		Type    int    `json:"type"`
 		ID      int    `json:"id"`
 		Country string `json:"country"`
-		Sunrise int    `json:"sunrise"`
-		Sunset  int    `json:"sunset"`
+		Sunrise int64  `json:"sunrise"`
+		Sunset  int64  `json:"sunset"`
 	} `json:"sys"`
 	Timezone int    `json:"timezone"`
 	ID       int    `json:"id"`
@@ -67,7 +67,7 @@ type WeatherCache struct {
 }
 
 var (
-	cachedWeatherData WeatherCache
+	CachedWeatherData WeatherCache
 	lastRainedAt      time.Time
 	requestURL        string
 )
@@ -133,8 +133,8 @@ func getWeatherPacket(packetMaps *socket.T_PacketMap) *socket.Packet {
 
 func getWeatherData() (OWM_Data, error) {
 	// Check if the data is cached
-	if time.Since(cachedWeatherData.LastUpdate) < WEATHER_CACHE_DURATION {
-		return cachedWeatherData.Data, nil
+	if time.Since(CachedWeatherData.LastUpdate) < WEATHER_CACHE_DURATION {
+		return CachedWeatherData.Data, nil
 	}
 	// Do the request to OpenWeatherMap
 	var data OWM_Data
@@ -150,8 +150,8 @@ func getWeatherData() (OWM_Data, error) {
 		return data, err
 	}
 	// Save the data in the cache
-	cachedWeatherData.Data = data
-	cachedWeatherData.LastUpdate = time.Now()
+	CachedWeatherData.Data = data
+	CachedWeatherData.LastUpdate = time.Now()
 	// Save the cache on disk
 	file, err := os.OpenFile(".cached_weather", os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
@@ -160,7 +160,7 @@ func getWeatherData() (OWM_Data, error) {
 	}
 	defer file.Close()
 	encoder := gob.NewEncoder(file)
-	err = encoder.Encode(cachedWeatherData)
+	err = encoder.Encode(CachedWeatherData)
 	if err != nil {
 		log.Println("Failed to encode weather cache:", err)
 	}
@@ -252,7 +252,7 @@ func MonitorWeather(packetMaps *socket.T_PacketMap) {
 		packet.Data = buffer.Bytes()
 		packet.Dirty = true
 		// Sleep until the next update with a 1 second margin
-		time.Sleep(WEATHER_CACHE_DURATION - time.Since(cachedWeatherData.LastUpdate) + 1*time.Second)
+		time.Sleep(WEATHER_CACHE_DURATION - time.Since(CachedWeatherData.LastUpdate) + 1*time.Second)
 	}
 }
 
@@ -270,13 +270,13 @@ func init() {
 	}
 	defer file.Close()
 	decoder := gob.NewDecoder(file)
-	err = decoder.Decode(&cachedWeatherData)
+	err = decoder.Decode(&CachedWeatherData)
 	if err != nil {
 		log.Println("Failed to decode weather cache:", err)
 		return
 	}
-	if computeRainIntensity(cachedWeatherData.Data) > 0 {
-		lastRainedAt = cachedWeatherData.LastUpdate
+	if computeRainIntensity(CachedWeatherData.Data) > 0 {
+		lastRainedAt = CachedWeatherData.LastUpdate
 	}
-	log.Println("Weather cache loaded! Cached at:", cachedWeatherData.LastUpdate)
+	log.Println("Weather cache loaded! Cached at:", CachedWeatherData.LastUpdate)
 }

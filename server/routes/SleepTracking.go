@@ -8,6 +8,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+var (
+	TimeSlept uint32
+)
+
 func SleepTracking(c *fiber.Ctx) error {
 	var data struct {
 		Time uint32 `json:"time"`
@@ -46,5 +50,6 @@ func init() {
 		packet = socket.NewPacket(socket.T_SLEEP, socket.C_SLEEP, socket.DT_UINT32, "")
 		socket.PacketMap.AddPacket("sleepTracking", packet)
 	}
-	packet.SetUint32(uint32(data[0])<<24 | uint32(data[1])<<16 | uint32(data[2])<<8 | uint32(data[3]))
+	TimeSlept = uint32(data[0])<<24 | uint32(data[1])<<16 | uint32(data[2])<<8 | uint32(data[3])
+	packet.SetUint32(TimeSlept)
 }
