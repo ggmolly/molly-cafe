@@ -96,8 +96,8 @@ export class SchoolProjectPacket extends APacket {
         const rows: HTMLCollectionOf<HTMLTableRowElement> = table.rows;
         const rowsArray: HTMLTableRowElement[] = Array.from(rows);
         rowsArray.sort((a, b) => {
-            const aName = a.children[0].innerHTML;
-            const bName = b.children[0].innerHTML;
+            const aName = (a.children[0] as HTMLTableCellElement).innerText;
+            const bName = (b.children[0] as HTMLTableCellElement).innerText;
             return aName.localeCompare(bName);
         });
         rowsArray.forEach((row) => {
