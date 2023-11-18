@@ -140,6 +140,7 @@ front/assets/main.js
 
 # fonts assets
 front/fonts
+front/assets/fonts
 
 # compiled binary
 illustrious
@@ -169,3 +170,14 @@ sonar-project.properties
 
 # misc files
 .last_sleep
+.cached_weather
+
+# config files
+server/**.json
+
+# blog posts
+blog-posts/
+pistache-cli/**.html
+
+# go workspaces
+go.work
