@@ -19,7 +19,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#e879f9">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='assets/main.css'>
-    <script src='main.js'></script>
+    <script src='assets/main.js'></script>
 </head>
 
 <body>
@@ -91,6 +91,23 @@
                                         </tr>
                                     </thead>
                                     <tbody class="high" id="school-projects">
+                                        {{range .projects}}
+                                            <tr id="sp-{{.ID}}">
+                                                {{if .Href}}
+                                                    <td><a href="{{.Href}}">{{.Name}}</a></td>
+                                                {{else}}
+                                                    <td>{{.Name}}</td>
+                                                {{end}}
+                                                    <td>{{.Description}}</td>
+                                                {{if .Wip}}
+                                                    <td class="grade-wip">WIP</td>
+                                                {{else if .Grading}}
+                                                    <td class="grade-wip">Not graded yet</td>
+                                                {{else}}
+                                                    <td class="{{getGradeColor .Grade}}">{{.Grade}}%</td>
+                                                {{end}}
+                                            </tr>
+                                        {{end}}
                                     </tbody>
                                 </table>
                             </div>
@@ -99,6 +116,11 @@
                             <h3 class="ml-1">Blog posts</h3>
                             <div class="m-4">
                                 <ul id="blog-posts">
+                                    {{range .pistachePosts}}
+                                        <li id="pb-{{.ID}}" data-timestamp="{{timeToUnix .CreationDate}}">
+                                            <a href="{{.Href}}" class="green">➜ {{.Title}}</a> — <span>{{formatDate .CreationDate}}</span>
+                                        </li>
+                                    {{end}}
                                 </ul>
                             </div>
                         </div>
@@ -114,7 +136,7 @@
                             </div>
                             <div class="inner-card" id="misc">
                                 <h3 class="stone">misc</h3>
-                                <h4>currently here................ [<span class="fuchsia" id="connected-count">?</span>]
+                                <h4>currently here................ [<span class="fuchsia" id="connected-count">{{.connectedCount}}</span>]
                                 </h4>
                             </div>
                         </div>
@@ -129,14 +151,14 @@
                                         <span class="white-border"></span>
                                         <span class="hole"></span>
                                         <img class="cd" height="128" width="128"
-                                            src="data:image/webp;base64,UklGRm4CAABXRUJQVlA4WAoAAAAgAAAAwwAAwwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDgggAAAAPAMAJ0BKsQAxAA//f7/f7+7NrIgqAPwP4lpbuF2sRtAJ73EXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtIT4h4sf0sbEXlgGupvcReWAa6m9xF5YBrqb3EXlgGupvcReWAa6m9xFtAAA/v8UMAAUPJXQ2gAAAAAA"
+                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
                                             alt="album cover" />
                                     </div>
                                 </div>
                                 <div class="mx-2 flex flex-col my-2">
-                                    <small id="song-title" class="font-bold">Unknown title</small>
-                                    <small id="song-artist">Unknown artist</small>
-                                    <small id="song-time">??:?? / ??:??</small>
+                                    <small id="song-title" class="font-bold">{{.strawberryTitle}}</small>
+                                    <small id="song-artist">{{.strawberryArtists}}</small>
+                                    <small id="song-time">0:00 / {{formatDuration .strawberryLength}}</small>
                                 </div>
                             </div>
                         </div>
