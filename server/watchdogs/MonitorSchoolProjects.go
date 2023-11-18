@@ -22,6 +22,34 @@ type SchoolProject struct {
 	Grade       int8   `json:"grade"`
 }
 
+func DeserializeProject(packet *socket.Packet) SchoolProject {
+	var project SchoolProject
+	// int8 -> wip / grading (bitmask)
+	var mask uint8 = packet.Data[0]
+	project.Wip = mask&0x01 != 0
+	project.Grading = mask&0x02 != 0
+
+	// int8 -> grade (whatever if not grading)
+	project.Grade = int8(packet.Data[1])
+
+	// uint8 -> description length
+	descriptionLength := packet.Data[2]
+
+	// string -> description
+	project.Description = string(packet.Data[3 : 3+descriptionLength])
+
+	// uint8 -> href length
+	hrefLength := packet.Data[3+descriptionLength]
+
+	// string -> href
+	if hrefLength > 0 {
+		project.Href = string(packet.Data[4+descriptionLength : 4+descriptionLength+hrefLength])
+	}
+
+	project.Name = packet.Name
+	return project
+}
+
 // Create / update the packet in the packet map and sends it to the clients
 func updateProject(packetMap *socket.T_PacketMap, project SchoolProject, projectPath string) {
 	packet, ok := packetMap.GetPacketByName(projectPath)

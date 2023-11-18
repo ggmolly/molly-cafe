@@ -109,6 +109,7 @@ func main() {
 	engine.AddFunc("formatTimestamp", templates.FormatTimestamp)
 	engine.AddFunc("formatSeconds", templates.FormatSeconds)
 	engine.AddFunc("getSleepColor", templates.GetSleepColor)
+	engine.AddFunc("getGradeColor", templates.GetGradeColor)
 
 	app := fiber.New(
 		fiber.Config{

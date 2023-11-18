@@ -19,6 +19,25 @@ var (
 	Birthday = time.Date(2003, 01, 02, 0, 0, 0, 0, time.UTC)
 )
 
+type projectPacket struct {
+	watchdogs.SchoolProject
+	ID uint16 `json:"id"`
+}
+
+func getProjects() []projectPacket {
+	var projects []projectPacket
+	// Loop through the packet map
+	for _, packet := range socket.PacketMap {
+		if packet.Target == socket.T_SCHOOL_PROJECTS {
+			projects = append(projects, projectPacket{
+				SchoolProject: watchdogs.DeserializeProject(packet),
+				ID:            packet.Id,
+			})
+		}
+	}
+	return projects
+}
+
 func Index(c *fiber.Ctx) error {
 	hiraganas, _ := leitner.LeitnerData.GetTopic("hiraganas")
 	katakanas, _ := leitner.LeitnerData.GetTopic("katakanas")
@@ -46,11 +65,12 @@ func Index(c *fiber.Ctx) error {
 		"sunriseTime":         watchdogs.CachedWeatherData.Data.Sys.Sunrise,
 		"sunsetTime":          watchdogs.CachedWeatherData.Data.Sys.Sunset,
 		"currentTime":         time.Now().Unix(), // Server time is Europe/Paris
-		"weatherCondition":   weatherCondition,
+		"weatherCondition":    weatherCondition,
 		"cloudiness":          watchdogs.CachedWeatherData.Data.Clouds.All,
 		"humidity":            watchdogs.CachedWeatherData.Data.Main.Humidity,
 		"feltTemperature":     fmt.Sprintf("%.2f", watchdogs.CachedWeatherData.Data.Main.FeelsLike),
 		"windSpeed":           fmt.Sprintf("%.2f", watchdogs.CachedWeatherData.Data.Wind.Speed),
 		"sleepTime":           timeSlept,
+		"projects":            getProjects(),
 	})
 }
