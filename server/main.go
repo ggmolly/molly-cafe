@@ -162,6 +162,7 @@ func main() {
 	}()
 	app.Get("/", templates.Index)
 	app.Static("/assets", filepath.Join(configuration.TemplateRoot, "assets"))
+	app.Static("/fonts", filepath.Join(configuration.TemplateRoot, "assets", "fonts"))
 	app.Static("/pistache", configuration.PistacheRoot)
 	app.Listen("0.0.0.0:50154")
 }
