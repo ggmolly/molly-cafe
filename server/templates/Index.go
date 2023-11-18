@@ -2,6 +2,7 @@ package templates
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -24,6 +25,11 @@ type projectPacket struct {
 	ID uint16 `json:"id"`
 }
 
+type pistachePost struct {
+	watchdogs.PistachePost
+	ID uint16 `json:"id"`
+}
+
 func getProjects() []projectPacket {
 	var projects []projectPacket
 	// Loop through the packet map
@@ -35,7 +41,27 @@ func getProjects() []projectPacket {
 			})
 		}
 	}
+	sort.Slice(projects, func(i, j int) bool {
+		return projects[i].Name < projects[j].Name
+	})
 	return projects
+}
+
+func getPistachePosts() []pistachePost {
+	var posts []pistachePost
+	// Loop through the packet map
+	for _, packet := range socket.PacketMap {
+		if packet.Target == socket.T_PISTACHE {
+			posts = append(posts, pistachePost{
+				PistachePost: watchdogs.DeserializePistachePost(packet),
+				ID:           packet.Id,
+			})
+		}
+	}
+	sort.Slice(posts, func(i, j int) bool {
+		return posts[i].CreationDate.After(posts[j].CreationDate)
+	})
+	return posts
 }
 
 func Index(c *fiber.Ctx) error {
@@ -72,5 +98,6 @@ func Index(c *fiber.Ctx) error {
 		"windSpeed":           fmt.Sprintf("%.2f", watchdogs.CachedWeatherData.Data.Wind.Speed),
 		"sleepTime":           timeSlept,
 		"projects":            getProjects(),
+		"pistachePosts":       getPistachePosts(),
 	})
 }

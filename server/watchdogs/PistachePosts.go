@@ -3,6 +3,7 @@ package watchdogs
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -18,7 +19,17 @@ var (
 
 type PistachePost struct {
 	Title        string
+	Href         string
 	CreationDate time.Time
+}
+
+func DeserializePistachePost(packet *socket.Packet) PistachePost {
+	var post PistachePost
+	post.Title = packet.Name
+	hrefLength := uint16(packet.Data[0])<<8 + uint16(packet.Data[1])
+	post.Href = "/pistache/" + string(packet.Data[2:hrefLength+2])
+	post.CreationDate = time.Unix(int64(uint32(packet.Data[hrefLength+2])<<24+uint32(packet.Data[hrefLength+3])<<16+uint32(packet.Data[hrefLength+4])<<8+uint32(packet.Data[hrefLength+5])), 0)
+	return post
 }
 
 // Reads first bytes of the HTML pistache post to get the <title> tag
@@ -50,6 +61,7 @@ func updatePost(packetMap *socket.T_PacketMap, path, title string) {
 	// uint16 -> href length
 	name := filepath.Base(path)
 	length := uint16(len(name))
+	log.Println(length, name)
 	buffer.WriteByte(byte(length >> 8))
 	buffer.WriteByte(byte(length))
 
