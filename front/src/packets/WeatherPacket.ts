@@ -84,7 +84,7 @@ export class WeatherPacket extends APacket {
         (document.querySelector("#w-cloudiness > span.value") as HTMLElement).innerText = window.s_Weather.cloudiness.toString() + "%";
 
         // Update temperature
-        (document.querySelector("#w-temperature > span.value") as HTMLElement).innerText = window.s_Weather.feelsLike.toString() + "°C";
+        (document.querySelector("#w-temperature > span.value") as HTMLElement).innerText = (window.s_Weather.feelsLike | 0).toString() + "°C";
 
         // Update humidity
         (document.querySelector("#w-humidity > span.value") as HTMLElement).innerText = window.s_Weather.humidity.toString() + "%";
