@@ -25,9 +25,6 @@ type UpdateDetails struct {
 
 var (
 	REFRESH_DELAY = 5 * time.Second
-	ProjectPath   string
-	PistacheRoot  = "./pistache"
-	TemplateRoot  = "./front"
 )
 
 func init() {
@@ -44,6 +41,9 @@ func init() {
 	if _, err := os.Stat("config.json"); os.IsNotExist(err) {
 		log.Println("Failed to load the config.json file, using default values")
 	}
+	// Force to load paths
+	configuration.LoadPaths()
+
 	socket.ConnectedClients = socket.NewClients()
 
 	// TCP / UDP connections
@@ -92,26 +92,11 @@ func init() {
 	// Weather
 	go watchdogs.MonitorWeather(&socket.PacketMap)
 
-	ProjectPath, err := configuration.GetRootPath("projects")
-	if err != nil {
-		log.Println("'projects' folder could not be found. project management will be disabled")
-	} else {
-		log.Printf("Monitoring projects from %s", ProjectPath)
-		go watchdogs.MonitorSchoolProjects(&socket.PacketMap, filepath.Join(ProjectPath, "school"))
-	}
+	// Pistache
+	go watchdogs.MonitorPistachePosts(&socket.PacketMap, configuration.PistacheRoot)
 
-	PistacheRoot, err = configuration.GetRootPath("pistache")
-	if err != nil {
-		log.Println("'pistache' folder could not be found. pistache will be disabled")
-	} else {
-		log.Printf("Pistache root set to %s", PistacheRoot)
-		go watchdogs.MonitorPistachePosts(&socket.PacketMap, PistacheRoot)
-	}
-
-	if os.Getenv("MODE") == "dev" {
-		TemplateRoot = "../front/"
-	}
-	log.Println("Template root set to", TemplateRoot)
+	// School projects
+	go watchdogs.MonitorSchoolProjects(&socket.PacketMap, filepath.Join(configuration.ProjectPath, "school"))
 }
 
 func main() {
@@ -172,7 +157,7 @@ func main() {
 		}
 	}()
 	app.Get("/", templates.Index)
-	app.Static("/assets", filepath.Join(TemplateRoot, "assets"))
-	app.Static("/pistache", PistacheRoot)
+	app.Static("/assets", filepath.Join(configuration.TemplateRoot, "assets"))
+	app.Static("/pistache", configuration.PistacheRoot)
 	app.Listen("0.0.0.0:50154")
 }
