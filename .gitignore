@@ -135,6 +135,8 @@ front/swindle.js
 front/assets/old
 front/assets/*.py
 front/main.css
+front/assets/main.css
+front/assets/main.js
 
 # fonts assets
 front/fonts
