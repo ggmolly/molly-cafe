@@ -108,6 +108,7 @@ func main() {
 
 	engine.AddFunc("formatTimestamp", templates.FormatTimestamp)
 	engine.AddFunc("formatSeconds", templates.FormatSeconds)
+	engine.AddFunc("formatDuration", templates.FormatDuration)
 	engine.AddFunc("getSleepColor", templates.GetSleepColor)
 	engine.AddFunc("getGradeColor", templates.GetGradeColor)
 	engine.AddFunc("formatDate", templates.FormatDate)

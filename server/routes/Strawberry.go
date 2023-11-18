@@ -26,9 +26,13 @@ type dtoState struct {
 }
 
 var (
-	Playing            = false
-	CurrentTime uint32 = 0
-	TimeMutex          = &sync.Mutex{}
+	Playing                 = false
+	CurrentTime      uint32 = 0
+	TimeMutex               = &sync.Mutex{}
+	CurrentlyPlaying        = dtoUpdate{
+		Title:   "No song playing",
+		Artists: []string{"-"},
+	}
 
 	SeekPacket socket.Packet
 )
@@ -106,6 +110,8 @@ func publishNewSong(dto dtoUpdate) {
 	packet.Data = dataBuffer.Bytes()
 	// Send the packet to all connected clients
 	socket.ConnectedClients.Broadcast(packet.GetRawBytes())
+
+	CurrentlyPlaying = dto
 }
 
 func publishState(dto dtoState) {

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/bettercallmolly/illustrious/leitner"
+	"github.com/bettercallmolly/illustrious/routes"
 	"github.com/bettercallmolly/illustrious/socket"
 	"github.com/bettercallmolly/illustrious/watchdogs"
 	"github.com/gofiber/fiber/v2"
@@ -99,6 +100,10 @@ func Index(c *fiber.Ctx) error {
 		"sleepTime":           timeSlept,
 		"projects":            getProjects(),
 		"pistachePosts":       getPistachePosts(),
+		"strawberryCover":     routes.CurrentlyPlaying.Cover,
+		"strawberryTitle":     routes.CurrentlyPlaying.Title,
+		"strawberryArtists":   strings.Join(routes.CurrentlyPlaying.Artists, ", "),
+		"strawberryLength":    routes.CurrentlyPlaying.Length,
 		"connectedCount":      socket.NbClients,
 	})
 }
