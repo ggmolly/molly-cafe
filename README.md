@@ -30,6 +30,7 @@ Here's a list of all the features that are currently implemented :
 - [x] Number of users currently connected
 - [x] Live progress of a [Leitner System](https://en.wikipedia.org/wiki/Leitner_system)
 - [x] Sleep tracking (through Apple's [Shortcuts app](https://apps.apple.com/us/app/shortcuts/id915249334))
+- [x] Template rendering for the front-end
 
 # Note
 
@@ -167,3 +168,4 @@ Thanks to [Miko](https://x.com/Miko_Shiy) for most of the graphics !
 | sun.png | Sun icon for sunrise time | Miko |
 | clock.png | Clock icon to display current time | Miko |
 | thermometer.png | Thermometer icon to display felt temperature | Miko |
+| humidity.png | Humidity icon to display humidity | Miko |
