@@ -2,6 +2,7 @@ package templates
 
 import (
 	"fmt"
+	"html/template"
 	"sort"
 	"strings"
 	"time"
@@ -104,6 +105,7 @@ func Index(c *fiber.Ctx) error {
 		"strawberryTitle":     routes.CurrentlyPlaying.Title,
 		"strawberryArtists":   strings.Join(routes.CurrentlyPlaying.Artists, ", "),
 		"strawberryLength":    routes.CurrentlyPlaying.Length / 1e6,
+		"strawberryCd":        template.HTML(fmt.Sprintf(`<img class="cd" height="128" width="128" src="data:image/webp;base64,%s" alt="album cover" />`, routes.CurrentlyPlaying.Cover)),
 		"connectedCount":      socket.NbClients,
 	})
 }

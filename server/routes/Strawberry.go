@@ -32,6 +32,7 @@ var (
 	CurrentlyPlaying        = dtoUpdate{
 		Title:   "No song playing",
 		Artists: []string{"-"},
+		Cover:   "UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAD8D+JaQAA3AA/ua1AAA=",
 	}
 
 	SeekPacket socket.Packet
