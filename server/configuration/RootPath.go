@@ -28,7 +28,7 @@ func GetRootPath(folderName string) (string, error) {
 	return "", fmt.Errorf("folder %s not found", folderName)
 }
 
-func init() {
+func LoadPaths() {
 	log.Println("Loading paths...")
 	var err error
 	PistacheRoot, err = GetRootPath("pistache")
