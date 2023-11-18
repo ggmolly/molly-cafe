@@ -196,7 +196,6 @@ func serializeWeatherPacket(buffer *bytes.Buffer) error {
 
 	// Serialize the humidity (same process)
 	buffer.WriteByte(uint8(data.Main.Humidity))
-	buffer.WriteByte(uint8(data.Main.Humidity*100) % 100)
 
 	// Serialize the time to sunrise (4 bytes)
 	buffer.WriteByte(uint8(data.Sys.Sunrise >> 24))

@@ -27,12 +27,10 @@ export class WeatherPacket extends APacket {
         window.s_Weather.feelsLike += data.getUint8(this.offset++) / 100;
         // Byte 8 = humidity (real part)
         window.s_Weather.humidity = data.getUint8(this.offset++);
-        // Byte 9 = humidity (fractional part)
-        window.s_Weather.humidity += data.getUint8(this.offset++) / 100;
-        // Byte 10-14 = timeToSunrise (unix time)
+        // Byte 9-13 = timeToSunrise (unix time)
         window.s_Weather.timeToSunrise = data.getUint32(this.offset) * 1000;
         this.offset += 4;
-        // Byte 15-19 = timeToSunset (unix time)
+        // Byte 14-19 = timeToSunset (unix time)
         window.s_Weather.timeToSunset = data.getUint32(this.offset) * 1000;
         this.offset += 4;
         // Byte 20-24 = currentTime (unix time)
