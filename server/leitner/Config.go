@@ -61,9 +61,9 @@ func (c *LeitnerConfig) GetTopic(name string) (LeitnerTopic, bool) {
 // Sets a topic
 func (c *LeitnerConfig) SetTopic(name string, topic LeitnerTopic) {
 	configMutex.Lock()
-	defer configMutex.Unlock()
 	c.Topics[name] = topic
-	c.Save() // XXX: This might cause an infinite loop because of the lock in the Save() function
+	configMutex.Unlock()
+	c.Save()
 }
 
 // Get last update time
