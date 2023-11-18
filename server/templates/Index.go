@@ -79,7 +79,7 @@ func Index(c *fiber.Ctx) error {
 	}
 	weatherCondition := ""
 	if len(watchdogs.CachedWeatherData.Data.Weather) > 0 {
-		weatherCondition = strings.ToLower(watchdogs.CachedWeatherData.Data.Weather[0].Main)
+		weatherCondition = strings.ToLower(watchdogs.CachedWeatherData.Data.Weather[0].Description)
 	}
 	return c.Render("index", fiber.Map{
 		"age":                 uint8(time.Since(Birthday).Hours() / 24 / 365),
