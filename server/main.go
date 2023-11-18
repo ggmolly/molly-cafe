@@ -100,7 +100,7 @@ func init() {
 }
 
 func main() {
-	engine := html.New("../front", ".html")
+	engine := html.New(configuration.TemplateRoot, ".html")
 
 	if os.Getenv("MODE") == "dev" {
 		engine.Reload(true)

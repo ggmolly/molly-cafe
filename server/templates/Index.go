@@ -103,7 +103,7 @@ func Index(c *fiber.Ctx) error {
 		"strawberryCover":     routes.CurrentlyPlaying.Cover,
 		"strawberryTitle":     routes.CurrentlyPlaying.Title,
 		"strawberryArtists":   strings.Join(routes.CurrentlyPlaying.Artists, ", "),
-		"strawberryLength":    routes.CurrentlyPlaying.Length,
+		"strawberryLength":    routes.CurrentlyPlaying.Length / 1e6,
 		"connectedCount":      socket.NbClients,
 	})
 }
