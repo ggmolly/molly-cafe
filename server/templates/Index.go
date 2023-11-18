@@ -99,5 +99,6 @@ func Index(c *fiber.Ctx) error {
 		"sleepTime":           timeSlept,
 		"projects":            getProjects(),
 		"pistachePosts":       getPistachePosts(),
+		"connectedCount":      socket.NbClients,
 	})
 }
