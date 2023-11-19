@@ -155,17 +155,18 @@ Thanks to [Miko](https://x.com/Miko_Shiy) for most of the graphics !
 
 | File | Usage | Author |
 | :--- | :--- | --- |
-| cloud_0.png | Cloud variant 0 | Miko |
-| cloud_1.png | Cloud variant 1 | Miko |
-| cloud_2.png | Cloud variant 2 | Miko |
-| cloud_3.png | Cloud variant 3 | Miko |
-| cloud_4.png | Cloud variant 4 | Miko |
-| cloud_icon.png | Cloudiness icon | Miko |
-| cursor.png | Other user's cursors | ? |
-| moon.png | Moon icon for sunset time | Miko |
-| placeholder.png | Placeholder | Molly |
-| raindrop_0.png | Raindrop | Molly |
-| sun.png | Sun icon for sunrise time | Miko |
-| clock.png | Clock icon to display current time | Miko |
-| thermometer.png | Thermometer icon to display felt temperature | Miko |
-| humidity.png | Humidity icon to display humidity | Miko |
+| `cloud_0.png` | Cloud variant 0 | Miko |
+| `cloud_1.png` | Cloud variant 1 | Miko |
+| `cloud_2.png` | Cloud variant 2 | Miko |
+| `cloud_3.png` | Cloud variant 3 | Miko |
+| `cloud_4.png` | Cloud variant 4 | Miko |
+| `cloud_icon.png` | Cloudiness icon | Miko |
+| `cursor.png` | Other user's cursors | ? |
+| `moon.png` | Moon icon for sunset time | Miko |
+| `placeholder.png` | Placeholder | Molly |
+| `raindrop_0.png` | Raindrop | Molly |
+| `sun.png` | Sun icon for sunrise time | Miko |
+| `clock.png` | Clock icon to display current time | Miko |
+| `thermometer.png` | Thermometer icon to display felt temperature | Miko |
+| `humidity.png` | Humidity icon to display humidity | Miko |
+| `wind.png` | Wind icon to display wind speed | Miko |
