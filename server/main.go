@@ -141,7 +141,7 @@ func main() {
 	strawberryAPI.Patch("/state", routes.SetStrawberryState)
 
 	// iOS shortcuts will send a POST request to this endpoint
-	app.Post("/api/sleep", routes.SleepTracking)
+	app.Post("/api/sleep", middlewares.AuthHeader, routes.SleepTracking)
 
 	// Leitner API
 	leitnerAPI := app.Group("/api/leitner", middlewares.LANOnly)
