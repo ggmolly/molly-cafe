@@ -89,7 +89,7 @@ document.addEventListener("readystatechange", (event: Event) => {
 
 // When the table is resized, resize the canvas
 window.addEventListener("resize", (event: Event) => {
-    let canvas: HTMLCanvasElement = document.getElementById("sirius")!! as HTMLCanvasElement;
+    let canvas: HTMLCanvasElement = document.getElementById("weather")!! as HTMLCanvasElement;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     updateTableRectangle();
