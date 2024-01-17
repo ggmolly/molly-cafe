@@ -22,9 +22,9 @@ export class WeatherPacket extends APacket {
         // Byte 5 = temperature (fractional part)
         window.s_Weather.temperature += data.getUint8(this.offset++) / 100;
         // Byte 6 = feelsLike (real part)
-        window.s_Weather.feelsLike = data.getUint8(this.offset++);
+        window.s_Weather.feelsLike = data.getInt8(this.offset++);
         // Byte 7 = feelsLike (fractional part)
-        window.s_Weather.feelsLike += data.getUint8(this.offset++) / 100;
+        window.s_Weather.feelsLike += data.getInt8(this.offset++) / 100;
         // Byte 8 = humidity (real part)
         window.s_Weather.humidity = data.getUint8(this.offset++);
         // Byte 9-13 = timeToSunrise (unix time)
