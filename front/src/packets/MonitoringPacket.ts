@@ -56,10 +56,10 @@ export class MonitoringPacket extends APacket {
                 break;
             case DataType.TEMPERATURE: // temperature
                 span.innerText = this.data.toFixed(2) + '°C';
-                // green if < 50, yellow if < 70, red otherwise
-                if (this.data < 50) {
+                // green if < 65, yellow if < 75, red otherwise
+                if (this.data < 65) {
                     span.classList.add('green');
-                } else if (this.data < 70) {
+                } else if (this.data < 75) {
                     span.classList.add('yellow');
                 } else {
                     span.classList.add('red');
@@ -67,10 +67,10 @@ export class MonitoringPacket extends APacket {
                 break;
             case DataType.LOAD_USAGE: // load / usage
                 span.innerText = this.data.toFixed(2) + '%';
-                // green if < 50, yellow if < 70, red otherwise
-                if (this.data < 50) {
+                // green if < 70, yellow if < 80, red otherwise
+                if (this.data < 70) {
                     span.classList.add('green');
-                } else if (this.data < 70) {
+                } else if (this.data < 80) {
                     span.classList.add('yellow');
                 } else {
                     span.classList.add('red');
