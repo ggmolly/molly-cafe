@@ -10,15 +10,11 @@ import (
 	"github.com/bettercallmolly/illustrious/socket"
 )
 
-const (
-	URL = "https://rbx.proof.ovh.net/files/100Mb.dat" // OVH's Roubaix, France server
-)
-
 func MonitorInternetSpeed(packet *socket.Packet) {
 	for {
-		resp, err := http.Get(URL)
+		resp, err := http.Get(os.Getenv("SPEEDTEST_URL"))
 		if err != nil {
-			log.Println("/!\\ Error while opening HTTP request to OVH's Roubaix server: ", err)
+			log.Println("/!\\ Error while opening HTTP request: ", err)
 		} else {
 			null, _ := os.OpenFile(os.DevNull, os.O_WRONLY, 0666)
 			start := time.Now()
